@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.01" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+  <edmx:DataServices>
+    <Schema Namespace="Ex" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+      <EntityType Name="Item">
+        <Key><PropertyRef Name="Id"/></Key>
+        <Property Name="Id" Type="Edm.Int32" Nullable="false">
+          <Annotation Term="Core.Computed"/>
+          <Annotation Term="Core.Description" String="Identifier" Qualifier="short"/>
+        </Property>
+        <Property Name="Price" Type="Edm.Decimal"/>
+        <Property Name="Name" Type="Edm.String"/>
+      </EntityType>
+
+      <!-- Constants in attribute form -->
+      <Annotations Target="Ex.Item" Qualifier="q">
+        <Annotation Term="Ex.Binary" Binary="T0RhdGE="/>
+        <Annotation Term="Ex.Bool" Bool="false"/>
+        <Annotation Term="Ex.Date" Date="2026-09-30"/>
+        <Annotation Term="Ex.DateTimeOffset" DateTimeOffset="2026-09-30T12:00:00Z"/>
+        <Annotation Term="Ex.Decimal" Decimal="3.14"/>
+        <Annotation Term="Ex.Duration" Duration="P1D"/>
+        <Annotation Term="Ex.EnumMember" EnumMember="Ex.Color/Red Ex.Color/Blue"/>
+        <Annotation Term="Ex.Float" Float="1.5e3"/>
+        <Annotation Term="Ex.Guid" Guid="11111111-2222-3333-4444-555555555555"/>
+        <Annotation Term="Ex.Int" Int="42"/>
+        <Annotation Term="Ex.String" String="text"/>
+        <Annotation Term="Ex.TimeOfDay" TimeOfDay="21:45:00"/>
+        <Annotation Term="Ex.AnnotationPath" AnnotationPath="Orders/@UI.LineItem"/>
+        <Annotation Term="Ex.ModelElementPath" ModelElementPath="Ex.Item/Name"/>
+        <Annotation Term="Ex.NavigationPropertyPath" NavigationPropertyPath="Orders"/>
+        <Annotation Term="Ex.PropertyPath" PropertyPath="Name"/>
+        <Annotation Term="Ex.Path" Path="Name"/>
+      </Annotations>
+
+      <!-- Constants and paths in element form -->
+      <Annotations Target="Ex.Item/Name">
+        <Annotation Term="Ex.ElBinary"><Binary>T0RhdGE=</Binary></Annotation>
+        <Annotation Term="Ex.ElBool"><Bool>true</Bool></Annotation>
+        <Annotation Term="Ex.ElDate"><Date>2026-09-30</Date></Annotation>
+        <Annotation Term="Ex.ElDateTimeOffset"><DateTimeOffset>2026-09-30T12:00:00Z</DateTimeOffset></Annotation>
+        <Annotation Term="Ex.ElDecimal"><Decimal>3.14</Decimal></Annotation>
+        <Annotation Term="Ex.ElDuration"><Duration>P1D</Duration></Annotation>
+        <Annotation Term="Ex.ElEnumMember"><EnumMember>Ex.Color/Red</EnumMember></Annotation>
+        <Annotation Term="Ex.ElFloat"><Float>INF</Float></Annotation>
+        <Annotation Term="Ex.ElGuid"><Guid>11111111-2222-3333-4444-555555555555</Guid></Annotation>
+        <Annotation Term="Ex.ElInt"><Int>-7</Int></Annotation>
+        <Annotation Term="Ex.ElString"><String> padded text </String></Annotation>
+        <Annotation Term="Ex.ElTimeOfDay"><TimeOfDay>21:45:00</TimeOfDay></Annotation>
+        <Annotation Term="Ex.ElAnnotationPath"><AnnotationPath>Orders/@UI.LineItem</AnnotationPath></Annotation>
+        <Annotation Term="Ex.ElModelElementPath"><ModelElementPath>Ex.Item/Name</ModelElementPath></Annotation>
+        <Annotation Term="Ex.ElNavigationPropertyPath"><NavigationPropertyPath>Orders</NavigationPropertyPath></Annotation>
+        <Annotation Term="Ex.ElPropertyPath"><PropertyPath>Name</PropertyPath></Annotation>
+        <Annotation Term="Ex.ElPath"><Path>Name</Path></Annotation>
+      </Annotations>
+
+      <!-- Dynamic expressions -->
+      <Annotations Target="Ex.Item/Price">
+        <Annotation Term="Ex.Null"><Null/></Annotation>
+        <Annotation Term="Ex.NullAnnotated"><Null><Annotation Term="Core.Description" String="n"/></Null></Annotation>
+        <Annotation Term="Ex.Record">
+          <Record Type="Ex.Info">
+            <PropertyValue Property="Title" String="Hello"/>
+            <PropertyValue Property="Count"><Int>3</Int></PropertyValue>
+            <PropertyValue Property="Where" Path="Name"><Annotation Term="Core.Description" String="pv"/></PropertyValue>
+            <Annotation Term="Core.Description" String="rec"/>
+          </Record>
+        </Annotation>
+        <Annotation Term="Ex.Collection"><Collection><String>a</String><Int>1</Int><Record><PropertyValue Property="P" Bool="true"/></Record></Collection></Annotation>
+        <Annotation Term="Ex.Apply">
+          <Apply Function="odata.concat"><String>A</String><Path>Name</Path><Annotation Term="Core.Description" String="ap"/></Apply>
+        </Annotation>
+        <Annotation Term="Ex.If"><If><Bool>true</Bool><String>yes</String><String>no</String></If></Annotation>
+        <Annotation Term="Ex.And"><And><Bool>true</Bool><Path>Flag</Path></And></Annotation>
+        <Annotation Term="Ex.Or"><Or><Bool>true</Bool><Bool>false</Bool></Or></Annotation>
+        <Annotation Term="Ex.Not"><Not><Bool>true</Bool></Not></Annotation>
+        <Annotation Term="Ex.Eq"><Eq><Path>Price</Path><Int>1</Int></Eq></Annotation>
+        <Annotation Term="Ex.Ne"><Ne><Path>Price</Path><Int>1</Int></Ne></Annotation>
+        <Annotation Term="Ex.Gt"><Gt><Path>Price</Path><Int>1</Int></Gt></Annotation>
+        <Annotation Term="Ex.Ge"><Ge><Path>Price</Path><Int>1</Int></Ge></Annotation>
+        <Annotation Term="Ex.Lt"><Lt><Path>Price</Path><Int>1</Int></Lt></Annotation>
+        <Annotation Term="Ex.Le"><Le><Path>Price</Path><Int>1</Int></Le></Annotation>
+        <Annotation Term="Ex.Has"><Has><Path>Flags</Path><EnumMember>Ex.Color/Red</EnumMember></Has></Annotation>
+        <Annotation Term="Ex.In"><In><Path>Name</Path><Collection><String>a</String></Collection></In></Annotation>
+        <Annotation Term="Ex.Cast"><Cast Type="Edm.Decimal" Precision="10" Scale="2"><Path>Price</Path></Cast></Annotation>
+        <Annotation Term="Ex.IsOf"><IsOf Type="Collection(Edm.String)" MaxLength="5"><Path>Name</Path></IsOf></Annotation>
+        <Annotation Term="Ex.Labeled"><LabeledElement Name="Label1"><Path>Name</Path></LabeledElement></Annotation>
+        <Annotation Term="Ex.LabeledAttr"><LabeledElement Name="Label2" String="direct"/></Annotation>
+        <Annotation Term="Ex.LabeledRef"><LabeledElementReference>Ex.Label1</LabeledElementReference></Annotation>
+        <Annotation Term="Ex.UrlRef"><UrlRef><Apply Function="odata.concat"><String>http://x/</String><Path>Name</Path></Apply></UrlRef></Annotation>
+        <Annotation Term="Ex.Arithmetic"><Add><Path>Price</Path><Mul><Int>2</Int><Neg><Int>3</Int></Neg></Mul></Add></Annotation>
+        <Annotation Term="Ex.Arithmetic2"><Div><Sub><Int>4</Int><Int>1</Int></Sub><DivBy><Int>6</Int><Mod><Int>5</Int><Int>3</Int></Mod></DivBy></Div></Annotation>
+      </Annotations>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>

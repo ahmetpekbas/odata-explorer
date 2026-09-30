@@ -23,7 +23,7 @@ Everything in `src/csdl/` is pure TypeScript, with no DOM and no React.
   `Singleton`, `NavigationPropertyBinding`, `ActionImport`/`FunctionImport`, `Action`/`Function`
   (`IsBound`, `IsComposable`, `EntitySetPath`), `Parameter`, `ReturnType`, and `Term`.
   *Done when:* the TripPin container and operations match expectations in tests.
-- [ ] **1.5 XML parser: annotations.** Parse inline `Annotation` and external `Annotations Target` blocks.
+- [x] **1.5 XML parser: annotations.** Parse inline `Annotation` and external `Annotations Target` blocks.
   Handle constant expressions in both attribute and element form, and every dynamic expression (`Path`
   variants, `Record`/`PropertyValue`, `Collection`, `Apply`, `If`, logical and comparison operators,
   `Cast`, `IsOf`, `LabeledElement(Reference)`, `Null`, `UrlRef`).

@@ -7,7 +7,6 @@ import type {
   EntitySet,
   EnumMember,
   EnumType,
-  Facets,
   FunctionImport,
   Include,
   IncludeAnnotations,
@@ -26,13 +25,10 @@ import type {
   StructuredType,
   Term,
   TypeDefinition,
-  TypeRef,
 } from './model.ts';
+import { inlineAnnotations, parseAnnotationBlock } from './parse-xml-annotations.ts';
+import { bool, type Ctx, facets, typeRef } from './xml-attrs.ts';
 import { readXml, type XNode } from './xml-tree.ts';
-
-interface Ctx {
-  diagnostics: Diagnostic[];
-}
 
 export function parseXml(text: string): Model {
   const ctx: Ctx = { diagnostics: [] };
@@ -75,41 +71,6 @@ function required(ctx: Ctx, node: XNode, attr: string, target?: string): string 
     ctx.diagnostics.push(d);
   }
   return value ?? '';
-}
-
-function bool(node: XNode, attr: string, fallback: boolean): boolean {
-  const value = node.attrs[attr];
-  return value === undefined ? fallback : value === 'true';
-}
-
-function int(node: XNode, attr: string): number | undefined {
-  const value = node.attrs[attr];
-  if (value === undefined) return undefined;
-  const n = Number(value);
-  return Number.isInteger(n) ? n : undefined;
-}
-
-export function typeRef(raw: string): TypeRef {
-  const m = /^Collection\((.*)\)$/.exec(raw);
-  return m
-    ? { raw, name: m[1] ?? '', isCollection: true }
-    : { raw, name: raw, isCollection: false };
-}
-
-function facets(node: XNode): Facets {
-  const f: Facets = {};
-  const maxLength = node.attrs.MaxLength;
-  if (maxLength !== undefined) f.maxLength = maxLength === 'max' ? 'max' : int(node, 'MaxLength');
-  const precision = int(node, 'Precision');
-  if (precision !== undefined) f.precision = precision;
-  const scale = node.attrs.Scale;
-  if (scale !== undefined)
-    f.scale = scale === 'variable' || scale === 'floating' ? scale : int(node, 'Scale');
-  const srid = node.attrs.SRID;
-  if (srid !== undefined) f.srid = srid === 'variable' ? 'variable' : int(node, 'SRID');
-  if (node.attrs.Unicode !== undefined) f.unicode = bool(node, 'Unicode', true);
-  if (node.attrs.DefaultValue !== undefined) f.defaultValue = node.attrs.DefaultValue;
-  return f;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -171,6 +132,9 @@ function parseSchema(ctx: Ctx, node: XNode): Schema {
       case 'TypeDefinition':
         schema.typeDefinitions.push(parseTypeDefinition(ctx, namespace, child));
         break;
+      case 'Annotations':
+        schema.annotationBlocks.push(parseAnnotationBlock(ctx, child));
+        break;
       case 'Term':
         schema.terms.push(parseTerm(ctx, namespace, child));
         break;
@@ -200,7 +164,7 @@ function parseStructuredType(
     kind,
     id,
     name,
-    annotations: [],
+    annotations: inlineAnnotations(ctx, node),
     span: node.span,
     abstract: bool(node, 'Abstract', false),
     openType: bool(node, 'OpenType', false),
@@ -238,7 +202,7 @@ function parseProperty(ctx: Ctx, parentId: string, node: XNode): Property {
     kind: 'property',
     id: childId(parentId, name),
     name,
-    annotations: [],
+    annotations: inlineAnnotations(ctx, node),
     span: node.span,
     type: typeRef(required(ctx, node, 'Type', childId(parentId, name))),
     nullable: bool(node, 'Nullable', true),
@@ -253,7 +217,7 @@ function parseNavigationProperty(ctx: Ctx, parentId: string, node: XNode): Navig
     kind: 'navigationProperty',
     id,
     name,
-    annotations: [],
+    annotations: inlineAnnotations(ctx, node),
     span: node.span,
     type: typeRef(required(ctx, node, 'Type', id)),
     nullable: bool(node, 'Nullable', true),
@@ -291,7 +255,7 @@ function parseEnumType(ctx: Ctx, namespace: string, node: XNode): EnumType {
       kind: 'enumMember',
       id: childId(id, memberName),
       name: memberName,
-      annotations: [],
+      annotations: inlineAnnotations(ctx, child),
       span: child.span,
       value,
     });
@@ -300,7 +264,7 @@ function parseEnumType(ctx: Ctx, namespace: string, node: XNode): EnumType {
     kind: 'enumType',
     id,
     name,
-    annotations: [],
+    annotations: inlineAnnotations(ctx, node),
     span: node.span,
     isFlags,
     underlyingType: node.attrs.UnderlyingType ?? 'Edm.Int32',
@@ -314,7 +278,7 @@ function parseTypeDefinition(ctx: Ctx, namespace: string, node: XNode): TypeDefi
     kind: 'typeDefinition',
     id: qualify(namespace, name),
     name,
-    annotations: [],
+    annotations: inlineAnnotations(ctx, node),
     span: node.span,
     underlyingType: required(ctx, node, 'UnderlyingType', qualify(namespace, name)),
     facets: facets(node),
@@ -328,7 +292,7 @@ function parseTerm(ctx: Ctx, namespace: string, node: XNode): Term {
     kind: 'term',
     id,
     name,
-    annotations: [],
+    annotations: inlineAnnotations(ctx, node),
     span: node.span,
     type: typeRef(required(ctx, node, 'Type', id)),
     nullable: bool(node, 'Nullable', true),
@@ -369,7 +333,7 @@ function parseOperation(
     kind,
     id,
     name,
-    annotations: [],
+    annotations: inlineAnnotations(ctx, node),
     span: node.span,
     isBound,
     isComposable: bool(node, 'IsComposable', false),
@@ -387,7 +351,7 @@ function parseParameter(ctx: Ctx, operationId: string, node: XNode): Parameter {
     kind: 'parameter',
     id: parameterId(operationId, name),
     name,
-    annotations: [],
+    annotations: inlineAnnotations(ctx, node),
     span: node.span,
     type: typeRef(required(ctx, node, 'Type', operationId)),
     nullable: bool(node, 'Nullable', true),
@@ -400,7 +364,7 @@ function parseReturnType(ctx: Ctx, operationId: string, node: XNode): ReturnType
     kind: 'returnType',
     id: returnTypeId(operationId),
     name: '$ReturnType',
-    annotations: [],
+    annotations: inlineAnnotations(ctx, node),
     span: node.span,
     type: typeRef(required(ctx, node, 'Type', operationId)),
     nullable: bool(node, 'Nullable', true),
@@ -420,7 +384,7 @@ function parseEntityContainer(ctx: Ctx, namespace: string, node: XNode): EntityC
     kind: 'entityContainer',
     id,
     name,
-    annotations: [],
+    annotations: inlineAnnotations(ctx, node),
     span: node.span,
     entitySets: [],
     singletons: [],
@@ -432,7 +396,12 @@ function parseEntityContainer(ctx: Ctx, namespace: string, node: XNode): EntityC
   for (const child of node.children) {
     if (!CONTAINER_CHILDREN.has(child.name)) continue;
     const childName = required(ctx, child, 'Name', id);
-    const base = { id: childId(id, childName), name: childName, annotations: [], span: child.span };
+    const base = {
+      id: childId(id, childName),
+      name: childName,
+      annotations: inlineAnnotations(ctx, child),
+      span: child.span,
+    };
     switch (child.name) {
       case 'EntitySet':
         container.entitySets.push({
