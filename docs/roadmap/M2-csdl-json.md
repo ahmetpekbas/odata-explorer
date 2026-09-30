@@ -12,5 +12,5 @@
 - [x] **2.2 Parity suite.** Commit both formats of the vocabularies and of the `oasis-tcs/odata-csdl-schemas`
   examples. The test asserts that each XML/JSON pair produces a deep-equal model, ignoring spans.
   *Done when:* every pair matches, and each mismatch it uncovered is fixed.
-- [ ] **2.3 JSON source fragments.** Re-serialize the element's JSON subtree for the source panel.
+- [x] **2.3 JSON source fragments.** Re-serialize the element's JSON subtree for the source panel.
   *Done when:* each element kind returns its fragment in tests.
