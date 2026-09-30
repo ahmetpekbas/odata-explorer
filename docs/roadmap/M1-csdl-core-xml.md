@@ -14,7 +14,7 @@ Everything in `src/csdl/` is pure TypeScript, with no DOM and no React.
 - [x] **1.2 Fixtures.** Commit the TripPin and Northwind v4 `$metadata` files, and record their sources
   and licenses in `fixtures/README.md`.
   *Done when:* both files are committed and attributed.
-- [ ] **1.3 XML parser: types.** Stream-parse with saxes: `Edmx`, `Reference`/`Include`,
+- [x] **1.3 XML parser: types.** Stream-parse with saxes: `Edmx`, `Reference`/`Include`,
   `DataServices`, `Schema` (with `Alias`), `EntityType`, `ComplexType`, `EnumType`/`Member`,
   `TypeDefinition`, `Property` with all facets, `NavigationProperty` (with `ReferentialConstraint` and
   `OnDelete`), and `Key`/`PropertyRef`.

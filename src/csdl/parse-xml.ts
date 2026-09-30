@@ -1,0 +1,300 @@
+// CSDL XML -> normalized model. Type references are kept as written; resolve.ts qualifies them.
+import { childId, qualify } from './ids.ts';
+import type {
+  Diagnostic,
+  EnumMember,
+  EnumType,
+  Facets,
+  Include,
+  IncludeAnnotations,
+  KeyProperty,
+  Model,
+  NavigationProperty,
+  OnDeleteAction,
+  Property,
+  Reference,
+  Schema,
+  StructuredType,
+  TypeDefinition,
+  TypeRef,
+} from './model.ts';
+import { readXml, type XNode } from './xml-tree.ts';
+
+interface Ctx {
+  diagnostics: Diagnostic[];
+}
+
+export function parseXml(text: string): Model {
+  const ctx: Ctx = { diagnostics: [] };
+  const model: Model = {
+    format: 'xml',
+    version: '',
+    references: [],
+    schemas: [],
+    diagnostics: ctx.diagnostics,
+  };
+  const { root } = readXml(text);
+  if (!root) return model;
+
+  model.version = root.attrs.Version ?? '';
+  for (const child of root.children) {
+    if (child.name === 'Reference') model.references.push(parseReference(child));
+    else if (child.name === 'DataServices') {
+      for (const schema of child.children) {
+        if (schema.name === 'Schema') model.schemas.push(parseSchema(ctx, schema));
+      }
+    }
+  }
+  return model;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Attribute helpers
+
+/** A required attribute; a missing one is reported and read as an empty string. */
+function required(ctx: Ctx, node: XNode, attr: string, target?: string): string {
+  const value = node.attrs[attr];
+  if (value === undefined || value === '') {
+    const d: Diagnostic = {
+      severity: 'error',
+      code: 'missing-attribute',
+      message: `<${node.name}> is missing the required attribute ${attr}.`,
+      span: node.span,
+    };
+    if (target) d.target = target;
+    ctx.diagnostics.push(d);
+  }
+  return value ?? '';
+}
+
+function bool(node: XNode, attr: string, fallback: boolean): boolean {
+  const value = node.attrs[attr];
+  return value === undefined ? fallback : value === 'true';
+}
+
+function int(node: XNode, attr: string): number | undefined {
+  const value = node.attrs[attr];
+  if (value === undefined) return undefined;
+  const n = Number(value);
+  return Number.isInteger(n) ? n : undefined;
+}
+
+export function typeRef(raw: string): TypeRef {
+  const m = /^Collection\((.*)\)$/.exec(raw);
+  return m
+    ? { raw, name: m[1] ?? '', isCollection: true }
+    : { raw, name: raw, isCollection: false };
+}
+
+function facets(node: XNode): Facets {
+  const f: Facets = {};
+  const maxLength = node.attrs.MaxLength;
+  if (maxLength !== undefined) f.maxLength = maxLength === 'max' ? 'max' : int(node, 'MaxLength');
+  const precision = int(node, 'Precision');
+  if (precision !== undefined) f.precision = precision;
+  const scale = node.attrs.Scale;
+  if (scale !== undefined)
+    f.scale = scale === 'variable' || scale === 'floating' ? scale : int(node, 'Scale');
+  const srid = node.attrs.SRID;
+  if (srid !== undefined) f.srid = srid === 'variable' ? 'variable' : int(node, 'SRID');
+  if (node.attrs.Unicode !== undefined) f.unicode = bool(node, 'Unicode', true);
+  if (node.attrs.DefaultValue !== undefined) f.defaultValue = node.attrs.DefaultValue;
+  return f;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Edmx
+
+function parseReference(node: XNode): Reference {
+  const includes: Include[] = [];
+  const includeAnnotations: IncludeAnnotations[] = [];
+  for (const child of node.children) {
+    if (child.name === 'Include') {
+      const include: Include = { namespace: child.attrs.Namespace ?? '' };
+      if (child.attrs.Alias) include.alias = child.attrs.Alias;
+      includes.push(include);
+    } else if (child.name === 'IncludeAnnotations') {
+      const inc: IncludeAnnotations = { termNamespace: child.attrs.TermNamespace ?? '' };
+      if (child.attrs.Qualifier) inc.qualifier = child.attrs.Qualifier;
+      if (child.attrs.TargetNamespace) inc.targetNamespace = child.attrs.TargetNamespace;
+      includeAnnotations.push(inc);
+    }
+  }
+  return { uri: node.attrs.Uri ?? '', includes, includeAnnotations, span: node.span };
+}
+
+// ---------------------------------------------------------------------------------------------
+// Schema
+
+function parseSchema(ctx: Ctx, node: XNode): Schema {
+  const namespace = required(ctx, node, 'Namespace');
+  const schema: Schema = {
+    kind: 'schema',
+    id: namespace,
+    name: namespace,
+    namespace,
+    annotations: [],
+    span: node.span,
+    entityTypes: [],
+    complexTypes: [],
+    enumTypes: [],
+    typeDefinitions: [],
+    terms: [],
+    actions: [],
+    functions: [],
+    entityContainers: [],
+    annotationBlocks: [],
+  };
+  if (node.attrs.Alias) schema.alias = node.attrs.Alias;
+
+  for (const child of node.children) {
+    switch (child.name) {
+      case 'EntityType':
+        schema.entityTypes.push(parseStructuredType(ctx, namespace, child, 'entityType'));
+        break;
+      case 'ComplexType':
+        schema.complexTypes.push(parseStructuredType(ctx, namespace, child, 'complexType'));
+        break;
+      case 'EnumType':
+        schema.enumTypes.push(parseEnumType(ctx, namespace, child));
+        break;
+      case 'TypeDefinition':
+        schema.typeDefinitions.push(parseTypeDefinition(ctx, namespace, child));
+        break;
+    }
+  }
+  return schema;
+}
+
+function parseStructuredType(
+  ctx: Ctx,
+  namespace: string,
+  node: XNode,
+  kind: StructuredType['kind'],
+): StructuredType {
+  const name = required(ctx, node, 'Name');
+  const id = qualify(namespace, name);
+  const type: StructuredType = {
+    kind,
+    id,
+    name,
+    annotations: [],
+    span: node.span,
+    abstract: bool(node, 'Abstract', false),
+    openType: bool(node, 'OpenType', false),
+    hasStream: bool(node, 'HasStream', false),
+    key: [],
+    properties: [],
+    navigationProperties: [],
+  };
+  if (node.attrs.BaseType) type.baseType = typeRef(node.attrs.BaseType);
+
+  for (const child of node.children) {
+    if (child.name === 'Key') type.key = parseKey(child);
+    else if (child.name === 'Property') type.properties.push(parseProperty(ctx, id, child));
+    else if (child.name === 'NavigationProperty') {
+      type.navigationProperties.push(parseNavigationProperty(ctx, id, child));
+    }
+  }
+  return type;
+}
+
+function parseKey(node: XNode): KeyProperty[] {
+  const key: KeyProperty[] = [];
+  for (const ref of node.children) {
+    if (ref.name !== 'PropertyRef') continue;
+    const k: KeyProperty = { name: ref.attrs.Name ?? '' };
+    if (ref.attrs.Alias) k.alias = ref.attrs.Alias;
+    key.push(k);
+  }
+  return key;
+}
+
+function parseProperty(ctx: Ctx, parentId: string, node: XNode): Property {
+  const name = required(ctx, node, 'Name', parentId);
+  return {
+    kind: 'property',
+    id: childId(parentId, name),
+    name,
+    annotations: [],
+    span: node.span,
+    type: typeRef(required(ctx, node, 'Type', childId(parentId, name))),
+    nullable: bool(node, 'Nullable', true),
+    facets: facets(node),
+  };
+}
+
+function parseNavigationProperty(ctx: Ctx, parentId: string, node: XNode): NavigationProperty {
+  const name = required(ctx, node, 'Name', parentId);
+  const id = childId(parentId, name);
+  const nav: NavigationProperty = {
+    kind: 'navigationProperty',
+    id,
+    name,
+    annotations: [],
+    span: node.span,
+    type: typeRef(required(ctx, node, 'Type', id)),
+    nullable: bool(node, 'Nullable', true),
+    containsTarget: bool(node, 'ContainsTarget', false),
+    referentialConstraints: [],
+  };
+  if (node.attrs.Partner) nav.partner = node.attrs.Partner;
+  for (const child of node.children) {
+    if (child.name === 'ReferentialConstraint') {
+      nav.referentialConstraints.push({
+        property: child.attrs.Property ?? '',
+        referencedProperty: child.attrs.ReferencedProperty ?? '',
+      });
+    } else if (child.name === 'OnDelete') {
+      nav.onDelete = (child.attrs.Action ?? 'None') as OnDeleteAction;
+    }
+  }
+  return nav;
+}
+
+function parseEnumType(ctx: Ctx, namespace: string, node: XNode): EnumType {
+  const name = required(ctx, node, 'Name');
+  const id = qualify(namespace, name);
+  const isFlags = bool(node, 'IsFlags', false);
+  const members: EnumMember[] = [];
+  // Members without a Value continue from the previous one. (Flags members must state theirs.)
+  let next = 0;
+  for (const child of node.children) {
+    if (child.name !== 'Member') continue;
+    const memberName = required(ctx, child, 'Name', id);
+    const explicit = child.attrs.Value;
+    const value = explicit ?? String(next);
+    if (!isFlags && Number.isInteger(Number(value))) next = Number(value) + 1;
+    members.push({
+      kind: 'enumMember',
+      id: childId(id, memberName),
+      name: memberName,
+      annotations: [],
+      span: child.span,
+      value,
+    });
+  }
+  return {
+    kind: 'enumType',
+    id,
+    name,
+    annotations: [],
+    span: node.span,
+    isFlags,
+    underlyingType: node.attrs.UnderlyingType ?? 'Edm.Int32',
+    members,
+  };
+}
+
+function parseTypeDefinition(ctx: Ctx, namespace: string, node: XNode): TypeDefinition {
+  const name = required(ctx, node, 'Name');
+  return {
+    kind: 'typeDefinition',
+    id: qualify(namespace, name),
+    name,
+    annotations: [],
+    span: node.span,
+    underlyingType: required(ctx, node, 'UnderlyingType', qualify(namespace, name)),
+    facets: facets(node),
+  };
+}
