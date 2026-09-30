@@ -11,7 +11,7 @@ Everything in `src/csdl/` is pure TypeScript, with no DOM and no React.
   source spans, and diagnostics. Add helpers that build target-path IDs (`NS.T`, `NS.T/Prop`,
   `NS.Container/Set`, `NS.Fn(NS.Binding)`).
   *Done when:* the types compile, and the ID helpers are unit-tested, overload IDs included.
-- [ ] **1.2 Fixtures.** Commit the TripPin and Northwind v4 `$metadata` files, and record their sources
+- [x] **1.2 Fixtures.** Commit the TripPin and Northwind v4 `$metadata` files, and record their sources
   and licenses in `fixtures/README.md`.
   *Done when:* both files are committed and attributed.
 - [ ] **1.3 XML parser: types.** Stream-parse with saxes: `Edmx`, `Reference`/`Include`,
