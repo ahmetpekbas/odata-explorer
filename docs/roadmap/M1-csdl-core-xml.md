@@ -38,7 +38,7 @@ Everything in `src/csdl/` is pure TypeScript, with no DOM and no React.
 - [x] **1.7 Resolver: names.** Resolve aliases to namespaces, qualify every type reference, and handle
   `Collection(...)` and `Edm.*` primitives. Unresolved references become diagnostics.
   *Done when:* tests cover an alias-heavy fixture and an unresolved-type fixture.
-- [ ] **1.8 Resolver: structure.**
+- [x] **1.8 Resolver: structure.**
   - Base-type chains, inherited keys and properties, and a derived-types index.
   - Inverse navigation via `Partner`.
   - Which entity sets and singletons expose each type, and navigation bindings per set.

@@ -4,9 +4,10 @@
 import { locateDiagnostics } from './diagnostics.ts';
 import { actionId, functionId, parameterId, returnTypeId } from './ids.ts';
 import type { Annotation, Diagnostic, Element, Expression, Model, TypeRef } from './model.ts';
+import { resolveStructure, type Structure } from './resolve-structure.ts';
 import { allElements } from './walk.ts';
 
-export interface Resolved {
+export interface Resolved extends Structure {
   model: Model;
   /** Every element of the model by target-path ID. */
   elements: Map<string, Element>;
@@ -63,8 +64,9 @@ const PRIMITIVES = new Set(
 export function resolve(model: Model, source?: string): Resolved {
   const r = new Resolver(model);
   r.run();
+  const structure = resolveStructure(model, r.elements, (name) => r.qualifyName(name));
   if (source !== undefined) locateDiagnostics(model.diagnostics, source);
-  return { model, elements: r.elements };
+  return { model, elements: r.elements, ...structure };
 }
 
 class Resolver {
