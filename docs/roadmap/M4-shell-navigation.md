@@ -15,7 +15,7 @@
 - [x] **4.3 Navigator UI.** Fluent `FlatTree` items rendered through `@tanstack/react-virtual`, with an
   in-place filter and keyboard navigation.
   *Done when:* a list of 5,000 nodes scrolls smoothly, the filter narrows it, and the arrow keys work.
-- [ ] **4.4 Tab workspace.** A single click opens a preview tab and a double-click pins it. Middle-click
+- [x] **4.4 Tab workspace.** A single click opens a preview tab and a double-click pins it. Middle-click
   closes a tab, and "Close others" is available. Tabs that don't fit go into an overflow menu. Each tab
   kind shows a placeholder view for now.
   *Done when:* preview replacement and pinning behave like VS Code.

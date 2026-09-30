@@ -7,10 +7,11 @@ const useStyles = makeStyles({
   root: { flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' },
   toolbar: {
     display: 'flex',
-    justifyContent: 'flex-end',
+    alignItems: 'center',
     padding: tokens.spacingHorizontalXS,
     borderBottom: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStroke2}`,
   },
+  inspectorToggle: { marginInlineStart: 'auto' },
   group: { flex: 1, minHeight: 0 },
   pane: { overflow: 'auto', height: '100%' },
   separator: {
@@ -25,10 +26,12 @@ interface ShellProps {
   navigator: ReactNode;
   workspace: ReactNode;
   inspector: ReactNode;
+  /** Shown at the start of the toolbar above the panes. */
+  toolbar?: ReactNode;
 }
 
 /** Navigator | workspace | inspector. Pane sizes, and whether the inspector is collapsed, persist. */
-export function Shell({ navigator, workspace, inspector }: ShellProps) {
+export function Shell({ navigator, workspace, inspector, toolbar }: ShellProps) {
   const styles = useStyles();
   const inspectorRef = usePanelRef();
   const [collapsed, setCollapsed] = useState(false);
@@ -41,7 +44,9 @@ export function Shell({ navigator, workspace, inspector }: ShellProps) {
   return (
     <div className={styles.root}>
       <div className={styles.toolbar}>
+        {toolbar}
         <Button
+          className={styles.inspectorToggle}
           appearance="subtle"
           size="small"
           icon={collapsed ? <PanelRightExpandRegular /> : <PanelRightContractRegular />}

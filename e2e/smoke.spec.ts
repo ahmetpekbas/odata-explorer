@@ -37,6 +37,7 @@ test('lists the problems of a document with unresolved references', async ({ pag
   await page.goto('./');
   await page.getByLabel('Choose a metadata file').setInputFiles('fixtures/unresolved.xml');
   await expect(page.getByRole('button', { name: 'Close unresolved.xml' })).toBeVisible();
+  await page.getByRole('button', { name: /Problems \(/ }).click();
   const panel = page.getByRole('region', { name: 'Diagnostics' });
   await expect(panel.getByText('unresolved-reference').first()).toBeVisible();
 });
@@ -99,4 +100,46 @@ test('navigator virtualizes 5,000 nodes, filters, and follows the arrow keys', a
   await expect(tree.getByRole('treeitem', { name: 'T0', exact: true })).toBeHidden();
   await page.getByLabel('Filter the navigator').fill('zzz');
   await expect(page.getByText('No matches.')).toBeVisible();
+});
+
+test('tabs: preview is replaced, double-click pins, middle-click closes, overflow lists the rest', async ({
+  page,
+}) => {
+  await page.goto('./');
+  await page.getByLabel('Choose a metadata file').setInputFiles('fixtures/trippin.xml');
+  const tree = page.getByRole('tree', { name: 'Model elements' });
+  await tree.getByRole('treeitem', { name: 'Entity Types' }).click();
+  // Fluent renders a tab's text twice (the second copy reserves space for bold), so read the titles.
+  const tabs = async () => {
+    const all = await page.getByRole('tab').all();
+    return Promise.all(all.map(async (t) => (await t.getAttribute('title'))?.split('.').pop()));
+  };
+  const item = (name: string) => tree.getByRole('treeitem', { name, exact: true });
+
+  await item('Person').click();
+  await expect.poll(tabs).toEqual(['Person']);
+  await item('Trip').click();
+  await expect.poll(tabs).toEqual(['Trip']);
+
+  await item('Trip').dblclick();
+  await item('Airline').click();
+  await expect.poll(tabs).toEqual(['Trip', 'Airline']);
+  await item('Airport').click();
+  await expect.poll(tabs).toEqual(['Trip', 'Airport']);
+
+  await page.getByRole('tab', { name: 'Airport' }).click({ button: 'middle' });
+  await expect.poll(tabs).toEqual(['Trip']);
+
+  await item('Airline').dblclick();
+  await item('Flight').dblclick();
+  await page.getByRole('tab', { name: 'Trip' }).click({ button: 'right' });
+  await page.getByRole('menuitem', { name: 'Close others' }).click();
+  await expect.poll(tabs).toEqual(['Trip']);
+
+  await page.setViewportSize({ width: 900, height: 700 });
+  for (const name of ['Airline', 'Airport', 'Event', 'Flight', 'Person', 'PlanItem', 'Photo']) {
+    await item(name).dblclick();
+  }
+  await page.setViewportSize({ width: 640, height: 700 });
+  await expect(page.getByRole('button', { name: /\d+ more tabs/ })).toBeVisible();
 });

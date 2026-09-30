@@ -7,14 +7,15 @@ import {
   webDarkTheme,
   webLightTheme,
 } from '@fluentui/react-components';
+import { ErrorCircleRegular } from '@fluentui/react-icons';
 import { openFile, openRecent } from './app/loader.ts';
 import { selectActiveDocument, useStore } from './app/store.ts';
 import { useTheme } from './app/theme.ts';
-import { DiagnosticsPanel } from './ui/shell/DiagnosticsPanel.tsx';
 import { Navigator } from './ui/navigator/Navigator.tsx';
 import { RecentFiles } from './ui/shell/RecentFiles.tsx';
 import { StartPage } from './ui/shell/StartPage.tsx';
 import { Shell } from './ui/shell/Shell.tsx';
+import { Workspace } from './ui/workspace/Workspace.tsx';
 import { ThemeMenu } from './ui/shell/ThemeMenu.tsx';
 
 const useStyles = makeStyles({
@@ -53,7 +54,8 @@ const useStyles = makeStyles({
 export function App() {
   const styles = useStyles();
   const document = useStore(selectActiveDocument);
-  const selection = useStore((s) => s.selection);
+  const activeTab = useStore((s) => s.activeTab);
+  const openTab = useStore((s) => s.openTab);
   const select = useStore((s) => s.select);
   const closeDocument = useStore((s) => s.closeDocument);
   const { preference, setPreference, scheme } = useTheme();
@@ -81,14 +83,24 @@ export function App() {
           navigator={
             <Navigator
               model={document.resolved.model}
-              selectedId={selection}
-              onOpen={(target) => select(target.id)}
+              selectedId={activeTab}
+              onOpen={(target, pin) => openTab(target, pin)}
             />
           }
+          toolbar={
+            <Button
+              appearance="subtle"
+              size="small"
+              icon={<ErrorCircleRegular />}
+              onClick={() => openTab({ id: 'problems', kind: 'diagnostics' }, true)}
+            >
+              Problems ({document.resolved.model.diagnostics.length})
+            </Button>
+          }
           workspace={
-            <DiagnosticsPanel
+            <Workspace
               diagnostics={document.resolved.model.diagnostics}
-              onSelect={(d) => select(d.target)}
+              onSelectDiagnostic={(d) => select(d.target)}
             />
           }
           inspector={null}
