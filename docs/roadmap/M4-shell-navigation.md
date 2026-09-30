@@ -5,7 +5,7 @@
 - **Demo:** Browse the tree, open tabs, deep-link to a page.
 - **Needs:** [M3](M3-load-pipeline.md)
 
-- [ ] **4.1 Three-pane layout.** Navigator | workspace | inspector with `react-resizable-panels`. The
+- [x] **4.1 Three-pane layout.** Navigator | workspace | inspector with `react-resizable-panels`. The
   inspector can collapse, and the pane sizes persist.
   *Done when:* resizing and collapsing survive a reload.
 - [ ] **4.2 Navigator data.** Build the tree model: per schema (entity types, complex types, enums,

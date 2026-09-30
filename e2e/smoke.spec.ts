@@ -24,9 +24,9 @@ test('loads dropped metadata through the worker and rejects OData v2', async ({ 
   await page.goto('./');
 
   await page.getByLabel('Choose a metadata file').setInputFiles('fixtures/trippin.xml');
-  await expect(page.getByText('Loaded trippin.xml')).toBeVisible();
-  await expect(page.getByText(/\d+ entity types/)).toBeVisible();
-  await expect(page.getByText(/\d+ entity sets/)).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Close trippin.xml' })).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Navigator' })).toBeVisible();
+  await page.getByRole('button', { name: 'Close trippin.xml' }).click();
 
   await page.getByLabel('Choose a metadata file').setInputFiles('fixtures/v2.xml');
   await expect(page.getByText('Could not open v2.xml')).toBeVisible();
@@ -36,7 +36,7 @@ test('loads dropped metadata through the worker and rejects OData v2', async ({ 
 test('lists the problems of a document with unresolved references', async ({ page }) => {
   await page.goto('./');
   await page.getByLabel('Choose a metadata file').setInputFiles('fixtures/unresolved.xml');
-  await expect(page.getByText('Loaded unresolved.xml')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Close unresolved.xml' })).toBeVisible();
   const panel = page.getByRole('region', { name: 'Diagnostics' });
   await expect(panel.getByText('unresolved-reference').first()).toBeVisible();
 });
@@ -45,16 +45,27 @@ test('remembers a loaded file across a reload until it is forgotten', async ({ p
   await page.goto('./');
   await expect(page.getByText('Stored only in this browser.')).toBeVisible();
   await page.getByLabel('Choose a metadata file').setInputFiles('fixtures/trippin.xml');
-  await expect(page.getByText('Loaded trippin.xml')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Close trippin.xml' })).toBeVisible();
 
   await page.reload();
-  await expect(page.getByText('Loaded trippin.xml')).toBeHidden();
+  await expect(page.getByRole('button', { name: 'Close trippin.xml' })).toBeHidden();
   await page.getByRole('button', { name: 'Open trippin.xml' }).click();
-  await expect(page.getByText('Loaded trippin.xml')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Close trippin.xml' })).toBeVisible();
 
   await page.reload();
   await page.getByRole('button', { name: 'Forget trippin.xml' }).click();
   await expect(page.getByText('No recent files yet.')).toBeVisible();
   await page.reload();
   await expect(page.getByText('No recent files yet.')).toBeVisible();
+});
+
+test('keeps the inspector collapsed across a reload', async ({ page }) => {
+  await page.goto('./');
+  await page.getByLabel('Choose a metadata file').setInputFiles('fixtures/trippin.xml');
+  await page.getByRole('button', { name: 'Collapse inspector' }).click();
+  await expect(page.getByRole('button', { name: 'Expand inspector' })).toBeVisible();
+
+  await page.reload();
+  await page.getByRole('button', { name: 'Open trippin.xml' }).click();
+  await expect(page.getByRole('button', { name: 'Expand inspector' })).toBeVisible();
 });

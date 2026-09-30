@@ -1,4 +1,5 @@
 import {
+  Button,
   FluentProvider,
   makeStyles,
   Text,
@@ -12,6 +13,7 @@ import { useTheme } from './app/theme.ts';
 import { DiagnosticsPanel } from './ui/shell/DiagnosticsPanel.tsx';
 import { RecentFiles } from './ui/shell/RecentFiles.tsx';
 import { StartPage } from './ui/shell/StartPage.tsx';
+import { Shell } from './ui/shell/Shell.tsx';
 import { ThemeMenu } from './ui/shell/ThemeMenu.tsx';
 
 const useStyles = makeStyles({
@@ -28,6 +30,7 @@ const useStyles = makeStyles({
     padding: `${tokens.spacingVerticalS} ${tokens.spacingHorizontalL}`,
     borderBottom: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStroke2}`,
   },
+  actions: { display: 'flex', alignItems: 'center', gap: tokens.spacingHorizontalS },
   title: {
     margin: 0,
   },
@@ -50,6 +53,7 @@ export function App() {
   const styles = useStyles();
   const document = useStore(selectActiveDocument);
   const select = useStore((s) => s.select);
+  const closeDocument = useStore((s) => s.closeDocument);
   const { preference, setPreference, scheme } = useTheme();
 
   return (
@@ -61,21 +65,34 @@ export function App() {
         <Text as="h1" size={500} weight="semibold" className={styles.title}>
           OData Explorer
         </Text>
-        <ThemeMenu preference={preference} onChange={setPreference} />
-      </header>
-      <main className={styles.main}>
-        <div className={styles.content}>
-          <StartPage document={document} onOpen={(file) => void openFile(file)} />
-          <RecentFiles onOpen={(file) => void openRecent(file)} />
+        <div className={styles.actions}>
           {document?.status === 'ready' && (
+            <Button appearance="subtle" onClick={() => closeDocument(document.id)}>
+              Close {document.name}
+            </Button>
+          )}
+          <ThemeMenu preference={preference} onChange={setPreference} />
+        </div>
+      </header>
+      {document?.status === 'ready' ? (
+        <Shell
+          navigator={null}
+          workspace={
             <DiagnosticsPanel
               diagnostics={document.resolved.model.diagnostics}
-              // Until the navigator exists (M4), selecting only records the target.
               onSelect={(d) => select(d.target)}
             />
-          )}
-        </div>
-      </main>
+          }
+          inspector={null}
+        />
+      ) : (
+        <main className={styles.main}>
+          <div className={styles.content}>
+            <StartPage document={document} onOpen={(file) => void openFile(file)} />
+            <RecentFiles onOpen={(file) => void openRecent(file)} />
+          </div>
+        </main>
+      )}
     </FluentProvider>
   );
 }
