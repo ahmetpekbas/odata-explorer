@@ -1,5 +1,4 @@
 import {
-  Body1,
   FluentProvider,
   makeStyles,
   Text,
@@ -7,7 +6,10 @@ import {
   webDarkTheme,
   webLightTheme,
 } from '@fluentui/react-components';
+import { openFile } from './app/loader.ts';
+import { selectActiveDocument, useStore } from './app/store.ts';
 import { useTheme } from './app/theme.ts';
+import { StartPage } from './ui/shell/StartPage.tsx';
 import { ThemeMenu } from './ui/shell/ThemeMenu.tsx';
 
 const useStyles = makeStyles({
@@ -37,6 +39,7 @@ const useStyles = makeStyles({
 
 export function App() {
   const styles = useStyles();
+  const document = useStore(selectActiveDocument);
   const { preference, setPreference, scheme } = useTheme();
 
   return (
@@ -51,7 +54,7 @@ export function App() {
         <ThemeMenu preference={preference} onChange={setPreference} />
       </header>
       <main className={styles.main}>
-        <Body1>Open an OData $metadata document to explore its entities and relationships.</Body1>
+        <StartPage document={document} onOpen={(file) => void openFile(file)} />
       </main>
     </FluentProvider>
   );

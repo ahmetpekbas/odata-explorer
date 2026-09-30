@@ -19,3 +19,16 @@ test('starts from a subpath, follows the OS theme, and keeps a manual choice', a
   await expect(html).toHaveCSS('color-scheme', 'light');
   expect(errors).toEqual([]);
 });
+
+test('loads dropped metadata through the worker and rejects OData v2', async ({ page }) => {
+  await page.goto('./');
+
+  await page.getByLabel('Choose a metadata file').setInputFiles('fixtures/trippin.xml');
+  await expect(page.getByText('Loaded trippin.xml')).toBeVisible();
+  await expect(page.getByText(/\d+ entity types/)).toBeVisible();
+  await expect(page.getByText(/\d+ entity sets/)).toBeVisible();
+
+  await page.getByLabel('Choose a metadata file').setInputFiles('fixtures/v2.xml');
+  await expect(page.getByText('Could not open v2.xml')).toBeVisible();
+  await expect(page.getByText(/not supported/)).toBeVisible();
+});

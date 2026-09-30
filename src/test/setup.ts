@@ -6,3 +6,10 @@ afterEach(() => {
   cleanup();
   localStorage.clear();
 });
+
+// jsdom has no ResizeObserver, which Fluent's MessageBar uses.
+globalThis.ResizeObserver ??= class {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};

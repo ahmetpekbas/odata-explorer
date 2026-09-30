@@ -10,6 +10,7 @@ Small, public `$metadata` documents used by the CSDL tests. They are committed u
 | `aliases.xml` | Hand-written: two schemas referenced through aliases, an included vocabulary, overloads | n/a |
 | `unresolved.xml` | Hand-written: one of each kind of unresolvable type reference | n/a |
 | `expressions.xml` | Hand-written for this project: one example of every annotation expression form | n/a |
+| `v2.xml` | Hand-written: an OData v2 (EDMX 1.0) document, which must be rejected | n/a |
 
 ## Licensing
 

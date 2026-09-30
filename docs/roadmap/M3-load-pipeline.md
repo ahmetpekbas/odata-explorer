@@ -11,7 +11,7 @@
 - [x] **3.2 Store.** Write zustand `store.ts`: a map of documents (v1 shows one active document), the
   detail mode, and the selection.
   *Done when:* unit-tested reducers or actions.
-- [ ] **3.3 Start page.** A drop zone, a file picker, a progress bar, and an error message for failed
+- [x] **3.3 Start page.** A drop zone, a file picker, a progress bar, and an error message for failed
   loads.
   *Done when:* dropping TripPin shows the type and set counts, and dropping a v2 file shows the
   "not supported" message.
