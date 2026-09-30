@@ -26,9 +26,13 @@ import type {
   Term,
   TypeDefinition,
 } from './model.ts';
+import { locateDiagnostics } from './diagnostics.ts';
 import { inlineAnnotations, parseAnnotationBlock } from './parse-xml-annotations.ts';
 import { bool, type Ctx, facets, typeRef } from './xml-attrs.ts';
 import { readXml, type XNode } from './xml-tree.ts';
+
+/** EDMX namespaces of OData v1-v3, all under this prefix. */
+const LEGACY_EDMX_NS = 'http://schemas.microsoft.com/ado/';
 
 export function parseXml(text: string): Model {
   const ctx: Ctx = { diagnostics: [] };
@@ -39,10 +43,51 @@ export function parseXml(text: string): Model {
     schemas: [],
     diagnostics: ctx.diagnostics,
   };
-  const { root } = readXml(text);
+  const tree = readXml(text);
+
+  for (const e of tree.errors) {
+    ctx.diagnostics.push({
+      severity: 'error',
+      code: 'xml-syntax',
+      message: e.message,
+      line: e.line,
+      column: e.column,
+    });
+  }
+  if (tree.hasDoctype) {
+    ctx.diagnostics.push({
+      severity: 'error',
+      code: 'doctype-refused',
+      message:
+        'The document declares a DOCTYPE, which is not allowed. Entity declarations are never expanded.',
+    });
+    return model;
+  }
+  const { root } = tree;
   if (!root) return model;
 
   model.version = root.attrs.Version ?? '';
+  if (root.name !== 'Edmx') {
+    ctx.diagnostics.push({
+      severity: 'error',
+      code: 'not-edmx',
+      message: `The root element is <${root.name}>, but an OData $metadata document starts with <edmx:Edmx>.`,
+      span: root.span,
+    });
+    locateDiagnostics(ctx.diagnostics, text);
+    return model;
+  }
+  if (root.uri.startsWith(LEGACY_EDMX_NS) || /^[123]\./.test(model.version)) {
+    ctx.diagnostics.push({
+      severity: 'error',
+      code: 'unsupported-version',
+      message: `OData v2/v3 metadata (EDMX ${model.version || 'with a legacy namespace'}) is not supported. Only OData v4 CSDL is.`,
+      span: root.span,
+    });
+    locateDiagnostics(ctx.diagnostics, text);
+    return model;
+  }
+
   for (const child of root.children) {
     if (child.name === 'Reference') model.references.push(parseReference(child));
     else if (child.name === 'DataServices') {
@@ -51,6 +96,7 @@ export function parseXml(text: string): Model {
       }
     }
   }
+  locateDiagnostics(ctx.diagnostics, text);
   return model;
 }
 

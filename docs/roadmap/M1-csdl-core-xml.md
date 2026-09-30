@@ -28,7 +28,7 @@ Everything in `src/csdl/` is pure TypeScript, with no DOM and no React.
   variants, `Record`/`PropertyValue`, `Collection`, `Apply`, `If`, logical and comparison operators,
   `Cast`, `IsOf`, `LabeledElement(Reference)`, `Null`, `UrlRef`).
   *Done when:* a hand-written fixture with one example of every expression form parses correctly.
-- [ ] **1.6 Spans, diagnostics, guards.**
+- [x] **1.6 Spans, diagnostics, guards.**
   - Record start and end offsets for each element.
   - Report malformed XML as a diagnostic with line and column, and keep going where possible.
   - Detect v2/v3 EDMX and report "not supported".

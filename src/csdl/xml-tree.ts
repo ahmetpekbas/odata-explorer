@@ -30,6 +30,9 @@ export interface XmlTree {
   hasDoctype: boolean;
 }
 
+/** Give up on input that is mostly garbage rather than report every byte of it. */
+const MAX_ERRORS = 100;
+
 /** Thrown inside a saxes handler to abandon the parse, e.g. on a DOCTYPE. */
 class Abort extends Error {}
 
@@ -41,6 +44,7 @@ export function readXml(text: string): XmlTree {
   let hasDoctype = false;
 
   parser.on('error', (e) => {
+    if (errors.length >= MAX_ERRORS) throw new Abort();
     errors.push({
       message: e.message.replace(/^\d+:\d+: /, ''),
       line: parser.line,
