@@ -25,7 +25,7 @@ export default defineConfig([
   },
   {
     // Config files, e2e specs and scripts run in Node.
-    files: ['*.{js,ts}', 'e2e/**/*.ts'],
+    files: ['*.{js,ts}', 'e2e/**/*.ts', 'scripts/**/*.ts'],
     extends: [js.configs.recommended],
     languageOptions: { globals: globals.node },
   },

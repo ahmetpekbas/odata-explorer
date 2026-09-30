@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { parseXml } from './parse-xml.ts';
 import { resolve } from './resolve.ts';
-import { aliasesXml, northwindXml, trippinXml, unresolvedXml } from './test-fixtures.ts';
+import { aliasesXml, coreOnly, northwindXml, trippinXml, unresolvedXml } from './test-fixtures.ts';
 
-const load = (source: string) => resolve(parseXml(source), source);
+const load = (source: string) => resolve(parseXml(source), source, coreOnly);
 
 describe('resolver: names', () => {
   const { model, elements } = load(aliasesXml);
@@ -105,6 +105,7 @@ describe('resolver: unresolved references', () => {
 
   it('reports every unresolvable reference, and only those', () => {
     expect(messages).toEqual([
+      ['unresolved-reference', undefined, expect.stringContaining('Other.Model')],
       ['unresolved-type', 'Broken.Bad', expect.stringContaining('Broken.Missing')],
       ['unresolved-type', 'Broken.Bad/NoNamespace', expect.stringContaining('not qualified')],
       ['unresolved-type', 'Broken.Bad/UnknownNamespace', expect.stringContaining('Nowhere')],
@@ -128,7 +129,7 @@ describe('resolver: unresolved references', () => {
     expect(model.diagnostics.every((d) => d.line !== undefined && d.column !== undefined)).toBe(
       true,
     );
-    expect(model.diagnostics[0]).toMatchObject({ line: 13 });
+    expect(model.diagnostics[0]).toMatchObject({ code: 'unresolved-reference', line: 3 });
   });
 });
 

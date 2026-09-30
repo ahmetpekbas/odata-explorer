@@ -14,6 +14,13 @@ export interface Resolved extends Structure {
   elements: Map<string, Element>;
 }
 
+const TYPE_KINDS = new Set<Element['kind']>([
+  'entityType',
+  'complexType',
+  'enumType',
+  'typeDefinition',
+]);
+
 const PRIMITIVES = new Set(
   [
     'Binary',
@@ -55,15 +62,29 @@ const PRIMITIVES = new Set(
     'EntityType',
     'Untyped',
     'AnnotationPath',
+    'AnyPropertyPath',
     'ModelElementPath',
     'NavigationPropertyPath',
     'PropertyPath',
   ].map((n) => `Edm.${n}`),
 );
 
-/** `source` is the text the model was parsed from; it lets diagnostics carry line and column. */
-export function resolve(model: Model, source?: string): Resolved {
-  const r = new Resolver(model);
+/** Namespaces that are not defined in the document but are available elsewhere, e.g. vocabularies. */
+export interface ExternalSchemas {
+  has(namespace: string): boolean;
+  /**
+   * The resolved content, if it is loaded. Can be undefined for a namespace that `has` when
+   * vocabularies reference each other; types from it are then left unchecked.
+   */
+  get(namespace: string): Resolved | undefined;
+}
+
+/**
+ * `source` is the text the model was parsed from; it lets diagnostics carry line and column.
+ * `externals` supplies the content of `edmx:Reference`d namespaces.
+ */
+export function resolve(model: Model, source?: string, externals?: ExternalSchemas): Resolved {
+  const r = new Resolver(model, externals);
   r.run();
   const qualifyName = (name: string) => r.qualifyName(name);
   const structure = resolveStructure(model, r.elements, qualifyName);
@@ -84,9 +105,11 @@ class Resolver {
   private readonly types = new Map<string, Element>();
 
   private readonly model: Model;
+  private readonly externals: ExternalSchemas | undefined;
 
-  constructor(model: Model) {
+  constructor(model: Model, externals: ExternalSchemas | undefined) {
     this.model = model;
+    this.externals = externals;
   }
 
   run(): void {
@@ -114,6 +137,18 @@ class Resolver {
       if (schema.alias) this.addAlias(schema.alias, schema.namespace, schema);
     }
     for (const reference of model.references) {
+      const missing = reference.includes
+        .map((i) => i.namespace)
+        .filter((ns) => !this.ownNamespaces.has(ns) && !this.externals?.has(ns));
+      if (missing.length > 0 || reference.includes.length === 0) {
+        this.report(
+          undefined,
+          'unresolved-reference',
+          `The reference ${reference.uri} cannot be resolved${missing.length > 0 ? ` (${missing.join(', ')})` : ''}: only the standard OASIS vocabularies are bundled, so what it declares shows as unresolved.`,
+          'warning',
+          reference.span,
+        );
+      }
       for (const include of reference.includes) {
         this.included.add(include.namespace);
         if (include.alias) {
@@ -172,7 +207,17 @@ class Resolver {
           'unresolved-type',
           `The type ${type.name} is not defined in ${namespace}.`,
         );
-    } else if (!this.included.has(namespace)) {
+    } else if (this.included.has(namespace)) {
+      const external = this.externals?.get(namespace);
+      const found = external?.elements.get(type.name);
+      if (external && !(found && TYPE_KINDS.has(found.kind))) {
+        this.report(
+          owner,
+          'unresolved-type',
+          `The type ${type.name} is not defined in ${namespace}.`,
+        );
+      }
+    } else {
       this.report(
         owner,
         'unresolved-type',

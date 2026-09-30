@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import type { Annotation } from './model.ts';
 import { parseXml } from './parse-xml.ts';
 import { resolve } from './resolve.ts';
-import { aliasesXml, trippinXml } from './test-fixtures.ts';
+import { aliasesXml, coreOnly, trippinXml } from './test-fixtures.ts';
 
 const DOC = `<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
 <edmx:Reference Uri="core.xml"><edmx:Include Namespace="Org.OData.Core.V1" Alias="Core"/></edmx:Reference>
@@ -123,7 +123,7 @@ describe('annotation attachment', () => {
 
 describe('annotation attachment: documents', () => {
   it('attaches the external annotations in the alias fixture', () => {
-    const { model: m, elements: e } = resolve(parseXml(aliasesXml), aliasesXml);
+    const { model: m, elements: e } = resolve(parseXml(aliasesXml), aliasesXml, coreOnly);
     expect(m.diagnostics).toEqual([]);
     const customer = e.get('Org.Example.Model.Customer');
     expect(customer?.annotations.map((a) => [a.term, a.origin])).toEqual([

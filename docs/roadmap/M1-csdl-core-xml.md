@@ -47,7 +47,7 @@ Everything in `src/csdl/` is pure TypeScript, with no DOM and no React.
   path, keeping the qualifier and the origin. Support overload and nested targets.
   *Done when:* tests cover external targets on a property, a set, an overload, and a qualified
   annotation.
-- [ ] **1.10 Bundled vocabularies.** `scripts/fetch-vocabularies.ts` pulls the OASIS vocabulary XML
+- [x] **1.10 Bundled vocabularies.** `scripts/fetch-vocabularies.ts` pulls the OASIS vocabulary XML
   (Core, Capabilities, Measures, Validation, Aggregation, Authorization, JSON, Repeatability, Temporal) at
   a pinned commit into `src/vocabularies/`. `edmx:Reference`s resolve against the bundle, and term
   definitions can be looked up.

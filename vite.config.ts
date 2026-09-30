@@ -12,7 +12,7 @@ export default defineConfig({
         // The CSDL core must not depend on the DOM, so its tests run without one.
         test: {
           name: 'csdl',
-          include: ['src/csdl/**/*.test.ts'],
+          include: ['src/{csdl,vocabularies}/**/*.test.ts'],
           environment: 'node',
         },
       },
@@ -20,7 +20,7 @@ export default defineConfig({
         test: {
           name: 'ui',
           include: ['src/**/*.test.{ts,tsx}'],
-          exclude: [...configDefaults.exclude, 'src/csdl/**'],
+          exclude: [...configDefaults.exclude, 'src/csdl/**', 'src/vocabularies/**'],
           environment: 'jsdom',
           setupFiles: ['src/test/setup.ts'],
         },
