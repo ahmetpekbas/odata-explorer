@@ -7,7 +7,7 @@
 
 Everything in `src/csdl/` is pure TypeScript, with no DOM and no React.
 
-- [ ] **1.1 Model types.** Write `model.ts`: every element kind, facets, annotations with expressions,
+- [x] **1.1 Model types.** Write `model.ts`: every element kind, facets, annotations with expressions,
   source spans, and diagnostics. Add helpers that build target-path IDs (`NS.T`, `NS.T/Prop`,
   `NS.Container/Set`, `NS.Fn(NS.Binding)`).
   *Done when:* the types compile, and the ID helpers are unit-tested, overload IDs included.
