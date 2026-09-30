@@ -1,0 +1,4 @@
+# Hand-written prose; formatting is kept as authored.
+*.md
+protocol/
+package-lock.json

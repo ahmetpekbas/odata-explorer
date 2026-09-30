@@ -5,7 +5,7 @@
 - **Demo:** An empty app, themed, building and testing.
 - **Needs:** nothing
 
-- [ ] **0.1 Scaffold the app.** Vite + React + TypeScript (strict), plus npm scripts for `dev`, `build`,
+- [x] **0.1 Scaffold the app.** Vite + React + TypeScript (strict), plus npm scripts for `dev`, `build`,
   `preview`, `lint`, `format`, `test`, and `e2e`. Set up ESLint and Prettier.
   *Done when:* `npm run dev` shows a placeholder page, and `lint` and `build` pass.
 - [ ] **0.2 Repo hygiene.** Replace the .NET `.gitignore` with a Node one (`node_modules`, `dist`,
