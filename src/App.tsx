@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 import { openFile, openRecent } from './app/loader.ts';
 import { openableTarget } from './app/openable.ts';
 import { PROBLEMS_TAB, startRouting } from './app/routing.ts';
+import { startTabPersistence } from './app/tab-persistence.ts';
 import { selectActiveDocument, useStore } from './app/store.ts';
 import { useTheme } from './app/theme.ts';
 import { Navigator } from './ui/navigator/Navigator.tsx';
@@ -63,6 +64,7 @@ export function App() {
   const closeDocument = useStore((s) => s.closeDocument);
   const { preference, setPreference, scheme } = useTheme();
   useEffect(() => startRouting(), []);
+  useEffect(() => startTabPersistence(), []);
 
   return (
     <FluentProvider

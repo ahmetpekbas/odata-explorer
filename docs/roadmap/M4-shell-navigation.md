@@ -22,6 +22,6 @@
 - [x] **4.5 Hash routing.** The active tab syncs with `#/d/<docId>/<kind>/<targetPath>`. Back/forward
   work, and opening a deep link opens its tab. Diagnostics entries now navigate to their element.
   *Done when:* a pasted URL for a TripPin element opens the right tab.
-- [ ] **4.6 Per-file tab restore.** Save the open tabs with the recent file and restore them when it's
+- [x] **4.6 Per-file tab restore.** Save the open tabs with the recent file and restore them when it's
   reopened.
   *Done when:* after a reload the same tabs reopen and the same one is active.

@@ -190,3 +190,38 @@ test('routing: a problem with a target opens its element', async ({ page }) => {
   }
   expect(await page.getByRole('tab').count()).toBeGreaterThan(before);
 });
+
+test('restores the open tabs and the active one when a file is reopened', async ({ page }) => {
+  await page.goto('./');
+  await page.getByLabel('Choose a metadata file').setInputFiles('fixtures/trippin.xml');
+  const tree = page.getByRole('tree', { name: 'Model elements' });
+  await tree.getByRole('treeitem', { name: 'Entity Types' }).click();
+  for (const name of ['Person', 'Trip', 'Airline']) {
+    await tree.getByRole('treeitem', { name, exact: true }).dblclick();
+  }
+  await tree.getByRole('treeitem', { name: 'Flight', exact: true }).click();
+  await page.getByRole('tab', { name: 'Trip', exact: true }).click();
+  const titles = async () => {
+    const all = await page.getByRole('tab').all();
+    return Promise.all(all.map(async (t) => (await t.getAttribute('title'))?.split('.').pop()));
+  };
+  await expect.poll(titles).toEqual(['Person', 'Trip', 'Airline', 'Flight']);
+
+  // The hash names the file and the active tab; the rest comes back with the file.
+  await page.reload();
+  await expect.poll(titles).toEqual(['Person', 'Trip', 'Airline', 'Flight']);
+  await expect(page.getByRole('tab', { name: 'Trip', exact: true })).toHaveAttribute(
+    'aria-selected',
+    'true',
+  );
+
+  // From the start page, the recent file brings them back too.
+  await page.getByRole('button', { name: 'Close trippin.xml' }).click();
+  await page.reload();
+  await page.getByRole('button', { name: 'Open trippin.xml' }).click();
+  await expect.poll(titles).toEqual(['Person', 'Trip', 'Airline', 'Flight']);
+  await expect(page.getByRole('tab', { name: 'Trip', exact: true })).toHaveAttribute(
+    'aria-selected',
+    'true',
+  );
+});

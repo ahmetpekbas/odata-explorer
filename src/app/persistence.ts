@@ -2,6 +2,7 @@
 // without reading every document. Everything stays in this browser.
 import { openDB, type DBSchema, type IDBPDatabase } from 'idb';
 import type { Format } from '../worker/load.ts';
+import type { Tab } from './store.ts';
 
 export interface RecentFile {
   id: string;
@@ -11,6 +12,9 @@ export interface RecentFile {
   format: Format;
   /** Epoch milliseconds of the last time it was opened. */
   openedAt: number;
+  /** The tabs that were open when the file was last used, and which one was active. */
+  tabs?: Tab[];
+  activeTab?: string;
 }
 
 interface Schema extends DBSchema {
@@ -61,11 +65,19 @@ export async function saveRecent(
   const meta = tx.objectStore('meta');
   const texts = tx.objectStore('text');
 
+  // Reopening the same file keeps its tabs; a new file of the same name starts without.
+  let kept: Pick<RecentFile, 'tabs' | 'activeTab'> = {};
   for (const old of await meta.index('name').getAll(file.name)) {
+    if (old.id === file.id) {
+      kept = {
+        ...(old.tabs && { tabs: old.tabs }),
+        ...(old.activeTab && { activeTab: old.activeTab }),
+      };
+    }
     await meta.delete(old.id);
     await texts.delete(old.id);
   }
-  await meta.put({ ...file, size, openedAt: now });
+  await meta.put({ ...file, ...kept, size, openedAt: now });
   await texts.put(text, file.id);
 
   let total = 0;
@@ -81,6 +93,24 @@ export async function saveRecent(
   await tx.done;
   changed();
   return true;
+}
+
+/** Remembers which tabs a file has open. Does nothing for a file that is not remembered. */
+export async function saveTabs(
+  id: string,
+  tabs: Tab[],
+  activeTab: string | undefined,
+): Promise<void> {
+  const d = await database();
+  const tx = d.transaction('meta', 'readwrite');
+  const meta = await tx.store.get(id);
+  if (meta) {
+    const next: RecentFile = { ...meta, tabs };
+    if (activeTab === undefined) delete next.activeTab;
+    else next.activeTab = activeTab;
+    await tx.store.put(next);
+  }
+  await tx.done;
 }
 
 /** Recent files, most recently opened first. */

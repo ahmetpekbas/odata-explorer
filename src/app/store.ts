@@ -45,7 +45,13 @@ export interface StoreState {
   /** Adds a document in the loading state and makes it the active one. */
   startLoading: (doc: DocumentBase) => void;
   setProgress: (id: string, progress: Progress) => void;
-  finishLoading: (id: string, resolved: Resolved, text: string) => void;
+  /** `restored` brings back the tabs of an earlier session, if this document is the active one. */
+  finishLoading: (
+    id: string,
+    resolved: Resolved,
+    text: string,
+    restored?: { tabs: Tab[]; activeTab: string | undefined },
+  ) => void;
   failLoading: (id: string, error: string) => void;
   closeDocument: (id: string) => void;
   setActive: (id: string | undefined) => void;
@@ -94,10 +100,20 @@ export const useStore = create<StoreState>()((set) => ({
     })),
   setProgress: (id, progress) =>
     set((s) => replace(s, id, (doc) => (doc.status === 'loading' ? { ...doc, progress } : doc))),
-  finishLoading: (id, resolved, text) =>
-    set((s) =>
-      replace(s, id, ({ id, name, size }) => ({ id, name, size, status: 'ready', resolved, text })),
-    ),
+  finishLoading: (id, resolved, text, restored) =>
+    set((s) => {
+      const next = replace(s, id, ({ id, name, size }) => ({
+        id,
+        name,
+        size,
+        status: 'ready',
+        resolved,
+        text,
+      }));
+      return restored && s.activeId === id
+        ? { ...next, ...activated(restored.tabs, restored.activeTab) }
+        : next;
+    }),
   failLoading: (id, error) =>
     set((s) =>
       replace(s, id, ({ id, name, size }) => ({ id, name, size, status: 'error', error })),

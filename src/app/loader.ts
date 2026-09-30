@@ -3,7 +3,7 @@
 import { proxy, wrap } from 'comlink';
 import type { ParserApi } from '../worker/parser.worker.ts';
 import type { LoadResult, Progress } from '../worker/load.ts';
-import { getRecent, getRecentText, saveRecent } from './persistence.ts';
+import { getRecent, getRecentText, saveRecent, type RecentFile } from './persistence.ts';
 import { useStore } from './store.ts';
 
 export type Parse = (text: string, onProgress: (progress: Progress) => void) => Promise<LoadResult>;
@@ -30,6 +30,7 @@ export async function openText(
   text: string,
   parse: Parse = workerParse,
   id: string = crypto.randomUUID(),
+  restored?: Pick<RecentFile, 'tabs' | 'activeTab'>,
 ): Promise<string> {
   const store = useStore.getState();
   store.startLoading({ id, name, size: text.length });
@@ -45,7 +46,12 @@ export async function openText(
       const reason = model.diagnostics.find((d) => d.severity === 'error')?.message;
       store.failLoading(id, reason ?? 'The document does not contain any schemas.');
     } else {
-      store.finishLoading(id, result.resolved, text);
+      store.finishLoading(
+        id,
+        result.resolved,
+        text,
+        restored?.tabs && { tabs: restored.tabs, activeTab: restored.activeTab },
+      );
       // Remembering is a convenience: a full or unavailable IndexedDB must not fail the load.
       saveRecent({ id, name, format: model.format }, text).catch(() => undefined);
     }
@@ -70,11 +76,11 @@ export async function openFile(file: File, parse?: Parse): Promise<string> {
 
 /** Reopens a remembered file. Returns undefined when it is gone. */
 export async function openRecent(
-  recent: { id: string; name: string },
+  recent: Pick<RecentFile, 'id' | 'name' | 'tabs' | 'activeTab'>,
   parse?: Parse,
 ): Promise<string | undefined> {
   const text = await getRecentText(recent.id);
-  return text === undefined ? undefined : openText(recent.name, text, parse, recent.id);
+  return text === undefined ? undefined : openText(recent.name, text, parse, recent.id, recent);
 }
 
 /** Reopens a remembered file by id, e.g. from a deep link. Returns undefined when it is gone. */

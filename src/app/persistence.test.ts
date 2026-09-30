@@ -8,6 +8,7 @@ import {
   listRecent,
   onRecentChange,
   saveRecent,
+  saveTabs,
 } from './persistence.ts';
 
 const file = (id: string, name = `${id}.xml`) => ({ id, name, format: 'xml' as const });
@@ -73,5 +74,38 @@ describe('recent files', () => {
     unsubscribe();
     await clearRecent();
     expect(listener).toHaveBeenCalledTimes(3);
+  });
+});
+
+describe('saved tabs', () => {
+  const tabs = [
+    { id: 'NS.A', kind: 'entityType' as const, pinned: true },
+    { id: 'NS.B', kind: 'complexType' as const, pinned: false },
+  ];
+
+  it('stores the tabs and the active one with the file', async () => {
+    await saveRecent(file('a'), 'x', 1);
+    await saveTabs('a', tabs, 'NS.B');
+    expect(await listRecent()).toMatchObject([{ id: 'a', tabs, activeTab: 'NS.B' }]);
+    await saveTabs('a', [], undefined);
+    const [saved] = await listRecent();
+    expect(saved).toMatchObject({ tabs: [] });
+    expect(saved).not.toHaveProperty('activeTab');
+  });
+
+  it('ignores a file that is not remembered', async () => {
+    await saveTabs('nope', tabs, 'NS.A');
+    expect(await listRecent()).toEqual([]);
+  });
+
+  it('keeps the tabs when the same file is saved again, but not for a new file of that name', async () => {
+    await saveRecent(file('a'), 'x', 1);
+    await saveTabs('a', tabs, 'NS.A');
+    await saveRecent(file('a'), 'x', 2);
+    expect(await listRecent()).toMatchObject([{ id: 'a', tabs, activeTab: 'NS.A' }]);
+    await saveRecent({ ...file('b'), name: 'a.xml' }, 'y', 3);
+    expect(await listRecent()).toEqual([
+      { id: 'b', name: 'a.xml', format: 'xml', size: 1, openedAt: 3 },
+    ]);
   });
 });

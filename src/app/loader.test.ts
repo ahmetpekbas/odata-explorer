@@ -4,7 +4,7 @@ import trippin from '../../fixtures/trippin.xml?raw';
 import v2 from '../../fixtures/v2.xml?raw';
 import { load } from '../worker/load.ts';
 import { openRecent, openText, type Parse } from './loader.ts';
-import { clearRecent, listRecent } from './persistence.ts';
+import { clearRecent, listRecent, saveTabs } from './persistence.ts';
 import { selectActiveDocument, useStore } from './store.ts';
 
 const initial = useStore.getInitialState();
@@ -75,5 +75,23 @@ describe('openText', () => {
 
   it('cannot reopen a forgotten file', async () => {
     expect(await openRecent({ id: 'gone', name: 'gone.xml' }, inline)).toBeUndefined();
+  });
+});
+
+describe('openRecent with saved tabs', () => {
+  it('restores the tabs and the active one, and keeps the id of the file', async () => {
+    const id = await openText('trippin.xml', trippin, inline);
+    const tabs = [
+      { id: 'NS.A', kind: 'entityType' as const, pinned: true },
+      { id: 'NS.B', kind: 'complexType' as const, pinned: false },
+    ];
+    await saveTabs(id, tabs, 'NS.A');
+    const [recent] = await listRecent();
+    expect(recent?.id).toBe(id);
+
+    useStore.setState(initial, true);
+    expect(await openRecent(recent!, inline)).toBe(id);
+    expect(useStore.getState()).toMatchObject({ tabs, activeTab: 'NS.A', selection: 'NS.A' });
+    expect(await listRecent()).toMatchObject([{ id, tabs, activeTab: 'NS.A' }]);
   });
 });
