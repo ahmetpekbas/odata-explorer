@@ -15,6 +15,6 @@
 - [x] **0.3 Fluent UI and theming.** Wrap the app in `FluentProvider`, using light/dark from the system
   setting. Add a manual override, persisted in `localStorage`.
   *Done when:* the theme follows the OS setting, and the toggle survives a reload.
-- [ ] **0.4 Test harnesses.** Configure Vitest with a Node environment for `src/csdl` and jsdom for the
+- [x] **0.4 Test harnesses.** Configure Vitest with a Node environment for `src/csdl` and jsdom for the
   UI. Configure Playwright with one smoke test. Set Vite `base: './'`.
   *Done when:* `npm test` and `npm run e2e` each run at least one passing test.

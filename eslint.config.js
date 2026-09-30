@@ -10,14 +10,8 @@ export default defineConfig([
   globalIgnores(['dist', 'coverage', 'playwright-report', 'test-results', 'protocol']),
   {
     files: ['**/*.{ts,tsx}'],
-    extends: [
-      js.configs.recommended,
-      tseslint.configs.recommendedTypeChecked,
-      reactHooks.configs.flat.recommended,
-      reactRefresh.configs.vite,
-    ],
+    extends: [js.configs.recommended, tseslint.configs.recommendedTypeChecked],
     languageOptions: {
-      globals: globals.browser,
       parserOptions: {
         projectService: true,
         tsconfigRootDir: import.meta.dirname,
@@ -25,7 +19,13 @@ export default defineConfig([
     },
   },
   {
-    files: ['**/*.js'],
+    files: ['src/**/*.{ts,tsx}'],
+    extends: [reactHooks.configs.flat.recommended, reactRefresh.configs.vite],
+    languageOptions: { globals: globals.browser },
+  },
+  {
+    // Config files, e2e specs and scripts run in Node.
+    files: ['*.{js,ts}', 'e2e/**/*.ts'],
     extends: [js.configs.recommended],
     languageOptions: { globals: globals.node },
   },

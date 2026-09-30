@@ -28,7 +28,20 @@ npm run preview   # serve dist/
 npm run lint      # eslint . && prettier --check .
 npm run format    # prettier --write .
 npm test          # vitest run
+npm run e2e       # playwright test (builds, then serves dist/ under /sub/)
 ```
+
+Single tests: `npx vitest run src/app/theme.test.ts`, `npx vitest run -t "<test name>"`,
+`npx vitest run --project csdl`, `npx playwright test e2e/smoke.spec.ts`. Playwright needs
+`npx playwright install chromium` once.
+
+## Tests
+
+- Vitest has two projects in `vite.config.ts`. `csdl` runs `src/csdl/**/*.test.ts` in Node with no DOM,
+  which keeps the core DOM-free. `ui` runs every other `src/**/*.test.{ts,tsx}` in jsdom.
+- jsdom has no `matchMedia`; use `stubSystemScheme` from `src/test/matchMedia.ts`.
+- Playwright specs live in `e2e/` and run against the production build served from a subpath, which
+  checks that `base: './'` keeps the bundle portable.
 
 ## Stack
 

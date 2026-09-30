@@ -12,6 +12,7 @@ Requires Node.js 20.19+ or 22.12+.
 
 ```
 npm install
+npx playwright install chromium   # browser for the end-to-end tests
 ```
 
 ## Develop
@@ -25,8 +26,11 @@ npm run format   # apply Prettier formatting
 ## Test
 
 ```
-npm test         # unit tests (Vitest)
+npm test         # unit and component tests (Vitest)
+npm run e2e      # end-to-end tests (Playwright) against the production build
 ```
+
+`npm run e2e` builds the app and serves it from the `/sub/` path, the way a static host might.
 
 ## Build
 
@@ -38,4 +42,5 @@ npm run preview  # serve dist/ on http://localhost:4173
 ## Deploy
 
 `npm run build` produces a static bundle in `dist/` with no backend. Copy the contents of `dist/` to any
-static web host (GitHub Pages, Azure Static Web Apps, S3, nginx, ...).
+static web host (GitHub Pages, Azure Static Web Apps, S3, nginx, ...). Asset URLs are relative
+(`base: './'` in `vite.config.ts`), so the app works from the domain root or from any subpath.
