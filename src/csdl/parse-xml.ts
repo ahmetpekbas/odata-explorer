@@ -1,20 +1,30 @@
 // CSDL XML -> normalized model. Type references are kept as written; resolve.ts qualifies them.
-import { childId, qualify } from './ids.ts';
+import { actionId, childId, functionId, parameterId, qualify, returnTypeId } from './ids.ts';
 import type {
+  ActionImport,
   Diagnostic,
+  EntityContainer,
+  EntitySet,
   EnumMember,
   EnumType,
   Facets,
+  FunctionImport,
   Include,
   IncludeAnnotations,
   KeyProperty,
   Model,
   NavigationProperty,
+  NavigationPropertyBinding,
   OnDeleteAction,
+  Operation,
+  Parameter,
   Property,
   Reference,
+  ReturnType,
   Schema,
+  Singleton,
   StructuredType,
+  Term,
   TypeDefinition,
   TypeRef,
 } from './model.ts';
@@ -161,6 +171,18 @@ function parseSchema(ctx: Ctx, node: XNode): Schema {
       case 'TypeDefinition':
         schema.typeDefinitions.push(parseTypeDefinition(ctx, namespace, child));
         break;
+      case 'Term':
+        schema.terms.push(parseTerm(ctx, namespace, child));
+        break;
+      case 'Action':
+        schema.actions.push(parseOperation(ctx, namespace, child, 'action'));
+        break;
+      case 'Function':
+        schema.functions.push(parseOperation(ctx, namespace, child, 'function'));
+        break;
+      case 'EntityContainer':
+        schema.entityContainers.push(parseEntityContainer(ctx, namespace, child));
+        break;
     }
   }
   return schema;
@@ -297,4 +319,166 @@ function parseTypeDefinition(ctx: Ctx, namespace: string, node: XNode): TypeDefi
     underlyingType: required(ctx, node, 'UnderlyingType', qualify(namespace, name)),
     facets: facets(node),
   };
+}
+
+function parseTerm(ctx: Ctx, namespace: string, node: XNode): Term {
+  const name = required(ctx, node, 'Name');
+  const id = qualify(namespace, name);
+  const term: Term = {
+    kind: 'term',
+    id,
+    name,
+    annotations: [],
+    span: node.span,
+    type: typeRef(required(ctx, node, 'Type', id)),
+    nullable: bool(node, 'Nullable', true),
+    facets: facets(node),
+    appliesTo: node.attrs.AppliesTo?.split(/\s+/).filter(Boolean) ?? [],
+  };
+  if (node.attrs.BaseTerm) term.baseTerm = node.attrs.BaseTerm;
+  return term;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Actions and functions
+
+function parseOperation(
+  ctx: Ctx,
+  namespace: string,
+  node: XNode,
+  kind: Operation['kind'],
+): Operation {
+  const name = required(ctx, node, 'Name');
+  const isBound = bool(node, 'IsBound', false);
+  const qualified = qualify(namespace, name);
+  // The overload ID depends on parameter types, which are still unqualified here; the resolver
+  // recomputes it (and the IDs below it) once aliases are known.
+  const parameters = node.children
+    .filter((c) => c.name === 'Parameter')
+    .map((c) => parseParameter(ctx, qualified, c));
+  const id =
+    kind === 'action'
+      ? actionId(qualified, isBound ? parameters[0]?.type : undefined)
+      : functionId(
+          qualified,
+          parameters.map((p) => p.type),
+        );
+  for (const p of parameters) p.id = parameterId(id, p.name);
+
+  const op: Operation = {
+    kind,
+    id,
+    name,
+    annotations: [],
+    span: node.span,
+    isBound,
+    isComposable: bool(node, 'IsComposable', false),
+    parameters,
+  };
+  if (node.attrs.EntitySetPath) op.entitySetPath = node.attrs.EntitySetPath;
+  const returnType = node.children.find((c) => c.name === 'ReturnType');
+  if (returnType) op.returnType = parseReturnType(ctx, id, returnType);
+  return op;
+}
+
+function parseParameter(ctx: Ctx, operationId: string, node: XNode): Parameter {
+  const name = required(ctx, node, 'Name', operationId);
+  return {
+    kind: 'parameter',
+    id: parameterId(operationId, name),
+    name,
+    annotations: [],
+    span: node.span,
+    type: typeRef(required(ctx, node, 'Type', operationId)),
+    nullable: bool(node, 'Nullable', true),
+    facets: facets(node),
+  };
+}
+
+function parseReturnType(ctx: Ctx, operationId: string, node: XNode): ReturnType {
+  return {
+    kind: 'returnType',
+    id: returnTypeId(operationId),
+    name: '$ReturnType',
+    annotations: [],
+    span: node.span,
+    type: typeRef(required(ctx, node, 'Type', operationId)),
+    nullable: bool(node, 'Nullable', true),
+    facets: facets(node),
+  };
+}
+
+// ---------------------------------------------------------------------------------------------
+// Entity container
+
+const CONTAINER_CHILDREN = new Set(['EntitySet', 'Singleton', 'ActionImport', 'FunctionImport']);
+
+function parseEntityContainer(ctx: Ctx, namespace: string, node: XNode): EntityContainer {
+  const name = required(ctx, node, 'Name');
+  const id = qualify(namespace, name);
+  const container: EntityContainer = {
+    kind: 'entityContainer',
+    id,
+    name,
+    annotations: [],
+    span: node.span,
+    entitySets: [],
+    singletons: [],
+    actionImports: [],
+    functionImports: [],
+  };
+  if (node.attrs.Extends) container.extends = node.attrs.Extends;
+
+  for (const child of node.children) {
+    if (!CONTAINER_CHILDREN.has(child.name)) continue;
+    const childName = required(ctx, child, 'Name', id);
+    const base = { id: childId(id, childName), name: childName, annotations: [], span: child.span };
+    switch (child.name) {
+      case 'EntitySet':
+        container.entitySets.push({
+          ...base,
+          kind: 'entitySet',
+          entityType: typeRef(required(ctx, child, 'EntityType', base.id)),
+          includeInServiceDocument: bool(child, 'IncludeInServiceDocument', true),
+          bindings: parseBindings(child),
+        } satisfies EntitySet);
+        break;
+      case 'Singleton':
+        container.singletons.push({
+          ...base,
+          kind: 'singleton',
+          type: typeRef(required(ctx, child, 'Type', base.id)),
+          bindings: parseBindings(child),
+        } satisfies Singleton);
+        break;
+      case 'ActionImport': {
+        const imp: ActionImport = {
+          ...base,
+          kind: 'actionImport',
+          action: required(ctx, child, 'Action', base.id),
+        };
+        if (child.attrs.EntitySet) imp.entitySet = child.attrs.EntitySet;
+        container.actionImports.push(imp);
+        break;
+      }
+      case 'FunctionImport': {
+        const imp: FunctionImport = {
+          ...base,
+          kind: 'functionImport',
+          function: required(ctx, child, 'Function', base.id),
+          includeInServiceDocument: bool(child, 'IncludeInServiceDocument', false),
+        };
+        if (child.attrs.EntitySet) imp.entitySet = child.attrs.EntitySet;
+        container.functionImports.push(imp);
+        break;
+      }
+    }
+  }
+  return container;
+}
+
+function parseBindings(node: XNode): NavigationPropertyBinding[] {
+  return node.children
+    .filter((c) => c.name === 'NavigationPropertyBinding')
+    .map((c) => ({ path: c.attrs.Path ?? '', target: c.attrs.Target ?? '' }));
 }

@@ -156,3 +156,90 @@ describe('parseXml: declarations', () => {
     expect(model.schemas[0]?.entityTypes).toHaveLength(1);
   });
 });
+
+describe('parseXml: container and operations', () => {
+  const ns = 'Microsoft.OData.SampleService.Models.TripPin';
+  const schema = parseXml(trippinXml).schemas[0];
+
+  it('parses the TripPin container', () => {
+    const container = schema?.entityContainers[0];
+    expect(container).toMatchObject({ id: `${ns}.DefaultContainer`, name: 'DefaultContainer' });
+    expect(container?.entitySets.map((s) => s.name)).toEqual([
+      'Photos',
+      'People',
+      'Airlines',
+      'Airports',
+    ]);
+    expect(container?.entitySets[1]).toMatchObject({
+      id: `${ns}.DefaultContainer/People`,
+      entityType: { name: `${ns}.Person` },
+      includeInServiceDocument: true,
+    });
+    expect(container?.entitySets[1]?.bindings).toHaveLength(6);
+    expect(container?.entitySets[1]?.bindings[0]).toEqual({ path: 'Friends', target: 'People' });
+    expect(container?.singletons).toMatchObject([
+      { id: `${ns}.DefaultContainer/Me`, type: { name: `${ns}.Person` } },
+    ]);
+    expect(container?.singletons[0]?.bindings).toHaveLength(6);
+    expect(container?.functionImports).toMatchObject([
+      {
+        name: 'GetNearestAirport',
+        function: `${ns}.GetNearestAirport`,
+        entitySet: 'Airports',
+        includeInServiceDocument: true,
+      },
+    ]);
+    expect(container?.actionImports).toMatchObject([
+      { name: 'ResetDataSource', action: `${ns}.ResetDataSource` },
+    ]);
+  });
+
+  it('parses functions with overload IDs, parameters and return types', () => {
+    expect(schema?.functions.map((f) => f.id)).toEqual([
+      `${ns}.GetFavoriteAirline(${ns}.Person)`,
+      `${ns}.GetInvolvedPeople(${ns}.Trip)`,
+      `${ns}.GetFriendsTrips(${ns}.Person,Edm.String)`,
+      `${ns}.GetNearestAirport(Edm.Double,Edm.Double)`,
+    ]);
+    const fn = schema?.functions[2];
+    expect(fn).toMatchObject({
+      isBound: true,
+      isComposable: true,
+      entitySetPath: 'person/Friends/Trips',
+    });
+    expect(fn?.parameters.map((p) => [p.id, p.nullable])).toEqual([
+      [`${ns}.GetFriendsTrips(${ns}.Person,Edm.String)/person`, false],
+      [`${ns}.GetFriendsTrips(${ns}.Person,Edm.String)/userName`, false],
+    ]);
+    expect(fn?.returnType).toMatchObject({
+      id: `${ns}.GetFriendsTrips(${ns}.Person,Edm.String)/$ReturnType`,
+      type: { isCollection: true, name: `${ns}.Trip` },
+    });
+    expect(schema?.functions[3]).toMatchObject({ isBound: false });
+  });
+
+  it('parses actions, keying bound overloads by binding type only', () => {
+    expect(
+      schema?.actions.map((a) => [a.id, a.isBound, a.parameters.length, a.returnType]),
+    ).toEqual([
+      [`${ns}.ResetDataSource()`, false, 0, undefined],
+      [`${ns}.ShareTrip(${ns}.Person)`, true, 3, undefined],
+    ]);
+  });
+
+  it('parses terms and container Extends', () => {
+    const model = parseXml(
+      `<Edmx Version="4.0"><DataServices><Schema Namespace="NS" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+        <Term Name="Label" Type="Edm.String" Nullable="false" DefaultValue="x" BaseTerm="NS.Base" AppliesTo="EntityType Property" MaxLength="20"/>
+        <EntityContainer Name="C" Extends="Other.C"/></Schema></DataServices></Edmx>`,
+    );
+    expect(model.schemas[0]?.terms[0]).toMatchObject({
+      id: 'NS.Label',
+      nullable: false,
+      baseTerm: 'NS.Base',
+      appliesTo: ['EntityType', 'Property'],
+      facets: { maxLength: 20, defaultValue: 'x' },
+    });
+    expect(model.schemas[0]?.entityContainers[0]?.extends).toBe('Other.C');
+  });
+});

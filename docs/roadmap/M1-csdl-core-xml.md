@@ -19,7 +19,7 @@ Everything in `src/csdl/` is pure TypeScript, with no DOM and no React.
   `TypeDefinition`, `Property` with all facets, `NavigationProperty` (with `ReferentialConstraint` and
   `OnDelete`), and `Key`/`PropertyRef`.
   *Done when:* snapshot tests give the expected type and property counts for both fixtures.
-- [ ] **1.4 XML parser: container and operations.** Parse `EntityContainer` (`Extends`), `EntitySet`,
+- [x] **1.4 XML parser: container and operations.** Parse `EntityContainer` (`Extends`), `EntitySet`,
   `Singleton`, `NavigationPropertyBinding`, `ActionImport`/`FunctionImport`, `Action`/`Function`
   (`IsBound`, `IsComposable`, `EntitySetPath`), `Parameter`, `ReturnType`, and `Term`.
   *Done when:* the TripPin container and operations match expectations in tests.
