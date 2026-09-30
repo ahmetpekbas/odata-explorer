@@ -12,7 +12,7 @@
   `coverage`, `playwright-report`, `test-results`, `fixtures/large/`). Add a project `CLAUDE.md`, and a
   README skeleton covering setup, dev, test, build, and deploy.
   *Done when:* `git status` is clean after install and build, and the README commands work as written.
-- [ ] **0.3 Fluent UI and theming.** Wrap the app in `FluentProvider`, using light/dark from the system
+- [x] **0.3 Fluent UI and theming.** Wrap the app in `FluentProvider`, using light/dark from the system
   setting. Add a manual override, persisted in `localStorage`.
   *Done when:* the theme follows the OS setting, and the toggle survives a reload.
 - [ ] **0.4 Test harnesses.** Configure Vitest with a Node environment for `src/csdl` and jsdom for the

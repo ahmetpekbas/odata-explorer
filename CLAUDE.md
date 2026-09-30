@@ -32,9 +32,12 @@ npm test          # vitest run
 
 ## Stack
 
-Vite 8, React 19, TypeScript 6 (strict, `noUncheckedIndexedAccess`), ESLint flat config with
-typescript-eslint type-checked rules, Prettier. TypeScript is pinned to `~6.0` because typescript-eslint
-does not support TypeScript 7 yet.
+Vite 8, React 19, TypeScript 6 (strict, `noUncheckedIndexedAccess`), Fluent UI React v9, ESLint flat
+config with typescript-eslint type-checked rules, Prettier. TypeScript is pinned to `~6.0` because
+typescript-eslint does not support TypeScript 7 yet.
+
+Style with Fluent components, `makeStyles` and `tokens`, not hard-coded colors, so light and dark themes
+both work. The theme preference (system/light/dark) lives in `src/app/theme.ts`.
 
 ## Architecture rules
 
