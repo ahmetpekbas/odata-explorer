@@ -2,7 +2,7 @@
 // reference is qualified, and overload IDs are recomputed from the qualified parameter types.
 // Problems become diagnostics; nothing here throws.
 import { locateDiagnostics } from './diagnostics.ts';
-import { actionId, functionId, parameterId, returnTypeId } from './ids.ts';
+import { operationId, parameterId, returnTypeId } from './ids.ts';
 import type { Annotation, Diagnostic, Element, Expression, Model, TypeRef } from './model.ts';
 import { attachAnnotations } from './resolve-annotations.ts';
 import { resolveStructure, type Structure } from './resolve-structure.ts';
@@ -339,13 +339,12 @@ class Resolver {
     for (const schema of this.model.schemas) {
       for (const op of [...schema.actions, ...schema.functions]) {
         const qualified = `${schema.namespace}.${op.name}`;
-        op.id =
-          op.kind === 'action'
-            ? actionId(qualified, op.isBound ? op.parameters[0]?.type : undefined)
-            : functionId(
-                qualified,
-                op.parameters.map((p) => p.type),
-              );
+        op.id = operationId(
+          op.kind,
+          qualified,
+          op.isBound,
+          op.parameters.map((p) => p.type),
+        );
         for (const p of op.parameters) p.id = parameterId(op.id, p.name);
         if (op.returnType) op.returnType.id = returnTypeId(op.id);
       }

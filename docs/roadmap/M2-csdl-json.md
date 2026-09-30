@@ -5,7 +5,7 @@
 - **Demo:** JSON and XML versions of the same document produce the same model.
 - **Needs:** [M1](M1-csdl-core-xml.md)
 
-- [ ] **2.1 JSON parser.** Write `parse-json.ts`: `$Version`, `$Reference`, `$EntityContainer`,
+- [x] **2.1 JSON parser.** Write `parse-json.ts`: `$Version`, `$Reference`, `$EntityContainer`,
   namespace members with `$Kind`, overload arrays, `$Annotations`, and `@Term#Qualifier` keys. Normalize
   the JSON defaults to the model's defaults (`$Nullable`, `$Type`, and so on).
   *Done when:* the OASIS Core vocabulary JSON parses without diagnostics.

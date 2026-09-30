@@ -1,61 +1,18 @@
 // CSDL XML annotations and annotation expressions, in both attribute and element form.
+import { CONSTANTS, OPERATORS, PATHS } from './expression-names.ts';
 import type {
   Annotation,
   AnnotationBlock,
-  ConstantType,
   Expression,
   OperatorName,
   PathType,
   PropertyValue,
 } from './model.ts';
-import { type Ctx, facets, typeRef } from './xml-attrs.ts';
+import { typeRef } from './ids.ts';
+import { type Ctx, facets } from './xml-attrs.ts';
 import type { XNode } from './xml-tree.ts';
 
 const EDM_NS = 'http://docs.oasis-open.org/odata/ns/edm';
-
-const CONSTANTS: Record<string, ConstantType> = {
-  Binary: 'binary',
-  Bool: 'bool',
-  Date: 'date',
-  DateTimeOffset: 'dateTimeOffset',
-  Decimal: 'decimal',
-  Duration: 'duration',
-  EnumMember: 'enumMember',
-  Float: 'float',
-  Guid: 'guid',
-  Int: 'int',
-  String: 'string',
-  TimeOfDay: 'timeOfDay',
-};
-
-const PATHS = new Set<string>([
-  'Path',
-  'AnnotationPath',
-  'ModelElementPath',
-  'NavigationPropertyPath',
-  'PropertyPath',
-] satisfies PathType[]);
-
-const OPERATORS = new Set<string>([
-  'And',
-  'Or',
-  'Not',
-  'Eq',
-  'Ne',
-  'Gt',
-  'Ge',
-  'Lt',
-  'Le',
-  'Has',
-  'In',
-  'Add',
-  'Sub',
-  'Neg',
-  'Mul',
-  'Div',
-  'DivBy',
-  'Mod',
-] satisfies OperatorName[]);
 
 export function inlineAnnotations(ctx: Ctx, node: XNode): Annotation[] {
   return node.children

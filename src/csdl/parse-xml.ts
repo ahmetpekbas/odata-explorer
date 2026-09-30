@@ -1,5 +1,5 @@
 // CSDL XML -> normalized model. Type references are kept as written; resolve.ts qualifies them.
-import { actionId, childId, functionId, parameterId, qualify, returnTypeId } from './ids.ts';
+import { childId, operationId, parameterId, qualify, returnTypeId, typeRef } from './ids.ts';
 import type {
   ActionImport,
   Diagnostic,
@@ -28,7 +28,7 @@ import type {
 } from './model.ts';
 import { locateDiagnostics } from './diagnostics.ts';
 import { inlineAnnotations, parseAnnotationBlock } from './parse-xml-annotations.ts';
-import { bool, type Ctx, facets, typeRef } from './xml-attrs.ts';
+import { bool, type Ctx, facets } from './xml-attrs.ts';
 import { readXml, type XNode } from './xml-tree.ts';
 
 /** EDMX namespaces of OData v1-v3, all under this prefix. */
@@ -366,13 +366,12 @@ function parseOperation(
   const parameters = node.children
     .filter((c) => c.name === 'Parameter')
     .map((c) => parseParameter(ctx, qualified, c));
-  const id =
-    kind === 'action'
-      ? actionId(qualified, isBound ? parameters[0]?.type : undefined)
-      : functionId(
-          qualified,
-          parameters.map((p) => p.type),
-        );
+  const id = operationId(
+    kind,
+    qualified,
+    isBound,
+    parameters.map((p) => p.type),
+  );
   for (const p of parameters) p.id = parameterId(id, p.name);
 
   const op: Operation = {

@@ -2,3 +2,7 @@
 *.md
 protocol/
 package-lock.json
+
+# Generated or committed as served; kept byte-for-byte.
+src/vocabularies/*.json
+fixtures/

@@ -8,6 +8,14 @@ import type { TypeRef } from './model.ts';
 
 type TypeName = Pick<TypeRef, 'name' | 'isCollection'>;
 
+/** Reads `Collection(NS.Type)` and plain type references. */
+export function typeRef(raw: string): TypeRef {
+  const m = /^Collection\((.*)\)$/.exec(raw);
+  return m
+    ? { raw, name: m[1] ?? '', isCollection: true }
+    : { raw, name: raw, isCollection: false };
+}
+
 export function qualify(namespace: string, name: string): string {
   return `${namespace}.${name}`;
 }
@@ -33,6 +41,18 @@ export function actionId(qualifiedName: string, bindingType?: TypeName): string 
 /** Function overload: `NS.Fn(Type1,Type2)`, listing every parameter type in declaration order. */
 export function functionId(qualifiedName: string, parameterTypes: readonly TypeName[]): string {
   return `${qualifiedName}(${parameterTypes.map(typeRefString).join(',')})`;
+}
+
+/** ID of an action or function overload from its parameters, per `actionId` and `functionId`. */
+export function operationId(
+  kind: 'action' | 'function',
+  qualifiedName: string,
+  isBound: boolean,
+  parameterTypes: readonly TypeName[],
+): string {
+  return kind === 'action'
+    ? actionId(qualifiedName, isBound ? parameterTypes[0] : undefined)
+    : functionId(qualifiedName, parameterTypes);
 }
 
 /** The overload ID without its signature, which names all overloads of an action or function. */

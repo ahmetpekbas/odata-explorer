@@ -1,5 +1,5 @@
 // Attribute readers shared by the CSDL XML converters.
-import type { Diagnostic, Facets, TypeRef } from './model.ts';
+import type { Diagnostic, Facets } from './model.ts';
 import type { XNode } from './xml-tree.ts';
 
 /** Collects diagnostics while converting a tree to a model. */
@@ -17,13 +17,6 @@ export function int(node: XNode, attr: string): number | undefined {
   if (value === undefined) return undefined;
   const n = Number(value);
   return Number.isInteger(n) ? n : undefined;
-}
-
-export function typeRef(raw: string): TypeRef {
-  const m = /^Collection\((.*)\)$/.exec(raw);
-  return m
-    ? { raw, name: m[1] ?? '', isCollection: true }
-    : { raw, name: raw, isCollection: false };
 }
 
 export function facets(node: XNode): Facets {
