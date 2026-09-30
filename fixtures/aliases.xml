@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+  <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+    <edmx:Include Namespace="Org.OData.Core.V1" Alias="Core"/>
+  </edmx:Reference>
+  <edmx:DataServices>
+    <Schema Namespace="Org.Example.Model" Alias="M" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+      <EntityType Name="Customer">
+        <Key><PropertyRef Name="Id"/></Key>
+        <Property Name="Id" Type="Edm.Int32" Nullable="false"/>
+        <Property Name="Status" Type="X.Status"/>
+        <Property Name="Shipping" Type="X.Address"/>
+        <Property Name="Others" Type="Collection(X.Address)"/>
+        <Property Name="Permissions" Type="Core.Permission"/>
+        <NavigationProperty Name="Orders" Type="Collection(M.Order)" Partner="Customer"/>
+      </EntityType>
+      <EntityType Name="Order">
+        <Key><PropertyRef Name="Id"/></Key>
+        <Property Name="Id" Type="Edm.Int32" Nullable="false"/>
+        <NavigationProperty Name="Customer" Type="Org.Example.Model.Customer" Partner="Orders"/>
+      </EntityType>
+      <EntityType Name="VipCustomer" BaseType="M.Customer"/>
+      <Function Name="Top" IsBound="true">
+        <Parameter Name="customers" Type="Collection(M.Customer)"/>
+        <Parameter Name="count" Type="Edm.Int32"/>
+        <ReturnType Type="Collection(M.Customer)"/>
+      </Function>
+      <Action Name="Reset" IsBound="true">
+        <Parameter Name="customer" Type="M.Customer"/>
+      </Action>
+      <Action Name="Reset" IsBound="true">
+        <Parameter Name="order" Type="Org.Example.Model.Order"/>
+      </Action>
+      <EntityContainer Name="Container">
+        <EntitySet Name="Customers" EntityType="M.Customer">
+          <NavigationPropertyBinding Path="Orders" Target="Orders"/>
+        </EntitySet>
+        <EntitySet Name="Orders" EntityType="M.Order"/>
+        <ActionImport Name="ResetAll" Action="M.Reset"/>
+      </EntityContainer>
+      <Annotations Target="M.Customer">
+        <Annotation Term="Core.Description" String="A customer"/>
+        <Annotation Term="X.Flags" EnumMember="X.Status/Active"/>
+      </Annotations>
+    </Schema>
+    <Schema Namespace="Org.Example.Extra" Alias="X" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+      <EnumType Name="Status"><Member Name="Active"/><Member Name="Closed"/></EnumType>
+      <ComplexType Name="Address"><Property Name="City" Type="Edm.String"/></ComplexType>
+      <TypeDefinition Name="Code" UnderlyingType="Edm.String" MaxLength="5"/>
+      <Term Name="Flags" Type="X.Status" AppliesTo="EntityType"/>
+      <Term Name="Note" Type="X.Code" BaseTerm="Core.Description"/>
+      <EntityType Name="Thing" BaseType="M.Customer">
+        <Annotation Term="Core.Description">
+          <Cast Type="X.Code"><String>c</String></Cast>
+        </Annotation>
+        <Annotation Term="X.Flags">
+          <Record Type="M.Info"><PropertyValue Property="P" EnumMember="X.Status/Active X.Status/Closed"/></Record>
+        </Annotation>
+      </EntityType>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>

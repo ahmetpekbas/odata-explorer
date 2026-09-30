@@ -35,7 +35,7 @@ Everything in `src/csdl/` is pure TypeScript, with no DOM and no React.
   - Refuse DOCTYPE and entity declarations.
   *Done when:* each case has a test, and every span in the TripPin output slices back to the exact
   source text.
-- [ ] **1.7 Resolver: names.** Resolve aliases to namespaces, qualify every type reference, and handle
+- [x] **1.7 Resolver: names.** Resolve aliases to namespaces, qualify every type reference, and handle
   `Collection(...)` and `Edm.*` primitives. Unresolved references become diagnostics.
   *Done when:* tests cover an alias-heavy fixture and an unresolved-type fixture.
 - [ ] **1.8 Resolver: structure.**

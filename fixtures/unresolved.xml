@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+  <edmx:Reference Uri="https://example.com/other.xml">
+    <edmx:Include Namespace="Other.Model" Alias="O"/>
+  </edmx:Reference>
+  <edmx:DataServices>
+    <Schema Namespace="Broken" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+      <EntityType Name="Fine">
+        <Key><PropertyRef Name="Id"/></Key>
+        <Property Name="Id" Type="Edm.Int32" Nullable="false"/>
+        <Property Name="External" Type="O.Thing"/>
+      </EntityType>
+      <EntityType Name="Bad" BaseType="Broken.Missing">
+        <Property Name="NoNamespace" Type="Ghost"/>
+        <Property Name="UnknownNamespace" Type="Nowhere.Thing"/>
+        <Property Name="NotEdm" Type="Edm.Strng"/>
+        <NavigationProperty Name="Lost" Type="Collection(Broken.Gone)"/>
+      </EntityType>
+      <Function Name="F"><ReturnType Type="Broken.NoSuchType"/></Function>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>
