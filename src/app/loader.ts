@@ -3,7 +3,7 @@
 import { proxy, wrap } from 'comlink';
 import type { ParserApi } from '../worker/parser.worker.ts';
 import type { LoadResult, Progress } from '../worker/load.ts';
-import { getRecentText, saveRecent } from './persistence.ts';
+import { getRecent, getRecentText, saveRecent } from './persistence.ts';
 import { useStore } from './store.ts';
 
 export type Parse = (text: string, onProgress: (progress: Progress) => void) => Promise<LoadResult>;
@@ -21,13 +21,16 @@ const workerParse: Parse = (text, onProgress) => {
   return worker(text, onProgress);
 };
 
-/** Loads `text` as a new document and returns its id. Never rejects: failures land in the store. */
+/**
+ * Loads `text` as a new document and returns its id, which is also the id of its recent file: a URL
+ * with that id keeps working after a reload. Never rejects: failures land in the store.
+ */
 export async function openText(
   name: string,
   text: string,
   parse: Parse = workerParse,
+  id: string = crypto.randomUUID(),
 ): Promise<string> {
-  const id = crypto.randomUUID();
   const store = useStore.getState();
   store.startLoading({ id, name, size: text.length });
   try {
@@ -71,5 +74,11 @@ export async function openRecent(
   parse?: Parse,
 ): Promise<string | undefined> {
   const text = await getRecentText(recent.id);
-  return text === undefined ? undefined : openText(recent.name, text, parse);
+  return text === undefined ? undefined : openText(recent.name, text, parse, recent.id);
+}
+
+/** Reopens a remembered file by id, e.g. from a deep link. Returns undefined when it is gone. */
+export async function openRecentById(id: string, parse?: Parse): Promise<string | undefined> {
+  const recent = await getRecent(id);
+  return recent && openRecent(recent, parse);
 }

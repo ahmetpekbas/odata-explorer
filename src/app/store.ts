@@ -56,7 +56,8 @@ export interface StoreState {
   pinTab: (id: string) => void;
   closeTab: (id: string) => void;
   closeOtherTabs: (id: string) => void;
-  activateTab: (id: string) => void;
+  /** Makes the tab active; without an id no tab is active. */
+  activateTab: (id: string | undefined) => void;
 }
 
 const NO_TABS: Pick<StoreState, 'tabs' | 'activeTab'> = { tabs: [], activeTab: undefined };
@@ -153,7 +154,8 @@ export const useStore = create<StoreState>()((set) => ({
       const tab = s.tabs.find((t) => t.id === id);
       return tab ? activated([tab], id) : s;
     }),
-  activateTab: (id) => set((s) => (s.tabs.some((t) => t.id === id) ? activated(s.tabs, id) : s)),
+  activateTab: (id) =>
+    set((s) => (id === undefined || s.tabs.some((t) => t.id === id) ? activated(s.tabs, id) : s)),
 }));
 
 /** The active document, if there is one. */

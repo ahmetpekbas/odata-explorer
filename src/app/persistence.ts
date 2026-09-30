@@ -89,6 +89,10 @@ export async function listRecent(): Promise<RecentFile[]> {
   return (await d.getAllFromIndex('meta', 'openedAt')).reverse();
 }
 
+export async function getRecent(id: string): Promise<RecentFile | undefined> {
+  return (await database()).get('meta', id);
+}
+
 /** The remembered text of a file, or undefined if it was forgotten or evicted. */
 export async function getRecentText(id: string): Promise<string | undefined> {
   return (await database()).get('text', id);

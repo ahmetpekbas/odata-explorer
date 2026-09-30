@@ -48,11 +48,16 @@ test('remembers a loaded file across a reload until it is forgotten', async ({ p
   await page.getByLabel('Choose a metadata file').setInputFiles('fixtures/trippin.xml');
   await expect(page.getByRole('button', { name: 'Close trippin.xml' })).toBeVisible();
 
+  // The URL names the open file, so a reload reopens it without the start page.
   await page.reload();
-  await expect(page.getByRole('button', { name: 'Close trippin.xml' })).toBeHidden();
+  await expect(page.getByRole('button', { name: 'Close trippin.xml' })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Close trippin.xml' }).click();
+  await page.reload();
   await page.getByRole('button', { name: 'Open trippin.xml' }).click();
   await expect(page.getByRole('button', { name: 'Close trippin.xml' })).toBeVisible();
 
+  await page.getByRole('button', { name: 'Close trippin.xml' }).click();
   await page.reload();
   await page.getByRole('button', { name: 'Forget trippin.xml' }).click();
   await expect(page.getByText('No recent files yet.')).toBeVisible();
@@ -67,7 +72,6 @@ test('keeps the inspector collapsed across a reload', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Expand inspector' })).toBeVisible();
 
   await page.reload();
-  await page.getByRole('button', { name: 'Open trippin.xml' }).click();
   await expect(page.getByRole('button', { name: 'Expand inspector' })).toBeVisible();
 });
 
@@ -142,4 +146,47 @@ test('tabs: preview is replaced, double-click pins, middle-click closes, overflo
   }
   await page.setViewportSize({ width: 640, height: 700 });
   await expect(page.getByRole('button', { name: /\d+ more tabs/ })).toBeVisible();
+});
+
+test('routing: the active tab is in the URL, back/forward work, and a pasted link reopens it', async ({
+  page,
+}) => {
+  const person = 'Microsoft.OData.SampleService.Models.TripPin.Person';
+  await page.goto('./');
+  await page.getByLabel('Choose a metadata file').setInputFiles('fixtures/trippin.xml');
+  const tree = page.getByRole('tree', { name: 'Model elements' });
+  await tree.getByRole('treeitem', { name: 'Entity Types' }).click();
+  const heading = (name: string) => page.getByRole('heading', { name, exact: true });
+
+  await tree.getByRole('treeitem', { name: 'Person', exact: true }).click();
+  await expect(heading('Person')).toBeVisible();
+  await expect(page).toHaveURL(new RegExp(`#/d/[^/]+/entityType/${person}$`));
+  await tree.getByRole('treeitem', { name: 'Trip', exact: true }).click();
+  await expect(heading('Trip')).toBeVisible();
+
+  await page.goBack();
+  await expect(heading('Person')).toBeVisible();
+  await page.goForward();
+  await expect(heading('Trip')).toBeVisible();
+
+  // A pasted link: a fresh load of the same URL finds the file in the recent list.
+  await page.goBack();
+  const url = page.url();
+  await page.goto('about:blank');
+  await page.goto(url);
+  await expect(heading('Person')).toBeVisible();
+  await expect(page.getByRole('tab', { name: 'Person' })).toBeVisible();
+});
+
+test('routing: a problem with a target opens its element', async ({ page }) => {
+  await page.goto('./');
+  await page.getByLabel('Choose a metadata file').setInputFiles('fixtures/unresolved.xml');
+  await page.getByRole('button', { name: /Problems \(/ }).click();
+  const rows = page.getByRole('region', { name: 'Diagnostics' }).getByRole('button');
+  const before = await page.getByRole('tab').count();
+  for (const row of await rows.all()) {
+    await row.click();
+    if ((await page.getByRole('tab').count()) > before) break;
+  }
+  expect(await page.getByRole('tab').count()).toBeGreaterThan(before);
 });

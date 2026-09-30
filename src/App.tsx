@@ -8,7 +8,10 @@ import {
   webLightTheme,
 } from '@fluentui/react-components';
 import { ErrorCircleRegular } from '@fluentui/react-icons';
+import { useEffect } from 'react';
 import { openFile, openRecent } from './app/loader.ts';
+import { openableTarget } from './app/openable.ts';
+import { PROBLEMS_TAB, startRouting } from './app/routing.ts';
 import { selectActiveDocument, useStore } from './app/store.ts';
 import { useTheme } from './app/theme.ts';
 import { Navigator } from './ui/navigator/Navigator.tsx';
@@ -59,6 +62,7 @@ export function App() {
   const select = useStore((s) => s.select);
   const closeDocument = useStore((s) => s.closeDocument);
   const { preference, setPreference, scheme } = useTheme();
+  useEffect(() => startRouting(), []);
 
   return (
     <FluentProvider
@@ -92,7 +96,7 @@ export function App() {
               appearance="subtle"
               size="small"
               icon={<ErrorCircleRegular />}
-              onClick={() => openTab({ id: 'problems', kind: 'diagnostics' }, true)}
+              onClick={() => openTab(PROBLEMS_TAB, true)}
             >
               Problems ({document.resolved.model.diagnostics.length})
             </Button>
@@ -100,7 +104,13 @@ export function App() {
           workspace={
             <Workspace
               diagnostics={document.resolved.model.diagnostics}
-              onSelectDiagnostic={(d) => select(d.target)}
+              onSelectDiagnostic={(d) => {
+                const target = d.target && openableTarget(document.resolved, d.target);
+                if (!target || !d.target) return;
+                openTab(target);
+                // A property or parameter opens its type, with the element itself selected.
+                select(d.target);
+              }}
             />
           }
           inspector={null}

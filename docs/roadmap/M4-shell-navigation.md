@@ -19,7 +19,7 @@
   closes a tab, and "Close others" is available. Tabs that don't fit go into an overflow menu. Each tab
   kind shows a placeholder view for now.
   *Done when:* preview replacement and pinning behave like VS Code.
-- [ ] **4.5 Hash routing.** The active tab syncs with `#/d/<docId>/<kind>/<targetPath>`. Back/forward
+- [x] **4.5 Hash routing.** The active tab syncs with `#/d/<docId>/<kind>/<targetPath>`. Back/forward
   work, and opening a deep link opens its tab. Diagnostics entries now navigate to their element.
   *Done when:* a pasted URL for a TripPin element opens the right tab.
 - [ ] **4.6 Per-file tab restore.** Save the open tabs with the recent file and restore them when it's
