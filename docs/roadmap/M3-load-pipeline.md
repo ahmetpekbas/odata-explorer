@@ -8,7 +8,7 @@
 - [x] **3.1 Parser worker.** Write `parser.worker.ts` with Comlink: detect the format (`<` vs `{`),
   parse, resolve, report progress by bytes, and return errors as data rather than throwing.
   *Done when:* a Vitest worker test (or the E2E smoke test) gets a model and progress events back.
-- [ ] **3.2 Store.** Write zustand `store.ts`: a map of documents (v1 shows one active document), the
+- [x] **3.2 Store.** Write zustand `store.ts`: a map of documents (v1 shows one active document), the
   detail mode, and the selection.
   *Done when:* unit-tested reducers or actions.
 - [ ] **3.3 Start page.** A drop zone, a file picker, a progress bar, and an error message for failed
