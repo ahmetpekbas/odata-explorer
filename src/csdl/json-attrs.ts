@@ -43,18 +43,22 @@ function count(value: unknown): number | undefined {
   return typeof value === 'number' && Number.isInteger(value) ? value : undefined;
 }
 
+/** Facets that differ from their defaults (precision 0, scale 0, unicode true), as in the XML parser. */
 export function facets(obj: JsonObject): Facets {
   const f: Facets = {};
   const maxLength = obj.$MaxLength;
   if (maxLength !== undefined) f.maxLength = maxLength === 'max' ? 'max' : count(maxLength);
   const precision = count(obj.$Precision);
-  if (precision !== undefined) f.precision = precision;
+  if (precision) f.precision = precision;
   const scale = obj.$Scale;
-  if (scale !== undefined)
-    f.scale = scale === 'variable' || scale === 'floating' ? scale : count(scale);
+  if (scale !== undefined) {
+    const value = scale === 'variable' || scale === 'floating' ? scale : count(scale);
+    if (value) f.scale = value;
+  }
   const srid = obj.$SRID;
   if (srid !== undefined) f.srid = srid === 'variable' ? 'variable' : count(srid);
-  if (obj.$Unicode !== undefined) f.unicode = bool(obj, '$Unicode', true);
-  if (obj.$DefaultValue !== undefined) f.defaultValue = scalar(obj.$DefaultValue);
+  if (!bool(obj, '$Unicode', true)) f.unicode = false;
+  if (obj.$DefaultValue !== undefined)
+    f.defaultValue = obj.$DefaultValue === null ? 'null' : scalar(obj.$DefaultValue);
   return f;
 }

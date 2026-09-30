@@ -1,6 +1,6 @@
 // Annotation attachment. After this runs, `element.annotations` holds every annotation that applies
 // to the element: the inline ones, then those from `<Annotations Target>` blocks in document order.
-// Each annotation records its qualifier (a block's qualifier is copied down), its origin, and the
+// Each annotation records its qualifier (a block's qualifier was copied down by the parser), its origin, and the
 // target path it was written against; for external targets that may be longer than the element's ID
 // (`NS.Type/Complex/Prop`, `NS.Container/Set/Prop`).
 import { annotationId, childId, overloadGroupId } from './ids.ts';
@@ -113,6 +113,8 @@ export function attachAnnotations(
       const at = block.target.indexOf('/@');
       const targetText = at < 0 ? block.target : block.target.slice(0, at);
       const { elements: targets, path } = resolveTarget(targetText);
+      // Aliases in the target become namespaces, as everywhere else in the resolved model.
+      if (at < 0) block.target = path;
       let attachTo: { annotations: Annotation[] }[] = targets;
       let targetId = path;
 
@@ -140,7 +142,6 @@ export function attachAnnotations(
       }
 
       for (const annotation of block.annotations) {
-        if (block.qualifier && !annotation.qualifier) annotation.qualifier = block.qualifier;
         stamp(annotation, targetId);
         for (const holder of attachTo) holder.annotations.push(annotation);
       }

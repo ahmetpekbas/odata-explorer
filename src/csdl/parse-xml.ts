@@ -28,7 +28,7 @@ import type {
 } from './model.ts';
 import { locateDiagnostics } from './diagnostics.ts';
 import { inlineAnnotations, parseAnnotationBlock } from './parse-xml-annotations.ts';
-import { bool, type Ctx, facets } from './xml-attrs.ts';
+import { bool, type Ctx, facets, nullable } from './xml-attrs.ts';
 import { readXml, type XNode } from './xml-tree.ts';
 
 /** EDMX namespaces of OData v1-v3, all under this prefix. */
@@ -150,7 +150,7 @@ function parseSchema(ctx: Ctx, node: XNode): Schema {
     id: namespace,
     name: namespace,
     namespace,
-    annotations: [],
+    annotations: inlineAnnotations(ctx, node),
     span: node.span,
     entityTypes: [],
     complexTypes: [],
@@ -244,14 +244,15 @@ function parseKey(node: XNode): KeyProperty[] {
 
 function parseProperty(ctx: Ctx, parentId: string, node: XNode): Property {
   const name = required(ctx, node, 'Name', parentId);
+  const type = typeRef(required(ctx, node, 'Type', childId(parentId, name)));
   return {
     kind: 'property',
     id: childId(parentId, name),
     name,
     annotations: inlineAnnotations(ctx, node),
     span: node.span,
-    type: typeRef(required(ctx, node, 'Type', childId(parentId, name))),
-    nullable: bool(node, 'Nullable', true),
+    type,
+    nullable: nullable(node, type),
     facets: facets(node),
   };
 }
@@ -259,14 +260,15 @@ function parseProperty(ctx: Ctx, parentId: string, node: XNode): Property {
 function parseNavigationProperty(ctx: Ctx, parentId: string, node: XNode): NavigationProperty {
   const name = required(ctx, node, 'Name', parentId);
   const id = childId(parentId, name);
+  const type = typeRef(required(ctx, node, 'Type', id));
   const nav: NavigationProperty = {
     kind: 'navigationProperty',
     id,
     name,
     annotations: inlineAnnotations(ctx, node),
     span: node.span,
-    type: typeRef(required(ctx, node, 'Type', id)),
-    nullable: bool(node, 'Nullable', true),
+    type,
+    nullable: nullable(node, type),
     containsTarget: bool(node, 'ContainsTarget', false),
     referentialConstraints: [],
   };
@@ -334,14 +336,15 @@ function parseTypeDefinition(ctx: Ctx, namespace: string, node: XNode): TypeDefi
 function parseTerm(ctx: Ctx, namespace: string, node: XNode): Term {
   const name = required(ctx, node, 'Name');
   const id = qualify(namespace, name);
+  const type = typeRef(required(ctx, node, 'Type', id));
   const term: Term = {
     kind: 'term',
     id,
     name,
     annotations: inlineAnnotations(ctx, node),
     span: node.span,
-    type: typeRef(required(ctx, node, 'Type', id)),
-    nullable: bool(node, 'Nullable', true),
+    type,
+    nullable: nullable(node, type),
     facets: facets(node),
     appliesTo: node.attrs.AppliesTo?.split(/\s+/).filter(Boolean) ?? [],
   };
@@ -392,27 +395,29 @@ function parseOperation(
 
 function parseParameter(ctx: Ctx, operationId: string, node: XNode): Parameter {
   const name = required(ctx, node, 'Name', operationId);
+  const type = typeRef(required(ctx, node, 'Type', operationId));
   return {
     kind: 'parameter',
     id: parameterId(operationId, name),
     name,
     annotations: inlineAnnotations(ctx, node),
     span: node.span,
-    type: typeRef(required(ctx, node, 'Type', operationId)),
-    nullable: bool(node, 'Nullable', true),
+    type,
+    nullable: nullable(node, type),
     facets: facets(node),
   };
 }
 
 function parseReturnType(ctx: Ctx, operationId: string, node: XNode): ReturnType {
+  const type = typeRef(required(ctx, node, 'Type', operationId));
   return {
     kind: 'returnType',
     id: returnTypeId(operationId),
     name: '$ReturnType',
     annotations: inlineAnnotations(ctx, node),
     span: node.span,
-    type: typeRef(required(ctx, node, 'Type', operationId)),
-    nullable: bool(node, 'Nullable', true),
+    type,
+    nullable: nullable(node, type),
     facets: facets(node),
   };
 }

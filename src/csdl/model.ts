@@ -124,7 +124,7 @@ export interface Annotation {
 /** An `<Annotations Target="...">` block as written, before the resolver attaches its annotations. */
 export interface AnnotationBlock {
   target: string;
-  qualifier?: string;
+  /** A block qualifier is copied onto the annotations inside it, as JSON has no such thing. */
   annotations: Annotation[];
   span?: Span;
 }

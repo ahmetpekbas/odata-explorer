@@ -34,7 +34,7 @@ export function annotationsOf(
     if (!key.startsWith(`${prefix}@`)) continue;
     const name = key.slice(prefix.length + 1);
     // `@type` and the like are not terms; a nested annotation is found through its parent.
-    if (!name.includes('.') || name.includes('@')) continue;
+    if (!name.includes('.') || name.includes('@') || name === 'odata.type') continue;
     const [term = '', qualifier] = name.split('#');
     const annotation: Annotation = {
       term,
@@ -116,7 +116,7 @@ function objectExpression(ctx: JsonCtx, obj: JsonObject): Expression {
       case 'IsOf':
         return {
           kind: name === 'Cast' ? 'cast' : 'isOf',
-          type: typeRef(str(obj, '$Type') ?? ''),
+          type: typeRef(str(obj, '$Type') ?? 'Edm.String'),
           facets: facets(obj),
           value: expression(ctx, value),
         };
@@ -150,7 +150,8 @@ function record(ctx: JsonCtx, obj: JsonObject): Expression {
     properties,
     annotations: annotationsOf(ctx, obj),
   };
-  const type = str(obj, '@type');
-  if (type) result.type = type.replace(/^#/, '');
+  const type = str(obj, '@type') ?? str(obj, '@odata.type');
+  // The type may be given as `#Name` or as `<reference uri>#Name`.
+  if (type) result.type = type.replace(/^[^#]*#/, '');
   return result;
 }

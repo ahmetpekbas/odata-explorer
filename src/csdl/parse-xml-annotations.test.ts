@@ -15,11 +15,13 @@ const value = (map: Map<string, Annotation>, term: string): Expression | undefin
 describe('annotation parsing', () => {
   it('parses the fixture without diagnostics', () => {
     expect(model.diagnostics).toEqual([]);
-    expect(blocks.map((b) => [b.target, b.qualifier, b.annotations.length])).toEqual([
-      ['Ex.Item', 'q', 17],
-      ['Ex.Item/Name', undefined, 17],
-      ['Ex.Item/Price', undefined, 25],
+    expect(blocks.map((b) => [b.target, b.annotations.length])).toEqual([
+      ['Ex.Item', 17],
+      ['Ex.Item/Name', 17],
+      ['Ex.Item/Price', 25],
     ]);
+    // The block qualifier moves onto its annotations.
+    expect(blocks[0]?.annotations.every((a) => a.qualifier === 'q')).toBe(true);
     expect(blocks.flatMap((b) => b.annotations).every((a) => a.origin === 'external')).toBe(true);
   });
 

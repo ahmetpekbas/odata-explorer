@@ -14,29 +14,33 @@ import type { XNode } from './xml-tree.ts';
 
 const EDM_NS = 'http://docs.oasis-open.org/odata/ns/edm';
 
-export function inlineAnnotations(ctx: Ctx, node: XNode): Annotation[] {
+/** The `<Annotation>` children of a node; annotations of an annotation share its origin. */
+export function inlineAnnotations(
+  ctx: Ctx,
+  node: XNode,
+  origin: Annotation['origin'] = 'inline',
+): Annotation[] {
   return node.children
     .filter((c) => c.name === 'Annotation')
-    .map((c) => parseAnnotation(ctx, c, 'inline'));
+    .map((c) => parseAnnotation(ctx, c, origin));
 }
 
 /** `<Annotations Target="..." Qualifier="...">` */
 export function parseAnnotationBlock(ctx: Ctx, node: XNode): AnnotationBlock {
-  const block: AnnotationBlock = {
-    target: node.attrs.Target ?? '',
-    annotations: node.children
-      .filter((c) => c.name === 'Annotation')
-      .map((c) => parseAnnotation(ctx, c, 'external')),
-    span: node.span,
-  };
-  if (node.attrs.Qualifier) block.qualifier = node.attrs.Qualifier;
-  return block;
+  const annotations = node.children
+    .filter((c) => c.name === 'Annotation')
+    .map((c) => parseAnnotation(ctx, c, 'external'));
+  const qualifier = node.attrs.Qualifier;
+  if (qualifier) {
+    for (const annotation of annotations) annotation.qualifier ??= qualifier;
+  }
+  return { target: node.attrs.Target ?? '', annotations, span: node.span };
 }
 
 function parseAnnotation(ctx: Ctx, node: XNode, origin: Annotation['origin']): Annotation {
   const annotation: Annotation = {
     term: node.attrs.Term ?? '',
-    annotations: inlineAnnotations(ctx, node),
+    annotations: inlineAnnotations(ctx, node, origin),
     origin,
     span: node.span,
   };
@@ -60,6 +64,9 @@ function valueOf(ctx: Ctx, node: XNode): Expression | undefined {
     const constant = CONSTANTS[attr];
     if (constant) return { kind: 'constant', type: constant, value };
     if (PATHS.has(attr)) return { kind: 'path', type: attr as PathType, value };
+    if (attr === 'UrlRef') {
+      return { kind: 'urlRef', value: { kind: 'constant', type: 'string', value } };
+    }
   }
   for (const child of node.children) {
     if (child.name === 'Annotation' || child.name === 'PropertyValue') continue;

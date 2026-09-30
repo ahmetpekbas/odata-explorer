@@ -243,3 +243,43 @@ describe('parseXml: container and operations', () => {
     expect(model.schemas[0]?.entityContainers[0]?.extends).toBe('Other.C');
   });
 });
+
+describe('parseXml: defaults shared with JSON', () => {
+  const edmx = (schema: string) =>
+    `<edmx:Edmx xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" Version="4.0"><edmx:DataServices>` +
+    `<Schema xmlns="http://docs.oasis-open.org/odata/ns/edm" Namespace="N">${schema}</Schema>` +
+    `</edmx:DataServices></edmx:Edmx>`;
+
+  it('reads annotations written directly in the schema', () => {
+    const model = parseXml(edmx('<Annotation Term="Core.Description" String="Hi"/>'));
+    expect(model.schemas[0]?.annotations).toMatchObject([{ term: 'Core.Description' }]);
+  });
+
+  it('defaults Nullable to false for collections and true otherwise', () => {
+    const model = parseXml(
+      edmx(
+        '<ComplexType Name="T"><Property Name="A" Type="Edm.String"/>' +
+          '<Property Name="B" Type="Collection(Edm.String)"/>' +
+          '<Property Name="C" Type="Collection(Edm.String)" Nullable="true"/></ComplexType>',
+      ),
+    );
+    expect(model.schemas[0]?.complexTypes[0]?.properties.map((p) => p.nullable)).toEqual([
+      true,
+      false,
+      true,
+    ]);
+  });
+
+  it('omits facets that equal their defaults', () => {
+    const model = parseXml(
+      edmx(
+        '<ComplexType Name="T"><Property Name="A" Type="Edm.Decimal" Precision="0" Scale="0" Unicode="true"/>' +
+          '<Property Name="B" Type="Edm.String" Unicode="false"/></ComplexType>',
+      ),
+    );
+    expect(model.schemas[0]?.complexTypes[0]?.properties.map((p) => p.facets)).toEqual([
+      {},
+      { unicode: false },
+    ]);
+  });
+});
