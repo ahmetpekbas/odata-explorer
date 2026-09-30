@@ -4,6 +4,7 @@
 import { locateDiagnostics } from './diagnostics.ts';
 import { actionId, functionId, parameterId, returnTypeId } from './ids.ts';
 import type { Annotation, Diagnostic, Element, Expression, Model, TypeRef } from './model.ts';
+import { attachAnnotations } from './resolve-annotations.ts';
 import { resolveStructure, type Structure } from './resolve-structure.ts';
 import { allElements } from './walk.ts';
 
@@ -64,7 +65,9 @@ const PRIMITIVES = new Set(
 export function resolve(model: Model, source?: string): Resolved {
   const r = new Resolver(model);
   r.run();
-  const structure = resolveStructure(model, r.elements, (name) => r.qualifyName(name));
+  const qualifyName = (name: string) => r.qualifyName(name);
+  const structure = resolveStructure(model, r.elements, qualifyName);
+  attachAnnotations(model, r.elements, structure, qualifyName);
   if (source !== undefined) locateDiagnostics(model.diagnostics, source);
   return { model, elements: r.elements, ...structure };
 }

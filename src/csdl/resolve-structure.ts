@@ -126,38 +126,7 @@ export function resolveStructure(
     for (const ancestor of info.baseChain) structure.types.get(ancestor)?.descendants.push(type.id);
   }
 
-  /** Finds a member by name on a type or any of its ancestors. */
-  const findMember = (typeId: string, name: string): Property | NavigationProperty | undefined => {
-    const info = structure.types.get(typeId);
-    for (const id of [...(info?.propertyIds ?? []), ...(info?.navigationPropertyIds ?? [])]) {
-      const e = elements.get(id);
-      if (e?.name === name && (e.kind === 'property' || e.kind === 'navigationProperty')) return e;
-    }
-    return undefined;
-  };
-
-  /**
-   * Follows a path such as `Address/Country` or `NS.Derived/Nav` from a type. Type-cast segments
-   * (containing a dot) switch the current type; other segments step through members.
-   */
-  const followPath = (
-    startType: string,
-    path: string,
-  ): Property | NavigationProperty | undefined => {
-    let current = startType;
-    let member: Property | NavigationProperty | undefined;
-    for (const segment of path.split('/')) {
-      if (segment.includes('.')) {
-        current = qualifyName(segment);
-        member = undefined;
-        continue;
-      }
-      member = findMember(current, segment);
-      if (!member) return undefined;
-      current = member.type.name;
-    }
-    return member;
-  };
+  const { followPath } = memberLookup(structure, elements, qualifyName);
 
   // --- Partners --------------------------------------------------------------------------------
   for (const type of all) {
@@ -234,4 +203,45 @@ export function resolveStructure(
     }
   }
   return structure;
+}
+
+type Member = Property | NavigationProperty;
+
+/** Looks members up through the inheritance data in `structure`. */
+export function memberLookup(
+  structure: Pick<Structure, 'types'>,
+  elements: Map<string, Element>,
+  qualifyName: (name: string) => string,
+) {
+  /** Finds a member by name on a type or any of its ancestors. */
+  const findMember = (typeId: string, name: string): Member | undefined => {
+    const info = structure.types.get(typeId);
+    for (const id of [...(info?.propertyIds ?? []), ...(info?.navigationPropertyIds ?? [])]) {
+      const e = elements.get(id);
+      if (e?.name === name && (e.kind === 'property' || e.kind === 'navigationProperty')) return e;
+    }
+    return undefined;
+  };
+
+  /**
+   * Follows a path such as `Address/Country` or `NS.Derived/Nav` from a type. Type-cast segments
+   * (containing a dot) switch the current type; other segments step through members.
+   */
+  const followPath = (startType: string, path: string): Member | undefined => {
+    let current = startType;
+    let member: Member | undefined;
+    for (const segment of path.split('/')) {
+      if (segment.includes('.')) {
+        current = qualifyName(segment);
+        member = undefined;
+        continue;
+      }
+      member = findMember(current, segment);
+      if (!member) return undefined;
+      current = member.type.name;
+    }
+    return member;
+  };
+
+  return { findMember, followPath };
 }

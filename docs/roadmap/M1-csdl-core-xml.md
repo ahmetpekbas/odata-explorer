@@ -43,7 +43,7 @@ Everything in `src/csdl/` is pure TypeScript, with no DOM and no React.
   - Inverse navigation via `Partner`.
   - Which entity sets and singletons expose each type, and navigation bindings per set.
   *Done when:* the TripPin inheritance (`Person`/`Employee`) and the partner pairs resolve in tests.
-- [ ] **1.9 Resolver: annotation attachment.** Attach inline and external annotations to their target
+- [x] **1.9 Resolver: annotation attachment.** Attach inline and external annotations to their target
   path, keeping the qualifier and the origin. Support overload and nested targets.
   *Done when:* tests cover external targets on a property, a set, an overload, and a qualified
   annotation.
