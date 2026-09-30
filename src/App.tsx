@@ -11,6 +11,7 @@ import { openFile, openRecent } from './app/loader.ts';
 import { selectActiveDocument, useStore } from './app/store.ts';
 import { useTheme } from './app/theme.ts';
 import { DiagnosticsPanel } from './ui/shell/DiagnosticsPanel.tsx';
+import { Navigator } from './ui/navigator/Navigator.tsx';
 import { RecentFiles } from './ui/shell/RecentFiles.tsx';
 import { StartPage } from './ui/shell/StartPage.tsx';
 import { Shell } from './ui/shell/Shell.tsx';
@@ -52,6 +53,7 @@ const useStyles = makeStyles({
 export function App() {
   const styles = useStyles();
   const document = useStore(selectActiveDocument);
+  const selection = useStore((s) => s.selection);
   const select = useStore((s) => s.select);
   const closeDocument = useStore((s) => s.closeDocument);
   const { preference, setPreference, scheme } = useTheme();
@@ -76,7 +78,13 @@ export function App() {
       </header>
       {document?.status === 'ready' ? (
         <Shell
-          navigator={null}
+          navigator={
+            <Navigator
+              model={document.resolved.model}
+              selectedId={selection}
+              onOpen={(target) => select(target.id)}
+            />
+          }
           workspace={
             <DiagnosticsPanel
               diagnostics={document.resolved.model.diagnostics}

@@ -78,3 +78,19 @@ export function buildNavigatorTree(model: Model, { hideVocabularies }: TreeOptio
     .filter((s) => !(hideVocabularies && BUNDLED_NAMESPACES.includes(s.namespace)))
     .map(schemaNode);
 }
+
+/**
+ * The part of the tree that matches `query`, ignoring case: a node that matches keeps its whole
+ * subtree, any other node stays only for the matching descendants it leads to.
+ */
+export function filterTree(nodes: NavNode[], query: string): NavNode[] {
+  const needle = query.trim().toLowerCase();
+  if (needle === '') return nodes;
+  const walk = (list: NavNode[]): NavNode[] =>
+    list.flatMap((node) => {
+      if (`${node.label} ${node.detail ?? ''}`.toLowerCase().includes(needle)) return [node];
+      const children = walk(node.children);
+      return children.length > 0 ? [{ ...node, children }] : [];
+    });
+  return walk(nodes);
+}

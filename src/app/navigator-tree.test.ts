@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import trippin from '../../fixtures/trippin.xml?raw';
 import { load } from '../worker/load.ts';
-import { buildNavigatorTree, type NavNode } from './navigator-tree.ts';
+import { buildNavigatorTree, filterTree, type NavNode } from './navigator-tree.ts';
 
 function model(xml: string) {
   const result = load(xml);
@@ -93,5 +93,32 @@ describe('buildNavigatorTree', () => {
       'Org.OData.Core.V1',
       'N',
     ]);
+  });
+});
+
+describe('filterTree', () => {
+  const [schema] = buildNavigatorTree(model(trippin), { hideVocabularies: true });
+  const tree = schema ? [schema] : [];
+
+  it('returns everything for an empty query', () => {
+    expect(filterTree(tree, '  ')).toBe(tree);
+  });
+
+  it('keeps the path to each match, ignoring case', () => {
+    const [s] = filterTree(tree, 'PERSON');
+    expect(names(s?.children ?? [])).toEqual(['Entity Types', 'Enum Types']);
+    expect(names(child(s, 'Entity Types')?.children ?? [])).toEqual(['Person']);
+    expect(names(child(s, 'Enum Types')?.children ?? [])).toEqual(['PersonGender']);
+  });
+
+  it('keeps the whole subtree of a matching node', () => {
+    const [s] = filterTree(tree, 'entity sets');
+    const container = child(s, 'DefaultContainer');
+    expect(names(container?.children ?? [])).toEqual(['Entity Sets']);
+    expect(child(container, 'Entity Sets')?.children).toHaveLength(4);
+  });
+
+  it('returns nothing when nothing matches', () => {
+    expect(filterTree(tree, 'zzz')).toEqual([]);
   });
 });

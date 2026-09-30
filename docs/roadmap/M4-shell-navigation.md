@@ -12,7 +12,7 @@
   type definitions, terms, actions, functions), plus the container (sets, singletons, imports). Add a
   "hide vocabulary schemas" toggle, on by default.
   *Done when:* unit tests check TripPin's tree shape.
-- [ ] **4.3 Navigator UI.** Fluent `FlatTree` items rendered through `@tanstack/react-virtual`, with an
+- [x] **4.3 Navigator UI.** Fluent `FlatTree` items rendered through `@tanstack/react-virtual`, with an
   in-place filter and keyboard navigation.
   *Done when:* a list of 5,000 nodes scrolls smoothly, the filter narrows it, and the arrow keys work.
 - [ ] **4.4 Tab workspace.** A single click opens a preview tab and a double-click pins it. Middle-click

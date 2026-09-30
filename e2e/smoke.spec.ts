@@ -69,3 +69,34 @@ test('keeps the inspector collapsed across a reload', async ({ page }) => {
   await page.getByRole('button', { name: 'Open trippin.xml' }).click();
   await expect(page.getByRole('button', { name: 'Expand inspector' })).toBeVisible();
 });
+
+test('navigator virtualizes 5,000 nodes, filters, and follows the arrow keys', async ({ page }) => {
+  const types = Array.from(
+    { length: 5000 },
+    (_, i) =>
+      `<EntityType Name="T${i}"><Key><PropertyRef Name="Id"/></Key><Property Name="Id" Type="Edm.Int32" Nullable="false"/></EntityType>`,
+  ).join('');
+  const xml = `<?xml version="1.0"?><edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx"><edmx:DataServices><Schema Namespace="Big" xmlns="http://docs.oasis-open.org/odata/ns/edm">${types}</Schema></edmx:DataServices></edmx:Edmx>`;
+  await page.goto('./');
+  await page.getByLabel('Choose a metadata file').setInputFiles({
+    name: 'big.xml',
+    mimeType: 'application/xml',
+    buffer: Buffer.from(xml),
+  });
+
+  const tree = page.getByRole('tree', { name: 'Model elements' });
+  await expect(tree.getByRole('treeitem', { name: 'Big' })).toBeVisible();
+  await tree.getByRole('treeitem', { name: 'Entity Types' }).click();
+  await expect(tree.getByRole('treeitem', { name: 'T0', exact: true })).toBeVisible();
+  expect(await tree.getByRole('treeitem').count()).toBeLessThan(100);
+
+  await tree.getByRole('treeitem', { name: 'T0', exact: true }).focus();
+  await page.keyboard.press('ArrowDown');
+  await expect(tree.getByRole('treeitem', { name: 'T1', exact: true })).toBeFocused();
+
+  await page.getByLabel('Filter the navigator').fill('T4999');
+  await expect(tree.getByRole('treeitem', { name: 'T4999', exact: true })).toBeVisible();
+  await expect(tree.getByRole('treeitem', { name: 'T0', exact: true })).toBeHidden();
+  await page.getByLabel('Filter the navigator').fill('zzz');
+  await expect(page.getByText('No matches.')).toBeVisible();
+});
