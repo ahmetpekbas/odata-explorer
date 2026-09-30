@@ -1,0 +1,2714 @@
+<html>
+
+<head>
+<base href="https://docs.oasis-open.org/odata/new-in-odata/v4.01/cn04/new-in-odata-v4.01-cn04.html">
+<meta name="description" content="This document describes the changes in OData Version 4.01 compared to its predecessor version 4.0.">
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<title>What’s New in OData Version 4.01</title>
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:Wingdings;
+	panose-1:5 0 0 0 0 0 0 0 0 0;}
+@font-face
+	{font-family:"MS Mincho";
+	panose-1:2 2 6 9 4 2 5 8 3 4;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Verdana;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+@font-face
+	{font-family:"Arial Unicode MS";
+	panose-1:2 11 6 4 2 2 2 2 2 4;}
+@font-face
+	{font-family:Cambria;
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:"Liberation Sans";
+	panose-1:2 11 6 4 2 2 2 2 2 4;}
+@font-face
+	{font-family:"Malgun Gothic";
+	panose-1:2 11 5 3 2 0 0 2 0 4;}
+@font-face
+	{font-family:Tahoma;
+	panose-1:2 11 6 4 3 5 4 4 2 4;}
+@font-face
+	{font-family:"\@Malgun Gothic";
+	panose-1:2 11 5 3 2 0 0 2 0 4;}
+@font-face
+	{font-family:"\@Arial Unicode MS";
+	panose-1:2 11 6 4 2 2 2 2 2 4;}
+@font-face
+	{font-family:"\@MS Mincho";
+	panose-1:2 2 6 9 4 2 5 8 3 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:4.0pt;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+h1
+	{mso-style-link:"Heading 1 Char";
+	margin-top:.25in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.3in;
+	margin-bottom:.0001pt;
+	text-indent:-.3in;
+	page-break-after:avoid;
+	font-size:16.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;
+	font-weight:normal;}
+h2
+	{mso-style-name:"Heading 2\,H2";
+	mso-style-link:"Heading 2 Char\,H2 Char";
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:.4in;
+	text-indent:-.4in;
+	page-break-after:avoid;
+	font-size:14.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;
+	font-weight:normal;}
+h3
+	{mso-style-name:"Heading 3\,H3";
+	mso-style-link:"Heading 3 Char\,H3 Char";
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:.5in;
+	text-indent:-.5in;
+	page-break-after:avoid;
+	font-size:13.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;
+	font-weight:normal;}
+h4
+	{mso-style-name:"Heading 4\,H4";
+	mso-style-link:"Heading 4 Char\,H4 Char";
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:.6in;
+	text-indent:-.6in;
+	page-break-after:avoid;
+	font-size:12.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;
+	font-weight:normal;}
+h5
+	{mso-style-link:"Heading 5 Char";
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:.7in;
+	text-indent:-.7in;
+	page-break-after:avoid;
+	font-size:11.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;
+	font-weight:normal;}
+h6
+	{mso-style-link:"Heading 6 Char";
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:.8in;
+	text-indent:-.8in;
+	page-break-after:avoid;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;
+	font-weight:normal;}
+p.MsoHeading7, li.MsoHeading7, div.MsoHeading7
+	{mso-style-link:"Heading 7 Char";
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:.9in;
+	text-indent:-.9in;
+	page-break-after:avoid;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;}
+p.MsoHeading8, li.MsoHeading8, div.MsoHeading8
+	{mso-style-link:"Heading 8 Char";
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:1.0in;
+	text-indent:-1.0in;
+	page-break-after:avoid;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;}
+p.MsoHeading9, li.MsoHeading9, div.MsoHeading9
+	{mso-style-link:"Heading 9 Char";
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:1.1in;
+	text-indent:-1.1in;
+	page-break-after:avoid;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;}
+p.MsoToc1, li.MsoToc1, div.MsoToc1
+	{margin-top:4.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:0in;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.MsoToc2, li.MsoToc2, div.MsoToc2
+	{margin-top:4.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:10.5pt;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.MsoToc3, li.MsoToc3, div.MsoToc3
+	{margin-top:4.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:21.0pt;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.MsoToc4, li.MsoToc4, div.MsoToc4
+	{margin-top:4.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:33.0pt;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.MsoToc5, li.MsoToc5, div.MsoToc5
+	{margin-top:4.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:44.0pt;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.MsoFootnoteText, li.MsoFootnoteText, div.MsoFootnoteText
+	{mso-style-link:"Footnote Text Char";
+	margin-top:4.0pt;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.MsoCommentText, li.MsoCommentText, div.MsoCommentText
+	{mso-style-link:"Comment Text Char";
+	margin-top:4.0pt;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{mso-style-link:"Header Char";
+	margin-top:4.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:0in;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.MsoFooter, li.MsoFooter, div.MsoFooter
+	{mso-style-link:"Footer Char";
+	margin-top:6.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:0in;
+	margin-bottom:.0001pt;
+	font-size:8.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.MsoFooterCxSpFirst, li.MsoFooterCxSpFirst, div.MsoFooterCxSpFirst
+	{mso-style-link:"Footer Char";
+	margin-top:6.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:0in;
+	margin-bottom:.0001pt;
+	font-size:8.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.MsoFooterCxSpMiddle, li.MsoFooterCxSpMiddle, div.MsoFooterCxSpMiddle
+	{mso-style-link:"Footer Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:8.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.MsoFooterCxSpLast, li.MsoFooterCxSpLast, div.MsoFooterCxSpLast
+	{mso-style-link:"Footer Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:8.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.MsoCaption, li.MsoCaption, div.MsoCaption
+	{margin-top:4.0pt;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	font-variant:small-caps;
+	color:black;
+	letter-spacing:.3pt;
+	font-weight:bold;}
+span.MsoFootnoteReference
+	{vertical-align:super;}
+span.MsoPageNumber
+	{font-family:"Arial",sans-serif;
+	color:white;
+	font-weight:bold;}
+p.MsoTitle, li.MsoTitle, div.MsoTitle
+	{mso-style-link:"Title Char";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	font-size:24.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;
+	font-weight:bold;}
+p.MsoTitleCxSpFirst, li.MsoTitleCxSpFirst, div.MsoTitleCxSpFirst
+	{mso-style-link:"Title Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:24.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;
+	font-weight:bold;}
+p.MsoTitleCxSpMiddle, li.MsoTitleCxSpMiddle, div.MsoTitleCxSpMiddle
+	{mso-style-link:"Title Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:24.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;
+	font-weight:bold;}
+p.MsoTitleCxSpLast, li.MsoTitleCxSpLast, div.MsoTitleCxSpLast
+	{mso-style-link:"Title Char";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	font-size:24.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;
+	font-weight:bold;}
+p.MsoSubtitle, li.MsoSubtitle, div.MsoSubtitle
+	{mso-style-link:"Subtitle Char";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	font-size:18.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;
+	font-weight:bold;}
+p.MsoNoteHeading, li.MsoNoteHeading, div.MsoNoteHeading
+	{mso-style-link:"Note Heading Char";
+	margin-top:4.0pt;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:none;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:purple;
+	text-decoration:underline;}
+em
+	{color:#675E47;}
+p.MsoCommentSubject, li.MsoCommentSubject, div.MsoCommentSubject
+	{mso-style-link:"Comment Subject Char";
+	margin-top:4.0pt;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	font-weight:bold;}
+p.MsoAcetate, li.MsoAcetate, div.MsoAcetate
+	{mso-style-link:"Balloon Text Char";
+	margin-top:4.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:0in;
+	margin-bottom:.0001pt;
+	font-size:8.0pt;
+	font-family:"Tahoma",sans-serif;}
+span.MsoPlaceholderText
+	{color:gray;}
+p.MsoNoSpacing, li.MsoNoSpacing, div.MsoNoSpacing
+	{mso-style-link:"No Spacing Char";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.MsoRMPane, li.MsoRMPane, div.MsoRMPane
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{margin-top:4.0pt;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:.5in;
+	text-indent:-.2in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#4C4635;}
+p.MsoListParagraphCxSpFirst, li.MsoListParagraphCxSpFirst, div.MsoListParagraphCxSpFirst
+	{margin-top:4.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	text-indent:-.2in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#4C4635;}
+p.MsoListParagraphCxSpMiddle, li.MsoListParagraphCxSpMiddle, div.MsoListParagraphCxSpMiddle
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	text-indent:-.2in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#4C4635;}
+p.MsoListParagraphCxSpLast, li.MsoListParagraphCxSpLast, div.MsoListParagraphCxSpLast
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:.5in;
+	text-indent:-.2in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#4C4635;}
+p.MsoQuote, li.MsoQuote, div.MsoQuote
+	{mso-style-link:"Quote Char";
+	margin-top:8.0pt;
+	margin-right:.5in;
+	margin-bottom:8.0pt;
+	margin-left:.5in;
+	text-align:center;
+	line-height:125%;
+	font-size:12.0pt;
+	font-family:"Cambria",serif;
+	color:#A9A57C;
+	font-style:italic;}
+p.MsoIntenseQuote, li.MsoIntenseQuote, div.MsoIntenseQuote
+	{mso-style-link:"Intense Quote Char";
+	margin-top:10.0pt;
+	margin-right:.65in;
+	margin-bottom:14.0pt;
+	margin-left:.65in;
+	text-align:center;
+	line-height:125%;
+	background:#A9A57C;
+	border:none;
+	padding:0in;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;
+	color:white;
+	font-weight:bold;
+	font-style:italic;}
+span.MsoSubtleEmphasis
+	{color:black;
+	font-style:italic;}
+span.MsoIntenseEmphasis
+	{color:#A9A57C;
+	font-weight:bold;
+	font-style:italic;}
+span.MsoSubtleReference
+	{font-variant:small-caps;
+	color:#9CBEBD;
+	text-decoration:underline;}
+span.MsoIntenseReference
+	{font-variant:small-caps;
+	color:#9CBEBD;
+	letter-spacing:.25pt;
+	font-weight:bold;
+	text-decoration:underline;}
+span.MsoBookTitle
+	{font-variant:small-caps;
+	text-transform:none;
+	letter-spacing:.5pt;
+	font-weight:bold;}
+span.Heading1Char
+	{mso-style-name:"Heading 1 Char";
+	mso-style-link:"Heading 1";
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;}
+span.Heading2Char
+	{mso-style-name:"Heading 2 Char\,H2 Char";
+	mso-style-link:"Heading 2\,H2";
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;}
+span.Heading3Char
+	{mso-style-name:"Heading 3 Char\,H3 Char";
+	mso-style-link:"Heading 3\,H3";
+	font-family:"Arial",sans-serif;
+	color:#3B006F;
+	font-weight:bold;}
+span.Heading4Char
+	{mso-style-name:"Heading 4 Char\,H4 Char";
+	mso-style-link:"Heading 4\,H4";
+	font-family:"Arial",sans-serif;
+	color:#3B006F;
+	font-weight:bold;}
+span.Heading5Char
+	{mso-style-name:"Heading 5 Char";
+	mso-style-link:"Heading 5";
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;}
+span.Heading6Char
+	{mso-style-name:"Heading 6 Char";
+	mso-style-link:"Heading 6";
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;}
+span.Heading7Char
+	{mso-style-name:"Heading 7 Char";
+	mso-style-link:"Heading 7";
+	font-family:"Arial",sans-serif;
+	color:#3B006F;
+	font-weight:bold;}
+span.Heading8Char
+	{mso-style-name:"Heading 8 Char";
+	mso-style-link:"Heading 8";
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;}
+span.Heading9Char
+	{mso-style-name:"Heading 9 Char";
+	mso-style-link:"Heading 9";
+	font-family:"Arial",sans-serif;
+	color:#3B006F;
+	font-weight:bold;
+	font-style:italic;}
+span.TitleChar
+	{mso-style-name:"Title Char";
+	mso-style-link:Title;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;
+	font-weight:bold;}
+span.SubtitleChar
+	{mso-style-name:"Subtitle Char";
+	mso-style-link:Subtitle;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;
+	font-weight:bold;}
+span.BalloonTextChar
+	{mso-style-name:"Balloon Text Char";
+	mso-style-link:"Balloon Text";
+	font-family:"Tahoma",sans-serif;}
+span.NoSpacingChar
+	{mso-style-name:"No Spacing Char";
+	mso-style-link:"No Spacing";
+	font-family:"Liberation Sans",sans-serif;}
+p.PersonalName, li.PersonalName, div.PersonalName
+	{mso-style-name:"Personal Name";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	font-size:14.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;}
+p.PersonalNameCxSpFirst, li.PersonalNameCxSpFirst, div.PersonalNameCxSpFirst
+	{mso-style-name:"Personal NameCxSpFirst";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:14.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;}
+p.PersonalNameCxSpMiddle, li.PersonalNameCxSpMiddle, div.PersonalNameCxSpMiddle
+	{mso-style-name:"Personal NameCxSpMiddle";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:14.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;}
+p.PersonalNameCxSpLast, li.PersonalNameCxSpLast, div.PersonalNameCxSpLast
+	{mso-style-name:"Personal NameCxSpLast";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:10.0pt;
+	margin-left:0in;
+	font-size:14.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;}
+span.HeaderChar
+	{mso-style-name:"Header Char";
+	mso-style-link:Header;}
+span.FooterChar
+	{mso-style-name:"Footer Char";
+	mso-style-link:Footer;
+	font-family:"Liberation Sans",sans-serif;}
+p.Abstract, li.Abstract, div.Abstract
+	{mso-style-name:Abstract;
+	margin-top:4.0pt;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.AppendixHeading1, li.AppendixHeading1, div.AppendixHeading1
+	{mso-style-name:AppendixHeading1;
+	margin-right:0in;
+	margin-left:.25in;
+	text-indent:-.25in;
+	page-break-before:always;
+	page-break-after:avoid;
+	border:none;
+	padding:0in;
+	font-size:18.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;}
+span.FootnoteTextChar
+	{mso-style-name:"Footnote Text Char";
+	mso-style-link:"Footnote Text";}
+p.AppendixHeading3, li.AppendixHeading3, div.AppendixHeading3
+	{mso-style-name:AppendixHeading3;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:.5in;
+	text-indent:-.5in;
+	page-break-after:avoid;
+	font-size:13.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;}
+p.Titlepageinfo, li.Titlepageinfo, div.Titlepageinfo
+	{mso-style-name:"Title page info";
+	margin-top:4.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:0in;
+	margin-bottom:.0001pt;
+	page-break-after:avoid;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;
+	font-weight:bold;}
+p.Titlepageinfodescription, li.Titlepageinfodescription, div.Titlepageinfodescription
+	{mso-style-name:"Title page info description";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.TitlepageinfodescriptionCxSpFirst, li.TitlepageinfodescriptionCxSpFirst, div.TitlepageinfodescriptionCxSpFirst
+	{mso-style-name:"Title page info descriptionCxSpFirst";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.TitlepageinfodescriptionCxSpMiddle, li.TitlepageinfodescriptionCxSpMiddle, div.TitlepageinfodescriptionCxSpMiddle
+	{mso-style-name:"Title page info descriptionCxSpMiddle";
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.TitlepageinfodescriptionCxSpLast, li.TitlepageinfodescriptionCxSpLast, div.TitlepageinfodescriptionCxSpLast
+	{mso-style-name:"Title page info descriptionCxSpLast";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.RelatedWork, li.RelatedWork, div.RelatedWork
+	{mso-style-name:"Related Work";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:.25in;
+	text-indent:-.25in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.RelatedWorkCxSpFirst, li.RelatedWorkCxSpFirst, div.RelatedWorkCxSpFirst
+	{mso-style-name:"Related WorkCxSpFirst";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.25in;
+	margin-bottom:.0001pt;
+	text-indent:-.25in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.RelatedWorkCxSpMiddle, li.RelatedWorkCxSpMiddle, div.RelatedWorkCxSpMiddle
+	{mso-style-name:"Related WorkCxSpMiddle";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.25in;
+	margin-bottom:.0001pt;
+	text-indent:-.25in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.RelatedWorkCxSpLast, li.RelatedWorkCxSpLast, div.RelatedWorkCxSpLast
+	{mso-style-name:"Related WorkCxSpLast";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:.25in;
+	text-indent:-.25in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+span.Refterm
+	{mso-style-name:"Ref term";
+	font-weight:bold;}
+p.Ref, li.Ref, div.Ref
+	{mso-style-name:Ref;
+	margin-top:2.0pt;
+	margin-right:0in;
+	margin-bottom:2.0pt;
+	margin-left:1.5in;
+	text-indent:-1.25in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:black;}
+p.Notices, li.Notices, div.Notices
+	{mso-style-name:Notices;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:12.0pt;
+	margin-left:0in;
+	page-break-before:always;
+	border:none;
+	padding:0in;
+	font-size:18.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;}
+p.Note, li.Note, div.Note
+	{mso-style-name:Note;
+	margin-top:6.0pt;
+	margin-right:.5in;
+	margin-bottom:6.0pt;
+	margin-left:.5in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+span.NoteHeadingChar
+	{mso-style-name:"Note Heading Char";
+	mso-style-link:"Note Heading";
+	font-family:"Liberation Sans",sans-serif;}
+span.Keyword
+	{mso-style-name:Keyword;
+	font-family:"Courier New";}
+p.Example, li.Example, div.Example
+	{mso-style-name:Example;
+	margin-top:4.0pt;
+	margin-right:.3in;
+	margin-bottom:0in;
+	margin-left:.3in;
+	margin-bottom:.0001pt;
+	background:#E6E6E6;
+	font-size:9.0pt;
+	font-family:"Courier New";}
+p.Examplesmall, li.Examplesmall, div.Examplesmall
+	{mso-style-name:"Example small";
+	margin-top:4.0pt;
+	margin-right:.3in;
+	margin-bottom:0in;
+	margin-left:.3in;
+	margin-bottom:.0001pt;
+	background:#E6E6E6;
+	font-size:8.0pt;
+	font-family:"Courier New";}
+p.Definition, li.Definition, div.Definition
+	{mso-style-name:Definition;
+	margin-top:4.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:.5in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.Definitionterm, li.Definitionterm, div.Definitionterm
+	{mso-style-name:"Definition term";
+	margin-top:4.0pt;
+	margin-right:2.0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	font-weight:bold;}
+p.Code, li.Code, div.Code
+	{mso-style-name:Code;
+	margin-top:4.0pt;
+	margin-right:.3in;
+	margin-bottom:0in;
+	margin-left:.3in;
+	margin-bottom:.0001pt;
+	background:#D9D9D9;
+	border:none;
+	padding:0in;
+	font-size:9.0pt;
+	font-family:"Courier New";}
+p.Codesmall, li.Codesmall, div.Codesmall
+	{mso-style-name:"Code small";
+	margin-top:4.0pt;
+	margin-right:.3in;
+	margin-bottom:0in;
+	margin-left:.3in;
+	margin-bottom:.0001pt;
+	background:#E6E6E6;
+	border:none;
+	padding:0in;
+	font-size:8.0pt;
+	font-family:"Courier New";}
+p.Heading1WP, li.Heading1WP, div.Heading1WP
+	{mso-style-name:"Heading 1 WP";
+	mso-style-link:"Heading 1 WP Char";
+	margin-top:24.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:.3in;
+	text-indent:-.3in;
+	page-break-before:always;
+	page-break-after:avoid;
+	border:none;
+	padding:0in;
+	font-size:18.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;}
+span.Heading1WPChar
+	{mso-style-name:"Heading 1 WP Char";
+	mso-style-link:"Heading 1 WP";
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;}
+p.Contributor, li.Contributor, div.Contributor
+	{mso-style-name:Contributor;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.ContributorCxSpFirst, li.ContributorCxSpFirst, div.ContributorCxSpFirst
+	{mso-style-name:ContributorCxSpFirst;
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.ContributorCxSpMiddle, li.ContributorCxSpMiddle, div.ContributorCxSpMiddle
+	{mso-style-name:ContributorCxSpMiddle;
+	margin:0in;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.ContributorCxSpLast, li.ContributorCxSpLast, div.ContributorCxSpLast
+	{mso-style-name:ContributorCxSpLast;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:4.0pt;
+	margin-left:0in;
+	font-size:10.0pt;
+	font-family:"Liberation Sans",sans-serif;}
+p.TOCHeadingWP, li.TOCHeadingWP, div.TOCHeadingWP
+	{mso-style-name:"TOC Heading WP";
+	mso-style-link:"TOC Heading WP Char";
+	margin-top:24.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:0in;
+	page-break-before:always;
+	page-break-after:avoid;
+	border:none;
+	padding:0in;
+	font-size:18.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;}
+span.TOCHeadingWPChar
+	{mso-style-name:"TOC Heading WP Char";
+	mso-style-link:"TOC Heading WP";
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;}
+p.AppendixHeading2, li.AppendixHeading2, div.AppendixHeading2
+	{mso-style-name:AppendixHeading2;
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:6.0pt;
+	margin-left:.4in;
+	text-indent:-.4in;
+	page-break-after:avoid;
+	font-size:14.0pt;
+	font-family:"Liberation Sans",sans-serif;
+	color:#446CAA;}
+span.QuoteChar
+	{mso-style-name:"Quote Char";
+	mso-style-link:Quote;
+	font-family:"Cambria",serif;
+	color:#A9A57C;
+	font-style:italic;}
+span.IntenseQuoteChar
+	{mso-style-name:"Intense Quote Char";
+	mso-style-link:"Intense Quote";
+	font-family:"Malgun Gothic",sans-serif;
+	color:white;
+	background:#A9A57C;
+	font-weight:bold;
+	font-style:italic;}
+span.Datatype
+	{mso-style-name:Datatype;
+	font-family:"Courier New";}
+span.CommentTextChar
+	{mso-style-name:"Comment Text Char";
+	mso-style-link:"Comment Text";
+	font-family:"Liberation Sans",sans-serif;}
+span.CommentSubjectChar
+	{mso-style-name:"Comment Subject Char";
+	mso-style-link:"Comment Subject";
+	font-family:"Liberation Sans",sans-serif;
+	font-weight:bold;}
+.MsoChpDefault
+	{font-size:10.0pt;
+	font-family:"Calibri",sans-serif;}
+ /* Page Definitions */
+ @page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in .5in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+@page WordSection2
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in .5in 1.0in;}
+div.WordSection2
+	{page:WordSection2;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US link=blue vlink=purple>
+
+<div class=WordSection1>
+
+<p class=MsoNormal style='margin-bottom:10.0pt;line-height:115%'><a
+href="https://www.oasis-open.org/"><span style='color:windowtext'><img
+border=0 width=242 height=53 id="Picture 1"
+src="new-in-odata-v4.01-cn04_files/image001.jpg"></span></a></p>
+
+<div style='border:none;border-bottom:solid windowtext 1.0pt;padding:0in 0in 1.0pt 0in'>
+
+<p class=MsoSubtitle style='border:none;padding:0in'><span style='color:#717171'>OASIS
+Committee Note</span></p>
+
+</div>
+
+<p class=MsoTitle>What’s New in OData Version 4.01</p>
+
+<p class=MsoSubtitle>Committee Note 04</p>
+
+<p class=MsoSubtitle>26 September 2019</p>
+
+<p class=Titlepageinfo>This version:</p>
+
+<p class=TitlepageinfodescriptionCxSpFirst><a
+href="https://docs.oasis-open.org/odata/new-in-odata/v4.01/cn04/new-in-odata-v4.01-cn04.docx">https://docs.oasis-open.org/odata/new-in-odata/v4.01/cn04/new-in-odata-v4.01-cn04.docx</a>
+(Authoritative)</p>
+
+<p class=TitlepageinfodescriptionCxSpMiddle><a
+href="https://docs.oasis-open.org/odata/new-in-odata/v4.01/cn04/new-in-odata-v4.01-cn04.html">https://docs.oasis-open.org/odata/new-in-odata/v4.01/cn04/new-in-odata-v4.01-cn04.html</a></p>
+
+<p class=TitlepageinfodescriptionCxSpLast><a
+href="https://docs.oasis-open.org/odata/new-in-odata/v4.01/cn04/new-in-odata-v4.01-cn04.pdf">https://docs.oasis-open.org/odata/new-in-odata/v4.01/cn04/new-in-odata-v4.01-cn04.pdf</a></p>
+
+<p class=Titlepageinfo>Previous version:</p>
+
+<p class=TitlepageinfodescriptionCxSpFirst><a
+href="https://docs.oasis-open.org/odata/new-in-odata/v4.01/cn03/new-in-odata-v4.01-cn03.docx">https://docs.oasis-open.org/odata/new-in-odata/v4.01/cn03/new-in-odata-v4.01-cn03.docx</a>
+(Authoritative)</p>
+
+<p class=TitlepageinfodescriptionCxSpMiddle><a
+href="https://docs.oasis-open.org/odata/new-in-odata/v4.01/cn03/new-in-odata-v4.01-cn03.html">https://docs.oasis-open.org/odata/new-in-odata/v4.01/cn03/new-in-odata-v4.01-cn03.html</a></p>
+
+<p class=TitlepageinfodescriptionCxSpLast><a
+href="https://docs.oasis-open.org/odata/new-in-odata/v4.01/cn03/new-in-odata-v4.01-cn03.pdf">https://docs.oasis-open.org/odata/new-in-odata/v4.01/cn03/new-in-odata-v4.01-cn03.pdf</a></p>
+
+<p class=Titlepageinfo>Latest version:</p>
+
+<p class=TitlepageinfodescriptionCxSpFirst><a
+href="https://docs.oasis-open.org/odata/new-in-odata/v4.01/new-in-odata-v4.01.docx">https://docs.oasis-open.org/odata/new-in-odata/v4.01/new-in-odata-v4.01.docx</a>
+(Authoritative)</p>
+
+<p class=TitlepageinfodescriptionCxSpMiddle><a
+href="https://docs.oasis-open.org/odata/new-in-odata/v4.01/new-in-odata-v4.01.html">https://docs.oasis-open.org/odata/new-in-odata/v4.01/new-in-odata-v4.01.html</a></p>
+
+<p class=TitlepageinfodescriptionCxSpLast><a
+href="https://docs.oasis-open.org/odata/new-in-odata/v4.01/new-in-odata-v4.01.pdf">https://docs.oasis-open.org/odata/new-in-odata/v4.01/new-in-odata-v4.01.pdf</a></p>
+
+<p class=Titlepageinfo>Technical Committee:</p>
+
+<p class=Titlepageinfodescription><a
+href="https://www.oasis-open.org/committees/odata/">OASIS Open Data Protocol
+(OData) TC</a></p>
+
+<p class=Titlepageinfo>Chairs:</p>
+
+<p class=ContributorCxSpFirst>Ralf Handl (<a href="/cdn-cgi/l/email-protection#a6d4c7cac088cec7c8c2cae6d5c7d688c5c9cb"><span class="__cf_email__" data-cfemail="acdecdc0ca82c4cdc2c8c0ecdfcddc82cfc3c1">[email&#160;protected]</span></a>),
+<a href="http://www.sap.com/">SAP SE</a></p>
+
+<p class=ContributorCxSpLast>Mike Pizzo (<a href="/cdn-cgi/l/email-protection#a1ccc8cac4d1e1ccc8c2d3ced2cec7d58fc2cecc"><span class="__cf_email__" data-cfemail="ec818587899cac81858f9e839f838a98c28f8381">[email&#160;protected]</span></a>),
+<a href="http://www.microsoft.com/">Microsoft</a></p>
+
+<p class=Titlepageinfo>Editors:</p>
+
+<p class=ContributorCxSpFirst>Ralf Handl (<a href="/cdn-cgi/l/email-protection#f486959892da9c959a9098b4879584da979b99"><span class="__cf_email__" data-cfemail="6113000d074f09000f050d211200114f020e0c">[email&#160;protected]</span></a>),
+<a href="http://www.sap.com/">SAP SE</a></p>
+
+<p class=ContributorCxSpMiddle>Hubert Heijkers (<a href="/cdn-cgi/l/email-protection#0e667b6c6b7c7a20666b6764656b7c7d4e606220676c63206d6163"><span class="__cf_email__" data-cfemail="5a322f383f282e74323f3330313f28291a34367433383774393537">[email&#160;protected]</span></a>), <a
+href="http://www.ibm.com/">IBM</a></p>
+
+<p class=ContributorCxSpMiddle><span lang=NL>Mi</span>chael <span lang=NL>P</span>izzo
+(<a href="/cdn-cgi/l/email-protection#6d000406081d2d00040e1f021e020b19430e0200"><span class="__cf_email__" data-cfemail="1c717577796c5c71757f6e736f737a68327f7371">[email&#160;protected]</span></a>), <a
+href="http://www.microsoft.com/">Microsoft</a></p>
+
+<p class=ContributorCxSpLast><span lang=DE>Martin Zurmuehl (</span><a href="/cdn-cgi/l/email-protection#b8d5d9caccd1d696c2cdcad5cdddd0d4f8cbd9c896dbd7d5"><span lang=DE><span class="__cf_email__" data-cfemail="0f626e7d7b666121757a7d627a6a67634f7c6e7f216c6062">[email&#160;protected]</span></span></a><span
+lang=DE>), </span><a href="http://www.sap.com/"><span lang=DE>SAP SE</span></a></p>
+
+<p class=Titlepageinfo>Related work:</p>
+
+<p class=RelatedWorkCxSpFirst style='margin-left:0in;text-indent:0in'>This document
+is related to:</p>
+
+<p class=RelatedWorkCxSpMiddle><span style='font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><i>OData Version 4.01. Part 1: Protocol</i>. Latest version. <a
+href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html">https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html</a>.</p>
+
+<p class=RelatedWorkCxSpMiddle><span lang=DE style='font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><i>OData Version 4.01. Part 2: URL Conventions</i>. <span
+lang=DE>Latest version. </span><a
+href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html"><span
+lang=DE>https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html</span></a><span
+lang=DE>.</span></p>
+
+<p class=RelatedWorkCxSpMiddle><span lang=DE style='font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><i>OData JSON Format Version 4.01</i>. Edited by Ralf Handl,
+Michael Pizzo, and Mark Biamonte. <span lang=DE>Latest version: </span><a
+href="https://docs.oasis-open.org/odata/odata-json-format/v4.01/odata-json-format-v4.01.html"><span
+lang=DE>https://docs.oasis-open.org/odata/odata-json-format/v4.01/odata-json-format-v4.01.html</span></a><span
+lang=DE>.</span></p>
+
+<p class=RelatedWorkCxSpMiddle><span style='font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><i>OData Common Schema Definition Language (CSDL) JSON Representation
+Version 4.01</i>. Edited by Michael Pizzo, Ralf Handl, and Martin Zurmuehl. Latest
+version:<span class=MsoHyperlink> </span><a
+href="https://docs.oasis-open.org/odata/odata-csdl-json/v4.01/odata-csdl-json-v4.01.html">https://docs.oasis-open.org/odata/odata-csdl-json/v4.01/odata-csdl-json-v4.01.html</a>.</p>
+
+<p class=RelatedWorkCxSpLast><span style='font-family:Symbol'>·<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><i>OData Common Schema Definition Language (CSDL) XML
+Representation Version 4.01</i>. Edited by Michael Pizzo, Ralf Handl, and
+Martin Zurmuehl. Latest version:<span class=MsoHyperlink> </span><a
+href="https://docs.oasis-open.org/odata/odata-csdl-xml/v4.01/odata-csdl-xml-v4.01.html">https://docs.oasis-open.org/odata/odata-csdl-xml/v4.01/odata-csdl-xml-v4.01.html</a>.</p>
+
+<p class=Titlepageinfo>Abstract:</p>
+
+<p class=Abstract>This document describes the shape of, and motivation behind,
+the changes in OData Version 4.01 compared to its predecessor version 4.0.</p>
+
+<p class=Titlepageinfo>Status:</p>
+
+<p class=TitlepageinfodescriptionCxSpFirst>This is a Non-Standards Track Work
+Product. The patent provisions of the OASIS IPR Policy do not apply.</p>
+
+<p class=TitlepageinfodescriptionCxSpMiddle>This document was last revised or
+approved by the OASIS Open Data Protocol (OData) TC on the above date. The
+level of approval is also listed above. Check the “Latest version” location
+noted above for possible later revisions of this document. Any other numbered
+Versions and other technical work produced by the Technical Committee (TC) are
+listed at <a
+href="https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=odata#technical">https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=odata#technical</a>.</p>
+
+<p class=TitlepageinfodescriptionCxSpLast>TC members should send comments on
+this document to the TC’s email list. Others should send comments to the TC’s
+public comment list, after subscribing to it by following the instructions at
+the “<a
+href="https://www.oasis-open.org/committees/comments/index.php?wg_abbrev=odata">Send
+A Comment</a>” button on the TC’s web page at <a
+href="https://www.oasis-open.org/committees/odata/">https://www.oasis-open.org/committees/odata/</a><span
+class=MsoHyperlink><span style='color:black'>.</span></span></p>
+
+<p class=Titlepageinfo>Citation format:</p>
+
+<p class=Titlepageinfodescription>When referencing this document the following
+citation format should be used:</p>
+
+<p class=Abstract><span class=Refterm>[New-in-OData-v4.01]</span></p>
+
+<p class=Abstract><i>What’s New in OData Version 4.01</i>. Edited by Ralf
+Handl, Michael Pizzo, Stefan Hagen , and Martin Zurmuehl. 26 September 2019.
+OASIS Committee Note 04. <a
+href="https://docs.oasis-open.org/odata/new-in-odata/v4.01/cn04/new-in-odata-v4.01-cn04.html">https://docs.oasis-open.org/odata/new-in-odata/v4.01/cn04/new-in-odata-v4.01-cn04.html</a>.
+Latest version: <a
+href="https://docs.oasis-open.org/odata/new-in-odata/v4.01/new-in-odata-v4.01.html">https://docs.oasis-open.org/odata/new-in-odata/v4.01/new-in-odata-v4.01.html</a>.</p>
+
+<div style='border:none;border-top:solid gray 1.0pt;padding:1.0pt 0in 0in 0in'>
+
+<p class=Notices>Notices</p>
+
+</div>
+
+<p class=MsoNormal>Copyright © OASIS Open 2019.  All Rights Reserved.</p>
+
+<p class=MsoNormal>All capitalized terms in the following text have the
+meanings assigned to them in the OASIS Intellectual Property Rights Policy (the
+&quot;OASIS IPR Policy&quot;). The full <a
+href="https://www.oasis-open.org/policies-guidelines/ipr">Policy</a> may be
+found at the OASIS website.</p>
+
+<p class=MsoNormal>This document and translations of it may be copied and furnished
+to others, and derivative works that comment on or otherwise explain it or
+assist in its implementation may be prepared, copied, published, and
+distributed, in whole or in part, without restriction of any kind, provided
+that the above copyright notice and this section are included on all such
+copies and derivative works. However, this document itself may not be modified
+in any way, including by removing the copyright notice or references to OASIS,
+except as needed for the purpose of developing any document or deliverable
+produced by an OASIS Technical Committee (in which case the rules applicable to
+copyrights, as set forth in the OASIS IPR Policy, must be followed) or as
+required to translate it into languages other than English.</p>
+
+<p class=MsoNormal>The limited permissions granted above are perpetual and will
+not be revoked by OASIS or its successors or assigns.</p>
+
+<p class=MsoNormal>This document and the information contained herein is
+provided on an &quot;AS IS&quot; basis and OASIS DISCLAIMS ALL WARRANTIES,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF
+THE INFORMATION HEREIN WILL NOT INFRINGE ANY OWNERSHIP RIGHTS OR ANY IMPLIED
+WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.</p>
+
+<div style='border:none;border-top:solid black 1.0pt;padding:6.0pt 0in 0in 0in'>
+
+<p class=TOCHeadingWP>Table of Contents</p>
+
+</div>
+
+<p class=MsoToc1><a name="_Toc287337061"></a><a name="_Toc287336978"></a><a
+name="_Toc287336977"></a><a href="#_Toc21700011">1<span style='font-size:11.0pt;
+font-family:"Calibri",sans-serif;color:windowtext'>       </span>Introduction<span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>7</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700012">1.1 References (non-normative)<span
+style='color:windowtext;display:none'> </span><span
+style='color:windowtext;display:none'>7</span></a></p>
+
+<p class=MsoToc1><a href="#_Toc21700013">2<span style='font-size:11.0pt;
+font-family:"Calibri",sans-serif;color:windowtext'>       </span>OData Part 1:
+Protocol<span style='color:windowtext;display:none'> </span><span style='color:windowtext;display:none'>8</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700014">2.1 New: Default Namespaces<span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>8</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700015">2.2 New: Schema Versioning<span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>8</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700016">2.3 New: Header <span
+style='font-family:"Courier New"'>Isolation</span> without <span
+style='font-family:"Courier New"'>OData-</span> prefix<span style='color:windowtext;
+display:none'>. </span><span
+style='color:windowtext;display:none'>8</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700017">2.4 New: Preference <span
+style='font-family:"Courier New"'>omit-values</span><span style='color:windowtext;
+display:none'>. </span><span
+style='color:windowtext;display:none'>8</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700018">2.5 New: Response Header <span
+style='font-family:"Courier New"'>AsyncResult</span><span style='color:windowtext;
+display:none'>. </span><span
+style='color:windowtext;display:none'>8</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700019">2.6 Pruned: Metadata Service<span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>8</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700020">2.7 Improved: Case-Insensitive System
+Query Options without <span style='font-family:"Courier New"'>$</span> prefix<span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>8</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700021">2.8 New: System Query Option <span
+style='font-family:"Courier New"'>$compute</span><span style='color:windowtext;
+display:none'>. </span><span
+style='color:windowtext;display:none'>9</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700022">2.9 New: Indexing into Ordered
+Collections and Positional Insert<span style='color:windowtext;display:none'> </span><span style='color:windowtext;display:none'>9</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700023">2.10 New: Deep Update<span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>9</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700024">2.11 New: Set-Based Operations<span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>9</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700025">2.12 New: <span style='font-family:
+"Courier New"'>$expand</span> and <span style='font-family:"Courier New"'>$select</span>
+with <span style='font-family:"Courier New"'>POST</span> and <span
+style='font-family:"Courier New"'>PATCH</span><span style='color:windowtext;
+display:none'>. </span><span
+style='color:windowtext;display:none'>9</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700026">2.13 New: Invoking Functions with
+Implicit Parameter Aliases<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>9</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700027">2.14 New: Optional Parameters<span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>9</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700028">2.15 New: Referencing an ETag in a
+Batch Request<span style='color:windowtext;display:none'> </span><span style='color:windowtext;display:none'>9</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700029">2.16 New: Referencing across Change
+Sets in a Batch Request<span style='color:windowtext;display:none'> </span><span style='color:windowtext;display:none'>9</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700030">2.17 New: Referencing Nested Inserted
+Entities<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>10</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700031">2.18 New: Referencing Values in
+Response Bodies<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>10</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700032">2.19 New: Continue-on-Error for
+Collection requests<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>10</span></a></p>
+
+<p class=MsoToc1><a href="#_Toc21700033">3<span style='font-size:11.0pt;
+font-family:"Calibri",sans-serif;color:windowtext'>       </span>OData Part 2:
+URL Conventions<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>11</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700034">3.1 New: Alternate Keys<span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>11</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700035">3.2 New: Key-as-Segment Convention<span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>11</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700036">3.3 New: Addressing Operations without
+Namespace or Alias<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>11</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700037">3.4 New: Addressing a Member of an
+Ordered Collection<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>11</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700038">3.5 Improved: Case-Insensitive
+Operators and Functions<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>11</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700039">3.6 New: Annotation values in
+expressions<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>11</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700040">3.7 Improved: <span style='font-family:
+"Courier New"'>EQ</span> Comparison<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>11</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700041">3.8 Improved: <span style='font-family:
+"Courier New"'>cast</span> Function<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>11</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700042">3.9 Pruned: Structural Casting to
+Arbitrary Structured Types<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>11</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700043">3.10 Improved: Enumeration and
+Duration Literals without Prefix<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>12</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700044">3.11 New: <span style='font-family:
+"Courier New"'>in</span> Operator<span style='color:windowtext;display:none'> </span><span style='color:windowtext;display:none'>12</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700045">3.12 New: <span style='font-family:
+"Courier New"'>divby</span> Operator<span style='color:windowtext;display:none'> </span><span style='color:windowtext;display:none'>12</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700046">3.13 New: <span style='font-family:
+"Courier New"'>hassubset</span> and <span style='font-family:"Courier New"'>hassubsequence</span>
+Collection Functions<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>12</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700047">3.14 Improved: Collection Overloads
+for Functions <span style='font-family:"Courier New"'>concat</span>, <span
+style='font-family:"Courier New"'>contains</span>, <span style='font-family:
+"Courier New"'>endswith</span>, <span style='font-family:"Courier New"'>indexof</span>,
+<span style='font-family:"Courier New"'>length</span>, <span style='font-family:
+"Courier New"'>startswith</span>, and <span style='font-family:"Courier New"'>substring</span><span
+style='color:windowtext;display:none'>  </span><span
+style='color:windowtext;display:none'>12</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700048">3.15 New: <span style='font-family:
+"Courier New"'>matchesPattern</span> Function<span style='color:windowtext;
+display:none'>. </span><span
+style='color:windowtext;display:none'>12</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700049">3.16 Improved: <span style='font-family:
+"Courier New"'>substring</span> with Negative Start Index<span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>12</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700050">3.17 New: <span style='font-family:
+"Courier New"'>case</span> Function<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>12</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700051">3.18 Improved: <span style='font-family:
+"Courier New"'>/$count</span><span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>12</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700052">3.19 New: <span style='font-family:
+"Courier New"'>$expand</span> of Stream Properties and Media Resources<span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>12</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700053">3.20 Improved: System Query Option <span
+style='font-family:"Courier New"'>$search</span><span style='color:windowtext;
+display:none'>. </span><span
+style='color:windowtext;display:none'>12</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700054">3.21 Improved: System Query Option <span
+style='font-family:"Courier New"'>$select</span><span style='color:windowtext;
+display:none'>. </span><span
+style='color:windowtext;display:none'>13</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700055">3.22 New: System Query Option <span
+style='font-family:"Courier New"'>$compute</span><span style='color:windowtext;
+display:none'>. </span><span
+style='color:windowtext;display:none'>13</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700056">3.23 New: System Query Option <span
+style='font-family:"Courier New"'>$index</span><span style='color:windowtext;
+display:none'>. </span><span
+style='color:windowtext;display:none'>13</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700057">3.24 New: <span style='font-family:
+"Courier New"'>/$query</span><span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>13</span></a></p>
+
+<p class=MsoToc1><a href="#_Toc21700058">4<span style='font-size:11.0pt;
+font-family:"Calibri",sans-serif;color:windowtext'>       </span>Pruned: OData
+Part 3: Common Schema Definition Language (CSDL)<span style='color:windowtext;
+display:none'> </span><span
+style='color:windowtext;display:none'>14</span></a></p>
+
+<p class=MsoToc1><a href="#_Toc21700059">5<span style='font-size:11.0pt;
+font-family:"Calibri",sans-serif;color:windowtext'>       </span>New: OData
+Common Schema Definition Language XML Representation<span style='color:windowtext;
+display:none'>. </span><span
+style='color:windowtext;display:none'>15</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700060">5.1 New: Decimal with Floating Scale<span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>15</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700061">5.2 New: Built-in Abstract Type <span
+style='font-family:"Courier New"'>Edm.Untyped</span><span style='color:windowtext;
+display:none'>. </span><span
+style='color:windowtext;display:none'>15</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700062">5.3 New: Built-in Types for Terms: <span
+style='font-family:"Courier New"'>Edm.AnyPropertyPath</span> and <span
+style='font-family:"Courier New"'>Edm.ModelElementPath</span><span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>15</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700063">5.4 Improved: Key Properties<span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>15</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700064">5.5 New: Key-Less Entity Types<span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>15</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700065">5.6 Improved: Inheritance<span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>15</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700066">5.7 Improved: Referential Constraints<span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>15</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700067">5.8 Improved: <span style='font-family:
+"Courier New"'>Unicode</span> Facet<span style='color:windowtext;display:none'> </span><span style='color:windowtext;display:none'>15</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700068">5.9 New: Terms applying to Collections<span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>16</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700069">5.10 New: Annotations targeting
+Action/Function Overloads<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>16</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700070">5.11 New: Inheriting Annotations<span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>16</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700071">5.12 New: Absolute Paths in
+Annotations<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>16</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700072">5.13 New: Key and Index Path Segments
+in Annotations<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>16</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700073">5.14 New: Annotation Expressions <span
+style='font-family:"Courier New"'>Has</span>, <span style='font-family:"Courier New"'>In</span>,
+<span style='font-family:"Courier New"'>Add</span>, <span style='font-family:
+"Courier New"'>Sub</span>, <span style='font-family:"Courier New"'>Neg</span>, <span
+style='font-family:"Courier New"'>Mul</span>, <span style='font-family:"Courier New"'>Div</span>,
+<span style='font-family:"Courier New"'>DivBy</span>, and <span
+style='font-family:"Courier New"'>Mod</span><span style='color:windowtext;
+display:none'>. </span><span
+style='color:windowtext;display:none'>16</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700074">5.15 New: Client-Side Function <span
+style='font-family:"Courier New"'>odata.matchesPattern</span><span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>16</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700075">5.16 New: All URL Functions as
+Client-Side Functions<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>16</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700076">5.17 Pruned: Metadata Service<span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>16</span></a></p>
+
+<p class=MsoToc1><a href="#_Toc21700077">6<span style='font-size:11.0pt;
+font-family:"Calibri",sans-serif;color:windowtext'>       </span>New: OData
+Common Schema Definition Language JSON Representation<span style='color:windowtext;
+display:none'>. </span><span
+style='color:windowtext;display:none'>17</span></a></p>
+
+<p class=MsoToc1><a href="#_Toc21700078">7<span style='font-size:11.0pt;
+font-family:"Calibri",sans-serif;color:windowtext'>       </span>Pruned: OData
+Atom Format<span style='color:windowtext;display:none'> </span><span style='color:windowtext;display:none'>18</span></a></p>
+
+<p class=MsoToc1><a href="#_Toc21700079">8<span style='font-size:11.0pt;
+font-family:"Calibri",sans-serif;color:windowtext'>       </span>OData JSON
+Format<span style='color:windowtext;display:none'> </span><span style='color:windowtext;display:none'>19</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700080">8.1 Improved: Exponential Notation for
+Decimals<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>19</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700081">8.2 Improved: Control Information
+without prefix <span style='font-family:"Courier New"'>odata.</span><span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>19</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700082">8.3 Improved: <span style='font-family:
+"Courier New"'>@type</span> for Built-In Primitive Types<span style='color:
+windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>19</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700083">8.4 New: Inlined JSON Streams<span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>19</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700084">8.5 New: Simplified representation of
+Delta with Expand<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>19</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700085">8.6 Improved: Representation of
+Deleted Entities<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>19</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700086">8.7 Improved: Representation of
+Deleted Links<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>19</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700087">8.8 New: Advertise Actions/Functions
+on Collection-Valued Properties<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>19</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700088">8.9 New: Advertise Non-Availability of
+Actions/Functions<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>19</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700089">8.10 Improved: Invoke Parameterless
+Actions with Empty Request Body<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>19</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700090">8.11 New: JSON Batch Requests and
+Responses<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>20</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700091">8.12 New: Error Information within a
+Success Response<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>20</span></a></p>
+
+<p class=MsoToc2><a href="#_Toc21700092">8.13 New: Annotating Primitive Values
+within a Collection<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>20</span></a></p>
+
+<p class=MsoToc1><a href="#_Toc21700093">Appendix A.<span style='font-size:
+11.0pt;font-family:"Calibri",sans-serif;color:windowtext'>     </span>Acknowledgments<span
+style='color:windowtext;display:none'>. </span><span
+style='color:windowtext;display:none'>21</span></a></p>
+
+<p class=MsoToc1><a href="#_Toc21700094">Appendix B.<span style='font-size:
+11.0pt;font-family:"Calibri",sans-serif;color:windowtext'>     </span>Revision
+History<span style='color:windowtext;display:none'>. </span><span style='color:windowtext;display:none'>22</span></a></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+</div>
+
+<span style='font-size:10.0pt;font-family:"Liberation Sans",sans-serif'><br
+clear=all style='page-break-before:auto'>
+</span>
+
+<div class=WordSection2>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<div style='border:none;border-top:solid #A1985A 1.0pt;padding:6.0pt 0in 0in 0in'>
+
+<p class=Heading1WP style='border:none;padding:0in'><a name="sec_Introduction">1<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></a><a
+href="#sec_Introduction">Introduction</a><a name="_Toc19864247"></a><a
+name="_Toc12010462"></a><a name="_Toc21700011"></a></p>
+
+</div>
+
+<p class=MsoNormal>The Open Data Protocol (OData) Version 4.0 was first published
+in 2013 and has since been implemented in numerous products and tools.</p>
+
+<p class=MsoNormal>OData Version 4.0 has proven to be very suited for building
+inherently consistent REST APIs.</p>
+
+<p class=MsoNormal>OData Version 4.01 adds various new features and removes a
+few restrictions. These changes can be categorized into:</p>
+
+<p class=MsoListParagraphCxSpFirst style='margin-top:0in;margin-right:0in;
+margin-bottom:8.0pt;margin-left:38.25pt;text-indent:-.25in'><span
+style='font-family:Symbol;color:windowtext'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='color:windowtext'>Extended Query Language</span></p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-top:0in;margin-right:0in;
+margin-bottom:8.0pt;margin-left:38.25pt;text-indent:-.25in'><span
+style='font-family:Symbol;color:windowtext'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='color:windowtext'>Simplified Syntax</span></p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-top:0in;margin-right:0in;
+margin-bottom:8.0pt;margin-left:38.25pt;text-indent:-.25in'><span
+style='font-family:Symbol;color:windowtext'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='color:windowtext'>Simplified Payloads</span></p>
+
+<p class=MsoListParagraphCxSpLast style='margin-top:0in;margin-right:0in;
+margin-bottom:8.0pt;margin-left:38.25pt;text-indent:-.25in'><span
+style='font-family:Symbol;color:windowtext'>·<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span><span style='color:windowtext'>Easier partial adoption of OData
+in existing REST APIs</span></p>
+
+<p class=MsoNormal>OData 4.01 is highly compatible, incremental release over
+OData 4.0. A compliant 4.01 OData Service fully supports OData 4.0 clients. New
+OData 4.01 query features and simplified syntax can be supported as compatible
+extensions to OData 4.0 syntax. Content negotiation is facilitated through the
+ODataVersion header to ensure OData 4.0 clients don't receive unexpected
+constructs in response payloads.</p>
+
+<p class=MsoNormal>This document follows the structure of the specification
+documents and cross-references related changes. It is non-normative, so the key
+words “MUST”, “SHOULD”, “MAY”, and “NOT” are avoided and readers must not assume
+it states any requirements.</p>
+
+<h2><a name="sec_Referencesnonnormative">1.1 </a><a
+href="#sec_Referencesnonnormative">References (non-normative)</a><a
+name="_Toc19864248"></a><a name="_Toc12010463"></a><a name="_Toc21700012"></a></h2>
+
+<p class=MsoNormal style='margin-left:113.4pt;text-indent:-113.4pt'><b>[<a
+name=ODataAggregation>OData-Aggregation</a>]      </b><i><span
+style='font-size:9.0pt;font-family:"Verdana",sans-serif;color:black;background:
+white'>OData Extension for Data Aggregation Version 4.0</span></i><span
+style='font-size:9.0pt;font-family:"Verdana",sans-serif;color:black;background:
+white'>. Edited by Ralf Handl, Hubert Heijkers, Gerald Krause, Michael Pizzo,
+and Martin Zurmuehl. 04 November 2015. OASIS Committee Specification 02. </span><a href="https://docs.oasis-open.org/odata/odata-data-aggregation-ext/v4.0/cs02/odata-data-aggregation-ext-v4.0-cs02.html"><span
+style='font-size:9.0pt;font-family:"Verdana",sans-serif;color:#553377;
+background:white'>http://docs.oasis-open.org/odata/odata-data-aggregation-ext/v4.0/cs02/odata-data-aggregation-ext-v4.0-cs02.html</span></a><span
+style='font-size:9.0pt;font-family:"Verdana",sans-serif;color:black;background:
+white'>. </span><span lang=DE style='font-size:9.0pt;font-family:"Verdana",sans-serif;
+color:black;background:white'>Latest version: </span><a href="https://docs.oasis-open.org/odata/odata-data-aggregation-ext/v4.0/odata-data-aggregation-ext-v4.0.html"><span
+lang=DE style='font-size:9.0pt;font-family:"Verdana",sans-serif;color:#553377;
+background:white'>http://docs.oasis-open.org/odata/odata-data-aggregation-ext/v4.0/odata-data-aggregation-ext-v4.0.html</span></a><span
+lang=DE style='font-size:9.0pt;font-family:"Verdana",sans-serif;color:black;
+background:white'>.</span></p>
+
+<p class=MsoNormal style='margin-left:113.4pt;text-indent:-113.4pt'><b>[<a
+name=ODataCSDLJSON>OData-CSDLJSON</a>]        </b><i>OData Common Schema
+Definition Language (CSDL) JSON Representation Version 4.01. </i>See link in &quot;Related
+work&quot; section on cover page.</p>
+
+<p class=MsoNormal style='margin-left:113.4pt;text-indent:-113.4pt'><b>[<a
+name=ODataCSDLXML>OData-CSDLXML</a>]          </b><i>OData Common Schema
+Definition Language (CSDL) XML Representation Version 4.01. </i>See link in &quot;Related
+work&quot; section on cover page.</p>
+
+<p class=MsoNormal style='margin-left:113.4pt;text-indent:-113.4pt'><b>[<a
+name=ODataJSON>OData-JSON</a>]                 </b><i>OData JSON Format Version
+4.01. <br>
+</i>See link in &quot;Related work&quot; section on cover page.</p>
+
+<p class=MsoNormal style='margin-left:113.4pt;text-indent:-113.4pt'><b>[<a
+name=ODataProtocol>OData-Protocol</a>]            </b><i>OData Version 4.01
+Part 1: Protocol. <br>
+</i>See link in &quot;Related work&quot; section on cover page.</p>
+
+<p class=MsoNormal style='margin-left:113.4pt;text-indent:-113.4pt'><b>[<a
+name=ODataURL>OData-URL</a>]                   </b><i>OData Version 4.01 Part
+2: URL Conventions. <br>
+</i>See link in &quot;Related work&quot; section on cover page.</p>
+
+<div style='border:none;border-top:solid #A1985A 1.0pt;padding:6.0pt 0in 0in 0in'>
+
+<p class=Heading1WP style='border:none;padding:0in'><a name="_Toc287337065"></a><a
+name="_Toc287336982"></a><a name="sec_ODataPart1Protocol"></a><a
+name="_Toc528329316"></a><a name="_Toc469923713">2<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></a><a href="#sec_ODataPart1Protocol">OData Part 1: Protocol</a><a
+name="_Toc21700013"></a><a name="_Toc12010464"></a><a name="_Toc19864249"></a></p>
+
+</div>
+
+<h2><a name="sec_NewDefaultNamespaces"></a><a name="_Toc528329317"></a><a
+name="_Toc469923714"></a><a name="_Ref469907231"></a><a name="_Ref469907226">2.1
+</a><a href="#sec_NewDefaultNamespaces">New: Default Namespaces</a><a
+name="_Toc21700014"></a><a name="_Toc12010465"></a><a name="_Toc19864250"></a></h2>
+
+<p class=MsoNormal>The syntax of version 4.0 avoids ambiguity by referencing
+types, actions, functions, and all other model elements via a qualified name,
+i.e. prefixed with the namespace of the model element. Although shortcut
+aliases can be used in place of namespaces to qualify a model element, this
+namespace qualification still results in somewhat verbose URLs and payloads.</p>
+
+<p class=MsoNormal>Version 4.01 allows defining <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_DefaultNamespaces">default
+namespaces</a>, enabling references to model elements in those default
+namespaces to omit the qualifier. Precedence rules are introduced to resolve
+potential ambiguity.</p>
+
+<h2><a name="sec_NewSchemaVersioning"></a><a name="_Toc528329318"></a><a
+name="_Toc469923715">2.2 </a><a href="#sec_NewSchemaVersioning">New: Schema
+Versioning</a><a name="_Toc21700015"></a><a name="_Toc12010466"></a><a
+name="_Toc19864251"></a></h2>
+
+<p class=MsoNormal>Version 4.0 allows evolving OData services by adding
+optional constructs; breaking changes require publishing a new service with a
+different service root URL. This has been proven problematic for some providers
+as the service root URL tends to creep into derived documents and rolling out a
+new service root URL can be challenging.</p>
+
+<p class=MsoNormal>Version 4.01 allows breaking changes if (and only if) the
+service supports <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_ModelVersioning">schema
+version negotiation</a>, i.e. the old and new schema can both be served from
+the same service root URL.</p>
+
+<h2><a name="sec_NewHeaderIsolationwithoutODataprefix"></a><a
+name="_Toc528329319"></a><a name="_Toc469923716">2.3 </a><a
+href="#sec_NewHeaderIsolationwithoutODataprefix">New: Header <span
+style='font-family:"Courier New"'>Isolation</span> without <span
+style='font-family:"Courier New"'>OData-</span> prefix</a><a name="_Toc21700016"></a><a
+name="_Toc12010467"></a><a name="_Toc19864252"></a></h2>
+
+<p class=MsoNormal>The header <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_HeaderIsolationODataIsolation"><span
+style='font-family:"Courier New"'>OData-Isolation</span></a> isn’t that
+OData-specific, so version 4.01 accepts it without the prefix as <span
+class=Datatype>Isolation</span>.</p>
+
+<h2><a name="sec_NewPreferenceomitvalues"></a><a name="_Toc528329320"></a><a
+name="_Toc469923718"></a><a name="_Toc479154899"></a><a name="_Toc484694367"></a><a
+name="_Toc484694471"></a><a name="_Toc484694974"></a><a name="_Toc484697164"></a>2.4
+<a href="#sec_NewPreferenceomitvalues">New: Preference <span style='font-family:
+"Courier New"'>omit-values</span></a><a name="_Toc21700017"></a><a
+name="_Toc12010468"></a><a name="_Toc19864253"></a></h2>
+
+<p class=MsoNormal>Version 4.01 allows <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_Preferenceomitvalues">omitting
+null or, alternatively, default values</a> from response payloads. This
+significantly reduces the message size for sparsely populated entities with
+many properties.</p>
+
+<h2><a name="sec_NewResponseHeaderAsyncResult"></a><a name="_Toc528329321"></a><a
+name="_Toc469923719">2.5 </a><a href="#sec_NewResponseHeaderAsyncResult">New:
+Response Header <span style='font-family:"Courier New"'>AsyncResult</span></a><a
+name="_Toc21700018"></a><a name="_Toc12010469"></a><a name="_Toc19864254"></a></h2>
+
+<p class=MsoNormal>Version 4.0 requires that the final response from a status
+monitor resource for an asynchronously processed request uses content-type <span
+class=Datatype>application/http</span>; i.e., the response is a wrapper around
+the actual response to the original asynchronous request. This is considered
+unnecessary burden by some clients, and it is only necessary for cases where
+the original request results in an error.</p>
+
+<p class=MsoNormal>Version 4.01 allows a status monitor resource to return the
+unwrapped response to the original request; the response code for the final
+response is 200 (to signal the end of asynchronous processing), and the
+response code for the original request is conveyed through the <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_HeaderAsyncResult"><span
+style='font-family:"Courier New"'>AsyncResult</span> response header</a>.</p>
+
+<h2><a name="_Toc528329322"></a><a name="_Toc469923720">2.6 </a><a
+href="#sec_PrunedMetadataService">Pruned: Metadata Service</a><a
+name="_Toc21700019"></a><a name="_Toc12010470"></a><a name="_Toc19864255"></a></h2>
+
+<p class=MsoNormal>Exposing an OData service’s metadata itself as an OData
+service, while useful, is separate from the more concise metadata description
+format(s), so we removed it from the CSDL specification. We have not published
+a 4.01 version of the Metadata as a Service specification so, while services
+may still implement a metadata service that represents OData 4.0 concepts, we don’t
+guarantee that the additional features of a version 4.01 service can be
+represented in a version 4.0 metadata service.</p>
+
+<h2><a name="sec_ImprovedCaseInsensitiveSystemQueryOp"></a><a
+name="_Toc528329323"></a><a name="_Toc469923721">2.7 </a><a
+href="#sec_ImprovedCaseInsensitiveSystemQueryOp">Improved: Case-Insensitive
+System Query Options without <span style='font-family:"Courier New"'>$</span>
+prefix</a><a name="_Toc21700020"></a><a name="_Toc12010471"></a><a
+name="_Toc19864256"></a></h2>
+
+<p class=MsoNormal>Version 4.01 allows omitting the <span class=Datatype>$</span>
+prefix for system query options and allows any casing, so clients may request <span
+class=Datatype>Products?OrderBy=Price</span>. And yes, you are still allowed to
+prefix system query options with a dollar (<span class=Datatype>$</span><span
+class=Datatype><span style='font-family:"Calibri",sans-serif'>) sign</span></span>
+<span style='font-family:Wingdings'>J</span>.</p>
+
+<h2><a name="_Toc528329324"></a><a name="_Toc469923722">2.8 </a><a
+href="#sec_NewSystemQueryOptioncompute">New: System Query Option <span
+style='font-family:"Courier New"'>$compute</span></a><a name="_Toc21700021"></a><a
+name="_Toc12010472"></a><a name="_Toc19864257"></a></h2>
+
+<p class=MsoNormal>Version 4.01 allows requesting computed properties
+on-the-fly with <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_SystemQueryOptioncompute"><span
+style='font-family:"Courier New"'>$compute</span></a>. This is the counterpart
+to the <span class=Datatype>compute()</span> transformation defined in <b>[</b><b>OData-Aggregation</b><b>]</b>.</p>
+
+<h2><a name="sec_NewIndexingintoOrderedCollectionsand"></a><a
+name="_Toc528329325"></a><a name="_Toc469923723">2.9 </a><a
+href="#sec_NewIndexingintoOrderedCollectionsand">New: Indexing into Ordered
+Collections and Positional Insert</a><a name="_Toc21700022"></a><a
+name="_Toc12010473"></a><a name="_Toc19864258"></a></h2>
+
+<p class=MsoNormal>Version 4.0 treated collections as atomic, unordered bags of
+stuff and didn’t allow access to individual items in a collection.</p>
+
+<p class=MsoNormal>Version 4.01 introduces the concept of an ordered collection
+and allows <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_RequestinganIndividualMemberofanOrde">zero-based
+indexing into an ordered collection</a> for reading, updating, and inserting
+items.</p>
+
+<h2><a name="sec_NewDeepUpdate"></a><a name="_Toc528329326"></a><a
+name="_Toc469923724">2.10 </a><a href="#sec_NewDeepUpdate">New: Deep Update</a><a
+name="_Toc21700023"></a><a name="_Toc12010474"></a><a name="_Toc19864259"></a></h2>
+
+<p class=MsoNormal>Version 4.0 allowed “deep insert” of a new entity together
+with new related entities, e.g. creation of an order together with its order
+items.</p>
+
+<p class=MsoNormal>Version 4.01 adds “<a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_UpdateRelatedEntitiesWhenUpdatinganE">deep
+update</a>” of an existing entity, where the payload of the update can contain
+nested entities for creating new or updating existing related entities. The
+nested entities can be represented as a full set of related entities, or as a
+delta, i.e. only specifying new, changed, and removed entities.</p>
+
+<h2><a name="sec_NewSetBasedOperations"></a><a name="_Toc528329327"></a><a
+name="_Toc469923725">2.11 </a><a href="#sec_NewSetBasedOperations">New:
+Set-Based Operations</a><a name="_Toc21700024"></a><a name="_Toc12010475"></a><a
+name="_Toc19864260"></a></h2>
+
+<p class=MsoNormal>Similar to SQL’s <span class=Datatype>UPDATE ... WHERE ...</span>
+and <span class=Datatype>DELETE ... WHERE ...</span> version 4.01 allows <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_UpdateMembersofaCollection"><span
+style='font-family:"Courier New"'>PATCH</span></a> and <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_DeleteMembersofaCollection"><span
+style='font-family:"Courier New"'>DELETE</span></a> requests to <span
+class=Datatype>/$each</span> member of a collection, optionally limiting the
+operation to a subset of the collection identified via the new /<span
+class=Datatype>$filter(...</span><span style='font-family:"Courier New"'>)<span
+class=Datatype> path segment</span></span>.</p>
+
+<p class=MsoNormal>Both <span style='font-family:"Courier New"'>/$filter(...)</span>
+and <span class=Datatype>/$each</span> can be used with POST requests to invoke
+actions.</p>
+
+<p class=MsoNormal>Collections of entities can additionally be modified using <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_UpdateaCollectionofEntities"><span
+style='font-family:"Courier New"'>PATCH</span> requests with a delta payload</a>.
+So you can e.g. get a delta from one service and use it to modify another,
+similarly structured, service.</p>
+
+<h2><a name="sec_NewexpandandselectwithPOSTandPATCH"></a><a name="_Toc528329328"></a><a
+name="_Toc469923727">2.12 </a><a href="#sec_NewexpandandselectwithPOSTandPATCH">New:
+<span style='font-family:"Courier New"'>$expand</span> and <span
+style='font-family:"Courier New"'>$select</span> with <span style='font-family:
+"Courier New"'>POST</span> and <span style='font-family:"Courier New"'>PATCH</span></a><a
+name="_Toc21700025"></a><a name="_Toc12010476"></a><a name="_Toc19864261"></a></h2>
+
+<p class=MsoNormal>When modifying a single instance, the response shape can now
+be specified with <span class=Datatype>$expand</span> and <span class=Datatype>$select</span>
+combined with <span class=Datatype>Prefer:return=representation</span>.</p>
+
+<h2><a name="_Toc469923728"></a><a
+name="sec_NewInvokingFunctionswithImplicitPara"></a><a name="_Toc528329329">2.13
+</a><a href="#sec_NewInvokingFunctionswithImplicitPara">New: Invoking Functions
+with Implicit Parameter Aliases</a><a name="_Toc21700026"></a><a
+name="_Toc12010477"></a><a name="_Toc19864262"></a></h2>
+
+<p class=MsoNormal>Functions as the last path segment can now be invoked
+without appending parentheses and named parameters. Instead <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_InlineParameterSyntax">implicit
+parameter aliases</a> can be used to provide parameter values.</p>
+
+<h2><a name="_Toc528329330"></a><a name="sec_NewOptionalParameters">2.14 </a><a
+href="#sec_NewOptionalParameters">New: Optional Parameters</a><a
+name="_Toc21700027"></a><a name="_Toc12010478"></a><a name="_Toc19864263"></a></h2>
+
+<p class=MsoNormal>Non-binding action and function parameters can be marked as
+optional and omitted from requests, subject to overload resolution rules.</p>
+
+<h2><a name="sec_NewReferencinganETaginaBatchRequest">2.15 </a><a
+href="#sec_NewReferencinganETaginaBatchRequest">New: Referencing an ETag in a
+Batch Request</a><a name="_Toc21700028"></a><a name="_Toc12010479"></a><a
+name="_Toc19864264"></a></h2>
+
+<p class=MsoNormal>Version 4.01 allows conditional requests within a batch
+request that <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_ReferencingtheETagofanEntity">reference
+the ETag</a> returned in a previous operation in the same batch request.</p>
+
+<h2><a name="sec_NewReferencingacrossChangeSetsinaBat"></a><a
+name="_Toc528329331"></a><a name="_Toc469923729">2.16 </a><a
+href="#sec_NewReferencingacrossChangeSetsinaBat">New: Referencing across Change
+Sets in a Batch Request</a><a name="_Toc21700029"></a><a name="_Toc12010480"></a><a
+name="_Toc19864265"></a></h2>
+
+<p class=MsoNormal>Version 4.01 allows <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_ReferencingReturnedEntities"><span
+style='font-family:"Courier New"'>content-id</span> referencing</a> to requests
+in other change sets, or to requests not nested within a change set.</p>
+
+<h2><a name="sec_NewReferencingNestedInsertedEntities"></a><a
+name="_Toc528329332"></a><a name="_Toc469923730">2.17 </a><a
+href="#sec_NewReferencingNestedInsertedEntities">New: Referencing Nested
+Inserted Entities</a><a name="_Toc21700030"></a><a name="_Toc12010481"></a><a
+name="_Toc19864266"></a></h2>
+
+<p class=MsoNormal>Version 4.01 allows <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_CreateRelatedEntitiesWhenCreatinganE"><span
+style='font-family:"Courier New"'>content-id</span> referencing for nested
+entities</a> within deep insert requests. The content-id of the nested entity
+can be provided with the <span class=Datatype>Core.ContentID</span> instance
+annotation within the nested entity.</p>
+
+<h2><a name="sec_NewReferencingValuesinResponseBodies"></a><a
+name="_Toc528329333">2.18 </a><a
+href="#sec_NewReferencingValuesinResponseBodies">New: Referencing Values in
+Response Bodies</a><a name="_Toc21700031"></a><a name="_Toc12010482"></a><a
+name="_Toc19864267"></a></h2>
+
+<p class=MsoNormal>Version 4.01 allows <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_ReferencingValuesfromResponseBodies"><span
+style='font-family:"Courier New"'>content-id</span> referencing into JSON
+response bodies</a>, using standard OData URL syntax to address a specific part
+of the response.</p>
+
+<h2><a name="sec_NewContinueonErrorforCollectionreque">2.19 </a><a
+href="#sec_NewContinueonErrorforCollectionreque">New: Continue-on-Error for
+Collection requests</a><a name="_Toc21700032"></a><a name="_Toc12010483"></a><a
+name="_Toc19864268"></a></h2>
+
+<p class=MsoNormal>Version 4.01 defines new uses of the <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part1-protocol.html#sec_Preferencecontinueonerrorodatacontin"><span
+style='font-family:"Courier New"'>Continue-on-Error</span> preference</a>
+which, when applied, allows the service to continue executing the request despite
+errors encountered while processing the request.</p>
+
+<div style='border:none;border-top:solid #A1985A 1.0pt;padding:6.0pt 0in 0in 0in'>
+
+<p class=Heading1WP style='border:none;padding:0in'><a
+name="sec_ODataPart2URLConventions"></a><a name="_Toc528329334">3<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></a><a
+href="#sec_ODataPart2URLConventions">OData Part 2: URL Conventions</a><a
+name="_Toc21700033"></a><a name="_Toc12010484"></a><a name="_Toc19864269"></a></p>
+
+</div>
+
+<h2><a name="sec_NewAlternateKeys"></a><a name="_Toc528329335"></a><a
+name="_Toc469923732">3.1 </a><a href="#sec_NewAlternateKeys">New: Alternate
+Keys</a><a name="_Toc21700034"></a><a name="_Toc12010485"></a><a
+name="_Toc19864270"></a></h2>
+
+<p class=MsoNormal>In addition to the (primary) key, entities now may have <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_AlternateKeys">alternate
+keys</a> that can be used in URLs in the parentheses-style key syntax,
+specifying the property names of an alternate key.</p>
+
+<h2><a name="sec_NewKeyasSegmentConvention"></a><a name="_Toc528329336"></a><a
+name="_Toc469923733">3.2 </a><a href="#sec_NewKeyasSegmentConvention">New:
+Key-as-Segment Convention</a><a name="_Toc21700035"></a><a name="_Toc12010486"></a><a
+name="_Toc19864271"></a></h2>
+
+<p class=MsoNormal>In addition to the rather recognizable parentheses-style key
+convention specific for OData, version 4.01 also supports the <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_KeyasSegmentConvention">new
+key-as-segment convention</a> which has become the typical style for specifying
+individual resources by key in REST APIs.</p>
+
+<h2><a name="sec_NewAddressingOperationswithoutNamesp"></a><a
+name="_Toc528329337"></a><a name="_Toc469923734">3.3 </a><a
+href="#sec_NewAddressingOperationswithoutNamesp">New: Addressing Operations
+without Namespace or Alias</a><a name="_Toc21700036"></a><a name="_Toc12010487"></a><a
+name="_Toc19864272"></a></h2>
+
+<p class=MsoNormal>Actions or functions defined in a default namespace (see
+section 2.1) can now be used in URLs <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_AddressingOperations">without
+namespace- or alias-qualification</a>, so long as the operation name doesn’t
+collide with property or navigation property names.</p>
+
+<h2><a name="sec_NewAddressingaMemberofanOrderedColle"></a><a
+name="_Toc528329338"></a><a name="_Toc469923736">3.4 </a><a
+href="#sec_NewAddressingaMemberofanOrderedColle">New: Addressing a Member of an
+Ordered Collection</a><a name="_Toc21700037"></a><a name="_Toc12010488"></a><a
+name="_Toc19864273"></a></h2>
+
+<p class=MsoNormal>Version 4.01 introduces the concept of an <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_AddressingaMemberofanOrderedCollecti">ordered
+collection of primitive or complex values</a> and allows zero-based indexing
+into an ordered collection for reading, updating, and inserting items.</p>
+
+<h2><a name="sec_ImprovedCaseInsensitiveOperatorsandF"></a><a
+name="_Toc528329339"></a><a name="_Toc469923737">3.5 </a><a
+href="#sec_ImprovedCaseInsensitiveOperatorsandF">Improved: Case-Insensitive
+Operators and Functions</a><a name="_Toc21700038"></a><a name="_Toc12010489"></a><a
+name="_Toc19864274"></a></h2>
+
+<p class=MsoNormal>The logical and arithmetic operators, as well as the
+built-in functions that can be used in <span class=Datatype>$filter</span> and <span
+class=Datatype>$orderby,</span> are <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_LogicalOperators">case-insensitive</a>
+in version 4.01.</p>
+
+<h2><a name="sec_NewAnnotationvaluesinexpressions"></a><a name="_Toc528329340"></a><a
+name="_Toc469923738">3.6 </a><a href="#sec_NewAnnotationvaluesinexpressions">New:
+Annotation values in expressions</a><a name="_Toc21700039"></a><a
+name="_Toc12010490"></a><a name="_Toc19864275"></a></h2>
+
+<p class=MsoNormal><a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_AnnotationValuesinExpressions">Instance
+annotation values</a> can now be used in <span class=Datatype>$compute</span>, <span
+class=Datatype>$expand</span>, <span class=Datatype>$filter</span>, <span
+class=Datatype>$orderby</span>, and <span class=Datatype>$select</span>.</p>
+
+<h2><a name="sec_ImprovedEQComparison"></a><a name="_Toc528329341"></a><a
+name="_Toc469923739">3.7 </a><a href="#sec_ImprovedEQComparison">Improved: <span
+style='font-family:"Courier New"'>EQ</span> Comparison</a><a name="_Toc21700040"></a><a
+name="_Toc12010491"></a><a name="_Toc19864276"></a></h2>
+
+<p class=MsoNormal>The comparison operator <span class=Datatype>eq</span>
+allows <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_Equals">comparing
+ordered collections</a>, unordered collections, collections of entities, and
+single entities, and supports comparing nullable single-valued navigation paths
+to <span class=Datatype>null</span>.</p>
+
+<h2><a name="sec_ImprovedcastFunction"></a><a name="_Toc528329342"></a><a
+name="_Toc469923740">3.8 </a><a href="#sec_ImprovedcastFunction">Improved: <span
+style='font-family:"Courier New"'>cast</span> Function</a><a name="_Toc21700041"></a><a
+name="_Toc12010492"></a><a name="_Toc19864277"></a></h2>
+
+<p class=MsoNormal>Version 4.0 allows casting primitive values to string values
+using their literal representation used in payloads. Version 4.01 allows the
+inverse operation: <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_cast">casting
+a string value that is a literal representation of a primitive value to that
+primitive value</a>. This includes the WKT format for <span class=Datatype>Geo</span>
+types, and datetime values without explicit time zone to <span class=Datatype>Edm.DateTimeOffset</span>.</p>
+
+<p class=MsoNormal>Version 4.01 also allows <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_cast">casting
+between enumeration values and their underlying numeric values</a>.</p>
+
+<h2><a name="sec_PrunedStructuralCastingtoArbitrarySt"></a><a
+name="_Toc528329343"></a><a name="_Toc469923741">3.9 </a><a
+href="#sec_PrunedStructuralCastingtoArbitrarySt">Pruned: Structural Casting to
+Arbitrary Structured Types</a><a name="_Toc21700042"></a><a name="_Toc12010493"></a><a
+name="_Toc19864278"></a></h2>
+
+<p class=MsoNormal>Version 4.0 optionally allows structural casting of entities
+and complex instances to arbitrary structured types by casting identically
+named properties. This is deprecated with version 4.01; structured types can
+only be cast to a direct or indirect base type. In addition, a type cast
+segment can be used to <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_AddressingDerivedTypes">treat
+instances of one type as a type outside the hierarchy</a> where that treatment
+is meaningful to the service (for example, to treat an automobile as a
+connected device, without requiring that automobile derive from connected
+device).</p>
+
+<h2><a name="sec_ImprovedEnumerationandDurationLitera"></a><a
+name="_Toc528329344"></a><a name="_Toc469923742">3.10 </a><a
+href="#sec_ImprovedEnumerationandDurationLitera">Improved: Enumeration and Duration
+Literals without Prefix</a><a name="_Toc21700043"></a><a name="_Toc12010494"></a><a
+name="_Toc19864279"></a></h2>
+
+<p class=MsoNormal>Enumeration literals <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_PrimitiveLiterals">no
+longer need to be prefixed</a> with the type name, and duration literals no longer
+need the prefix <span class=Datatype>duration</span>.</p>
+
+<h2><a name="sec_NewinOperator"></a><a name="_Toc528329345"></a><a
+name="_Toc469923743">3.11 </a><a href="#sec_NewinOperator">New: <span
+style='font-family:"Courier New"'>in</span> Operator</a><a name="_Toc21700044"></a><a
+name="_Toc12010495"></a><a name="_Toc19864280"></a></h2>
+
+<p class=MsoNormal>The new <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_in"><span
+style='font-family:"Courier New"'>in</span> operator</a> checks whether the
+left operand is a member of the right operand, which must be a collection. A
+static collection can be specified as a parentheses-enclosed list of
+comma-separated primitive values. This latter form is syntactic sugar
+equivalent to several <span class=Datatype>EQ</span> expressions joined by <span
+class=Datatype>OR</span>. </p>
+
+<p class=MsoNormal><a name="_Toc469923744">The left operand can be an </a><a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_ComplexandCollectionLiterals">array
+of properties</a>, in which case the right operand must be an array of arrays:</p>
+
+<div style='border-top:solid windowtext 1.0pt;border-left:none;border-bottom:
+solid windowtext 1.0pt;border-right:none;padding:3.0pt 0in 3.0pt 0in;
+background:#D9D9D9;margin-left:.3in;margin-right:.3in'>
+
+<p class=Code style='margin-top:4.0pt;margin-right:0in;margin-bottom:0in;
+margin-left:0in;margin-bottom:.0001pt;background:#D9D9D9'><span
+style='color:black'>$filter=[FirstName,LastName] in [[&quot;John&quot;,&quot;Doe&quot;],[&quot;Jane&quot;,&quot;Smith&quot;]]</span></p>
+
+</div>
+
+<h2><a name="sec_NewdivbyOperator"></a><a name="_Toc528329346">3.12 </a><a
+href="#sec_NewdivbyOperator">New: <span style='font-family:"Courier New"'>divby</span>
+Operator</a><a name="_Toc21700045"></a><a name="_Toc12010496"></a><a
+name="_Toc19864281"></a></h2>
+
+<p class=MsoNormal>The new <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_Division"><span
+style='font-family:"Courier New"'>divby</span> operator</a> promotes both
+operands to decimals and always results in a decimal.</p>
+
+<h2><a name="_Toc469923745"></a><a name="_Toc469923746"></a><a
+name="sec_NewhassubsetandhassubsequenceCollect"></a><a name="_Toc528329347">3.13
+</a><a href="#sec_NewhassubsetandhassubsequenceCollect">New: <span
+style='font-family:"Courier New"'>hassubset</span> and <span style='font-family:
+"Courier New"'>hassubsequence</span> Collection Functions</a><a
+name="_Toc21700046"></a><a name="_Toc12010497"></a><a name="_Toc19864282"></a></h2>
+
+<p class=MsoNormal>The <span class=Datatype>hassubset</span> function checks
+whether the first collection has the second collection as a subset. The <span
+class=Datatype>hassubsequence</span> function in addition checks whether the
+items appear in the same order.</p>
+
+<h2><a name="sec_ImprovedCollectionOverloadsforFuncti"></a><a
+name="_Toc528329348">3.14 </a><a
+href="#sec_ImprovedCollectionOverloadsforFuncti">Improved: Collection Overloads
+for Functions <span style='font-family:"Courier New"'>concat</span>, <span
+style='font-family:"Courier New"'>contains</span>, <span style='font-family:
+"Courier New"'>endswith</span>, <span style='font-family:"Courier New"'>indexof</span>,
+<span style='font-family:"Courier New"'>length</span>, <span style='font-family:
+"Courier New"'>startswith</span>, and <span style='font-family:"Courier New"'>substring</span></a><a
+name="_Toc21700047"></a><a name="_Toc12010498"></a><a name="_Toc19864283"></a></h2>
+
+<p class=MsoNormal>These functions now allow collections as their parameters.</p>
+
+<h2><a name="sec_NewmatchesPatternFunction"></a><a name="_Toc528329349">3.15 </a><a
+href="#sec_NewmatchesPatternFunction">New: <span style='font-family:"Courier New"'>matchesPattern</span>
+Function</a><a name="_Toc21700048"></a><a name="_Toc12010499"></a><a
+name="_Toc19864284"></a></h2>
+
+<p class=MsoNormal>This new function checks whether a string <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_matchesPattern">matches
+a regular expression</a>.</p>
+
+<h2><a name="sec_ImprovedsubstringwithNegativeStartIn"></a><a
+name="_Toc528329350">3.16 </a><a
+href="#sec_ImprovedsubstringwithNegativeStartIn">Improved: <span
+style='font-family:"Courier New"'>substring</span> with Negative Start Index</a><a
+name="_Toc21700049"></a><a name="_Toc12010500"></a><a name="_Toc19864285"></a></h2>
+
+<p class=MsoNormal>The <span class=Datatype>substring</span> function now
+allows a <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_substring">negative
+start index</a> (second argument) to start N characters before the end of the
+string.</p>
+
+<h2><a name="sec_NewcaseFunction"></a><a name="_Toc528329351">3.17 </a><a
+href="#sec_NewcaseFunction">New: <span style='font-family:"Courier New"'>case</span>
+Function</a><a name="_Toc21700050"></a><a name="_Toc12010501"></a><a
+name="_Toc19864286"></a></h2>
+
+<p class=MsoNormal>This new function <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_case">evaluates
+a list of conditions</a> and returns one of multiple possible results.</p>
+
+<h2><a name="sec_Improvedcount"></a><a name="_Toc528329352">3.18 </a><a
+href="#sec_Improvedcount">Improved: <span style='font-family:"Courier New"'>/$count</span></a><a
+name="_Toc21700051"></a><a name="_Toc12010502"></a><a name="_Toc19864287"></a></h2>
+
+<p class=MsoNormal>In <span class=Datatype>$expand,</span> the <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_SystemQueryOptionexpand">path
+suffix <span style='font-family:"Courier New"'>/$count</span></a> can now be
+followed by parentheses containing a <span class=Datatype>$filter</span> or <span
+class=Datatype>$search</span> query option to return only the count of matching
+instances.</p>
+
+<h2><a name="sec_NewexpandofStreamPropertiesandMediaR"></a><a
+name="_Toc528329353"></a><a name="_Toc469923747">3.19 </a><a
+href="#sec_NewexpandofStreamPropertiesandMediaR">New: <span style='font-family:
+"Courier New"'>$expand</span> of Stream Properties and Media Resources</a><a
+name="_Toc21700052"></a><a name="_Toc12010503"></a><a name="_Toc19864288"></a></h2>
+
+<p class=MsoNormal>Version 4.01 allows <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_SystemQueryOptionexpand">inlining
+stream properties</a> as base64url-encoded values.</p>
+
+<h2><a name="sec_ImprovedSystemQueryOptionsearch"></a><a name="_Toc528329354"></a><a
+name="_Toc469923748">3.20 </a><a href="#sec_ImprovedSystemQueryOptionsearch">Improved:
+System Query Option <span style='font-family:"Courier New"'>$search</span></a><a
+name="_Toc21700053"></a><a name="_Toc12010504"></a><a name="_Toc19864289"></a></h2>
+
+<p class=MsoNormal>Version 4.01 allows <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_SystemQueryOptionsearch"><span
+style='font-family:"Courier New"'>$search</span></a> on collections of any
+type, not only on collections of entities.</p>
+
+<p class=MsoNormal>Version 4.01 also allows digits, dots, and commas in search terms,
+e.g. <span class=Datatype>$search=3.14</span>. as well as non-whitespace
+characters in search words, and allows single-quote delimited, unbalanced
+search expressions to be sent to the server.</p>
+
+<h2><a name="_Toc469923749"></a><a name="sec_ImprovedSystemQueryOptionselect"></a><a
+name="_Toc528329355">3.21 </a><a href="#sec_ImprovedSystemQueryOptionselect">Improved:
+System Query Option <span style='font-family:"Courier New"'>$select</span></a><a
+name="_Toc21700054"></a><a name="_Toc12010505"></a><a name="_Toc19864290"></a></h2>
+
+<p class=MsoNormal>Version 4.01 extends  <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_SystemQueryOptionselect"><span
+style='font-family:"Courier New"'>$select</span></a> similar to <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_SystemQueryOptionsearch"><span
+style='font-family:"Courier New"'>$expand</span></a> to allow filtering,
+searching, sorting and paging on collection-valued properties as well as
+computing and selecting properties of complex properties.</p>
+
+<p class=MsoNormal>To allow filtering and sorting on collections of primitive
+properties the symbol <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_this"><span
+style='font-family:"Courier New"'>$this</span></a> was added.</p>
+
+<h2><a name="sec_NewSystemQueryOptioncompute"></a><a name="_Toc528329356">3.22 </a><a
+href="#sec_NewSystemQueryOptioncompute">New: System Query Option <span
+style='font-family:"Courier New"'>$compute</span></a><a name="_Toc21700055"></a><a
+name="_Toc12010506"></a><a name="_Toc19864291"></a></h2>
+
+<p class=MsoNormal>Computed properties can be requested on-the-fly with <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_SystemQueryOptioncompute"><span
+style='font-family:"Courier New"'>$compute</span></a>. This is the counterpart
+to the <span class=Datatype>compute()</span> transformation defined in <b>[</b><a
+href="#ODataAggregation"><b>OData-Aggregation</b></a><b>]</b>.</p>
+
+<h2><a name="sec_NewSystemQueryOptionindex"></a><a name="_Toc528329357"></a><a
+name="_Toc469923750">3.23 </a><a href="#sec_NewSystemQueryOptionindex">New:
+System Query Option <span style='font-family:"Courier New"'>$index</span></a><a
+name="_Toc21700056"></a><a name="_Toc12010507"></a><a name="_Toc19864292"></a></h2>
+
+<p class=MsoNormal>Version 4.01 introduces the concept of an ordered collection
+of primitive or complex values. The new <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_SystemQueryOptionindex">system
+query option <span style='font-family:"Courier New"'>$index</span></a> allows
+positional insert of an item into an ordered collection.</p>
+
+<h2><a name="_Toc469923751"></a><a name="sec_Newquery"></a><a
+name="_Toc528329358">3.24 </a><a href="#sec_Newquery">New: <span
+style='font-family:"Courier New"'>/$query</span></a><a name="_Toc21700057"></a><a
+name="_Toc12010508"></a><a name="_Toc19864293"></a></h2>
+
+<p class=MsoNormal>In resource paths the <a href="https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#sec_PassingQueryOptionsintheRequestBody">path
+suffix <span style='font-family:"Courier New"'>/$query</span></a> can be used
+together with the HTTP verb POST to execute what is logically a GET request and
+transport overlong query options in the request body.</p>
+
+<div style='border:none;border-top:solid #A1985A 1.0pt;padding:6.0pt 0in 0in 0in'>
+
+<p class=Heading1WP style='border:none;padding:0in'><a
+name="sec_PrunedODataPart3CommonSchemaDefiniti"></a><a name="_Toc528329359">4<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></a><a
+href="#sec_PrunedODataPart3CommonSchemaDefiniti">Pruned: OData Part 3: Common
+Schema Definition Language (CSDL)</a><a name="_Toc21700058"></a><a
+name="_Toc12010509"></a><a name="_Toc19864294"></a></p>
+
+</div>
+
+<p class=MsoNormal>Version 4.0 only specifies an XML representation of the
+Common Schema Definition Language (CSDL), and Part 3 of version 4.0 describes
+both the meta-model of OData metadata documents and its XML representation.</p>
+
+<p class=MsoNormal>Version 4.01 adds an alternative JSON representation of
+CSDL, so the OData TC has decided to discontinue Part 3 and instead incorporate
+the meta-model specification in both the CSDL JSON document <b>[</b><a
+href="#ODataCSDLJSON"><b>OData-CSDLJSON</b></a><b>]</b> and the CSDL XML
+document <b>[</b><a href="#ODataCSDLXML"><b>OData-CSDLXML</b></a><b>]</b>.</p>
+
+<div style='border:none;border-top:solid #A1985A 1.0pt;padding:6.0pt 0in 0in 0in'>
+
+<p class=Heading1WP style='border:none;padding:0in'><a name="_Toc469923752"></a><a
+name="_Toc528329360">5<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></a><a href="#sec_NewODataCommonSchemaDefinitionLangua">New: OData
+Common Schema Definition Language XML Representation</a><a name="_Toc21700059"></a><a
+name="_Toc12010510"></a><a name="_Toc19864295"></a></p>
+
+</div>
+
+<p class=MsoNormal>This new document describes the XML representation of OData
+metadata documents. It replaces the former Part 3: CSDL. The following sections
+describe changes introduced by OData Version 4.01.</p>
+
+<h2><a name="sec_NewDecimalwithFloatingScale"></a><a name="_Toc528329361">5.1 </a><a
+href="#sec_NewDecimalwithFloatingScale">New: Decimal with Floating Scale</a><a
+name="_Toc21700060"></a><a name="_Toc12010511"></a><a name="_Toc19864296"></a></h2>
+
+<p class=MsoNormal>The type <span class=Datatype>Edm.Decimal</span> now allows
+floating scale and the special values <span class=Datatype>-INF</span>, <span
+class=Datatype>INF</span>, and <span class=Datatype>NaN</span><span
+class=Datatype><span style='font-family:"Calibri",sans-serif'> to support </span></span><span
+class=Datatype>DECFLOAT</span>.</p>
+
+<h2><a name="sec_NewBuiltinAbstractTypeEdmUntyped"></a><a name="_Toc528329362">5.2
+</a><a href="#sec_NewBuiltinAbstractTypeEdmUntyped">New: Built-in Abstract Type
+<span style='font-family:"Courier New"'>Edm.Untyped</span></a><a
+name="_Toc21700061"></a><a name="_Toc12010512"></a><a name="_Toc19864297"></a></h2>
+
+<p class=MsoNormal>Non-key properties typed with <a href="https://docs.oasis-open.org/odata/odata-csdl-xml/v4.01/odata-csdl-xml-v4.01.html#sec_BuiltInAbstractTypes"><span
+style='font-family:"Courier New"'>Edm.Untyped</span></a> can contain any valid
+type or collection of types, recursively. This is an “escape hatch” for
+situations where the OData type system is too restrictive to model the payload.
+Use sparingly and with care as you lose all benefits of OData metadata for
+these “untyped” parts – no types, no metadata annotations, no predictability.</p>
+
+<h2><a name="sec_NewBuiltinTypesforTermsEdmAnyPropert"></a><a
+name="_Toc528329363"></a><a name="_Toc469923753">5.3 </a><a
+href="#sec_NewBuiltinTypesforTermsEdmAnyPropert">New: Built-in Types for Terms:
+<span style='font-family:"Courier New"'>Edm.AnyPropertyPath</span> and <span
+style='font-family:"Courier New"'>Edm.ModelElementPath</span></a><a
+name="_Toc21700062"></a><a name="_Toc12010513"></a><a name="_Toc19864298"></a></h2>
+
+<p class=MsoNormal>The <span class=Datatype>Edm.AnyPropertyPath</span> is a
+generalization of <a href="https://docs.oasis-open.org/odata/odata-csdl-xml/v4.01/odata-csdl-xml-v4.01.html#sec_BuiltInTypesfordefiningVocabularyTer"><span
+style='font-family:"Courier New"'>Edm.PropertyPath</span> and <span
+style='font-family:"Courier New"'>Edm.NavigationPropertyPath</span></a> that
+can be used in term definitions for situations that do not differentiate between
+structural and navigation properties.</p>
+
+<p class=MsoNormal>The <span class=Datatype>Edm.ModelElementPath</span> allows
+referencing any model element.</p>
+
+<h2><a name="sec_ImprovedKeyProperties"></a><a name="_Toc528329364"></a><a
+name="_Toc469923755">5.4 </a><a href="#sec_ImprovedKeyProperties">Improved: Key
+Properties</a><a name="_Toc21700063"></a><a name="_Toc12010514"></a><a
+name="_Toc19864299"></a></h2>
+
+<p class=MsoNormal>Key properties of an entity type can now be <a href="https://docs.oasis-open.org/odata/odata-csdl-xml/v4.01/odata-csdl-xml-v4.01.html#sec_Key">part
+of a related entity ty</a>pe provided the navigation path to the “remote” key
+property consists only of single-valued, non-nullable segments. And of course,
+these key properties need an alias.</p>
+
+<h2><a name="sec_NewKeyLessEntityTypes"></a><a name="_Toc528329365"></a><a
+name="_Toc469923756">5.5 </a><a href="#sec_NewKeyLessEntityTypes">New: Key-Less
+Entity Types</a><a name="_Toc21700064"></a><a name="_Toc12010515"></a><a
+name="_Toc19864300"></a></h2>
+
+<p class=MsoNormal>Non-abstract entity types <a href="https://docs.oasis-open.org/odata/odata-csdl-xml/v4.01/odata-csdl-xml-v4.01.html#sec_Key">need
+not specify a key</a>. These can be used e.g. in singletons or single-valued
+containment navigation properties. Entity types used within an entity set or
+collection-valued containment navigation property must still define a set of
+key properties.</p>
+
+<h2><a name="sec_ImprovedInheritance"></a><a name="_Toc528329366"></a><a
+name="_Toc469923757">5.6 </a><a href="#sec_ImprovedInheritance">Improved:
+Inheritance</a><a name="_Toc21700065"></a><a name="_Toc12010516"></a><a
+name="_Toc19864301"></a></h2>
+
+<p class=MsoNormal>Derived structured types can now <a href="https://docs.oasis-open.org/odata/odata-csdl-xml/v4.01/odata-csdl-xml-v4.01.html#sec_StructuralProperty">redefine
+the type of a complex property</a> or <a href="https://docs.oasis-open.org/odata/odata-csdl-xml/v4.01/odata-csdl-xml-v4.01.html#sec_NavigationProperty">navigation
+property</a> to a more specific subtype.</p>
+
+<h2><a name="sec_ImprovedReferentialConstraints"></a><a name="_Toc528329367"></a><a
+name="_Toc469923758">5.7 </a><a href="#sec_ImprovedReferentialConstraints">Improved:
+Referential Constraints</a><a name="_Toc21700066"></a><a name="_Toc12010517"></a><a
+name="_Toc19864302"></a></h2>
+
+<p class=MsoNormal><a href="https://docs.oasis-open.org/odata/odata-csdl-xml/v4.01/odata-csdl-xml-v4.01.html#sec_ReferentialConstraint">Referential
+constraints</a> can specify navigation properties and complex properties in
+addition to primitive properties.</p>
+
+<h2><a name="sec_ImprovedUnicodeFacet"></a><a name="_Toc528329368"></a><a
+name="_Toc469923759">5.8 </a><a href="#sec_ImprovedUnicodeFacet">Improved: <span
+style='font-family:"Courier New"'>Unicode</span> Facet</a><a name="_Toc21700067"></a><a
+name="_Toc12010518"></a><a name="_Toc19864303"></a></h2>
+
+<p class=MsoNormal>The <a href="https://docs.oasis-open.org/odata/odata-csdl-xml/v4.01/odata-csdl-xml-v4.01.html#sec_Unicode"><span
+style='font-family:"Courier New"'>Unicode</span> facet</a> can be used for
+defining terms, parameters, and return types. Somehow that got lost in version
+4.0, and only properties and type definitions explicitly allowed it.</p>
+
+<h2><a name="sec_NewTermsapplyingtoCollections"></a><a name="_Toc528329369"></a><a
+name="_Toc469923760">5.9 </a><a href="#sec_NewTermsapplyingtoCollections">New:
+Terms applying to Collections</a><a name="_Toc21700068"></a><a
+name="_Toc12010519"></a><a name="_Toc19864304"></a></h2>
+
+<p class=MsoNormal>Terms can now be marked as <a href="https://docs.oasis-open.org/odata/odata-csdl-xml/v4.01/odata-csdl-xml-v4.01.html#sec_Applicability">applicable</a>
+to any collection of entities (e.g. collection-valued navigation properties),
+not just to entity sets.</p>
+
+<h2><a name="sec_NewAnnotationstargetingActionFunctio"></a><a
+name="_Toc469923761"></a><a name="_Toc528329370">5.10 </a><a
+href="#sec_NewAnnotationstargetingActionFunctio">New: Annotations targeting
+Action/Function Overloads</a><a name="_Toc21700069"></a><a name="_Toc12010520"></a><a
+name="_Toc19864305"></a></h2>
+
+<p class=MsoNormal><a href="https://docs.oasis-open.org/odata/odata-csdl-xml/v4.01/odata-csdl-xml-v4.01.html#sec_Target">External
+targeting</a> of annotations is now also possible for individual overloads of
+actions and functions, their parameters and return types. In addition three of
+actions and functions, with the restriction that these annotations apply to all
+overloads. There’s still no way to externally target an individual overload.</p>
+
+<h2><a name="sec_NewInheritingAnnotations"></a><a name="_Toc528329371"></a><a
+name="_Toc469923762">5.11 </a><a href="#sec_NewInheritingAnnotations">New:
+Inheriting Annotations</a><a name="_Toc21700070"></a><a name="_Toc12010521"></a><a
+name="_Toc19864306"></a></h2>
+
+<p class=MsoNormal>Annotations are <a href="https://docs.oasis-open.org/odata/odata-csdl-xml/v4.01/odata-csdl-xml-v4.01.html#sec_Annotation">propagated
+along inheritance hierarchies</a>: annotations on a base type are also valid on
+a derived type unless applied again with a different value.</p>
+
+<h2><a name="sec_NewAbsolutePathsinAnnotations"></a><a name="_Toc528329372"></a><a
+name="_Toc469923763"></a><a name="_New:_Absolute_Paths"></a>5.12 <a
+href="#sec_NewAbsolutePathsinAnnotations">New: Absolute Paths in Annotations</a><a
+name="_Toc21700071"></a><a name="_Toc12010522"></a><a name="_Toc19864307"></a></h2>
+
+<p class=MsoNormal>In version 4.0 path expressions in annotations are relative
+to the annotated model element. </p>
+
+<p class=MsoNormal>Version 4.01 allows <a href="https://docs.oasis-open.org/odata/odata-csdl-xml/v4.01/odata-csdl-xml-v4.01.html#sec_PathSyntax">absolute
+paths starting with a forward slash</a> followed by the qualified name of a
+model element.</p>
+
+<h2><a name="_Toc469923764"></a><a
+name="sec_NewKeyandIndexPathSegmentsinAnnotati"></a><a name="_Toc528329373">5.13
+</a><a href="#sec_NewKeyandIndexPathSegmentsinAnnotati">New: Key and Index Path
+Segments in Annotations</a><a name="_Toc21700072"></a><a name="_Toc12010523"></a><a
+name="_Toc19864308"></a></h2>
+
+<p class=MsoNormal>Path expressions in annotations can now contain <a href="https://docs.oasis-open.org/odata/odata-csdl-xml/v4.01/odata-csdl-xml-v4.01.html#sec_PathSyntax">key
+segments</a> for drilling into collections of entities, and <a href="https://docs.oasis-open.org/odata/odata-csdl-xml/v4.01/odata-csdl-xml-v4.01.html#sec_PathSyntax">index
+segments</a> for drilling into ordered collections of complex or primitive
+values.</p>
+
+<h2><a name="sec_NewAnnotationExpressionsHasInAddSubN"></a><a
+name="_Toc528329374">5.14 </a><a
+href="#sec_NewAnnotationExpressionsHasInAddSubN">New: Annotation Expressions <span
+style='font-family:"Courier New"'>Has</span>, <span style='font-family:"Courier New"'>In</span>,
+<span style='font-family:"Courier New"'>Add</span>, <span style='font-family:
+"Courier New"'>Sub</span>, <span style='font-family:"Courier New"'>Neg</span>, <span
+style='font-family:"Courier New"'>Mul</span>, <span style='font-family:"Courier New"'>Div</span>,
+<span style='font-family:"Courier New"'>DivBy</span>, and <span
+style='font-family:"Courier New"'>Mod</span></a><a name="_Toc21700073"></a><a
+name="_Toc12010524"></a><a name="_Toc19864309"></a></h2>
+
+<p class=MsoNormal>These <a href="https://docs.oasis-open.org/odata/odata-csdl-xml/v4.01/odata-csdl-xml-v4.01.html#sec_ComparisonandLogicalOperators">comparison</a>
+and <a href="https://docs.oasis-open.org/odata/odata-csdl-xml/v4.01/odata-csdl-xml-v4.01.html#sec_ArithmeticOperators">arithmetic</a>
+annotation expressions are the counterpart to the equally named operators in
+URL expressions.</p>
+
+<h2><a name="sec_NewClientSideFunctionodatamatchesPat"></a><a
+name="_Toc528329375">5.15 </a><a
+href="#sec_NewClientSideFunctionodatamatchesPat">New: Client-Side Function <span
+style='font-family:"Courier New"'>odata.matchesPattern</span></a><a
+name="_Toc21700074"></a><a name="_Toc12010525"></a><a name="_Toc19864310"></a></h2>
+
+<p class=MsoNormal>Annotation expressions can now check whether a string <a href="https://docs.oasis-open.org/odata/odata-csdl-xml/v4.01/odata-csdl-xml-v4.01.html#sec_FunctionodatamatchesPattern">matches
+a regular expression</a>.</p>
+
+<h2><a name="sec_NewAllURLFunctionsasClientSideFuncti"></a><a
+name="_Toc528329376">5.16 </a><a
+href="#sec_NewAllURLFunctionsasClientSideFuncti">New: All URL Functions as
+Client-Side Functions</a><a name="_Toc21700075"></a><a name="_Toc12010526"></a><a
+name="_Toc19864311"></a></h2>
+
+<p class=MsoNormal>Annotation expressions can now use all functions defined in <b>[</b><a
+href="#ODataURL">OData-URL</a><b>]</b> with the same semantics.</p>
+
+<h2><a name="sec_PrunedMetadataService"></a><a name="_Toc528329377">5.17 </a><a
+href="#sec_PrunedMetadataService">Pruned: Metadata Service</a><a
+name="_Toc21700076"></a><a name="_Toc12010527"></a><a name="_Toc19864312"></a></h2>
+
+<p class=MsoNormal>Exposing an OData service’s metadata itself as an OData
+service, while useful, is separate from the more concise metadata description
+format(s), so we removed it from the CSDL specification. We have not published
+a 4.01 version of the Metadata as a Service specification so, while services
+may still implement a <i>metadata</i> <i>service</i>, we don’t guarantee that
+the additional features of a version 4.01 service can be represented in a
+version 4.0 <i>metadata</i> <i>service</i>.</p>
+
+<div style='border:none;border-top:solid #A1985A 1.0pt;padding:6.0pt 0in 0in 0in'>
+
+<p class=Heading1WP style='border:none;padding:0in'><a name="_Toc469923766"></a><a
+name="sec_NewODataCommonSchemaDefinitionLangua"></a><a name="_Toc528329378">6<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></a><a
+href="#sec_NewODataCommonSchemaDefinitionLangua">New: OData Common Schema
+Definition Language JSON Representation</a><a name="_Toc21700077"></a><a
+name="_Toc12010528"></a><a name="_Toc19864313"></a></p>
+
+</div>
+
+<p class=MsoNormal>This new document describes a JSON representation of an
+OData metadata document. The representation-independent parts of this document
+are identical to its twin document for the XML representation <b>[</b><a
+href="#ODataCSDLXML"><b>OData-CSDLXML</b></a><b>]</b>.</p>
+
+<div style='border:none;border-top:solid #A1985A 1.0pt;padding:6.0pt 0in 0in 0in'>
+
+<p class=Heading1WP style='border:none;padding:0in'><a
+name="sec_PrunedODataAtomFormat"></a><a name="_Toc528329379">7<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></a><a
+href="#sec_PrunedODataAtomFormat">Pruned: OData Atom Format</a><a
+name="_Toc21700078"></a><a name="_Toc12010529"></a><a name="_Toc19864314"></a></p>
+
+</div>
+
+<p class=MsoNormal>The Atom format has very little adoption. It’s going to be
+deprecated and hasn’t been updated to reflect the new 4.01 features.</p>
+
+<div style='border:none;border-top:solid #A1985A 1.0pt;padding:6.0pt 0in 0in 0in'>
+
+<p class=Heading1WP style='border:none;padding:0in'><a
+name="sec_ODataJSONFormat"></a><a name="_Toc528329380"></a><a
+name="_Toc469923767">8<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></a><a href="#sec_ODataJSONFormat">OData JSON Format</a><a
+name="_Toc21700079"></a><a name="_Toc12010530"></a><a name="_Toc19864315"></a></p>
+
+</div>
+
+<h2><a name="sec_ImprovedExponentialNotationforDecima"></a><a
+name="_Toc528329381"></a><a name="_Toc469923768">8.1 </a><a
+href="#sec_ImprovedExponentialNotationforDecima">Improved: Exponential Notation
+for Decimals</a><a name="_Toc21700080"></a><a name="_Toc12010531"></a><a
+name="_Toc19864316"></a></h2>
+
+<p class=MsoNormal>Version 4.0 only allowed exponential notation for <span
+class=Datatype>Edm.Decimal</span> values when combined with the format
+parameter <span class=Datatype>ExponentialDecimals=true</span>.</p>
+
+<p class=MsoNormal>Version 4.01 always allows <a href="https://docs.oasis-open.org/odata/odata-json-format/v4.01/odata-json-format-v4.01.html#sec_ControllingtheRepresentationofNumber">exponential
+notation for decimals</a>, as this is considered normal in JSON messages. </p>
+
+<h2><a name="sec_ImprovedControlInformationwithoutpre"></a><a
+name="_Toc528329382"></a><a name="_Toc469923769">8.2 </a><a
+href="#sec_ImprovedControlInformationwithoutpre">Improved: Control Information
+without prefix <span style='font-family:"Courier New"'>odata.</span></a><a
+name="_Toc21700081"></a><a name="_Toc12010532"></a><a name="_Toc19864317"></a></h2>
+
+<p class=MsoNormal>Control information represented in JSON as payload
+annotations in the <a href="https://docs.oasis-open.org/odata/odata-json-format/v4.01/odata-json-format-v4.01.html#sec_ControlInformation"><span
+style='font-family:"Courier New"'>odata</span> namespace</a> can now be
+specified without qualifier, i.e. <span class=Datatype>@count</span>, <span
+class=Datatype>@nextLink</span>, <span class=Datatype>@context</span>.</p>
+
+<h2><a name="sec_ImprovedtypeforBuiltInPrimitiveTypes"></a><a
+name="_Toc528329383"></a><a name="_Toc469923770">8.3 </a><a
+href="#sec_ImprovedtypeforBuiltInPrimitiveTypes">Improved: <span
+style='font-family:"Courier New"'>@type</span> for Built-In Primitive Types</a><a
+name="_Toc21700082"></a><a name="_Toc12010533"></a><a name="_Toc19864318"></a></h2>
+
+<p class=MsoNormal>The value of the <a href="https://docs.oasis-open.org/odata/odata-json-format/v4.01/odata-json-format-v4.01.html#sec_ControlInformationtypeodatatype"><span
+style='font-family:"Courier New"'>@type</span> control information</a> no
+longer needs the prefix <span class=Datatype>#</span> for built-in primitive
+types.</p>
+
+<h2><a name="_Toc528329384"></a><a name="_Toc469923771"></a><a
+name="sec_NewInlinedJSONStreams">8.4 </a><a href="#sec_NewInlinedJSONStreams">New:
+Inlined JSON Streams</a><a name="_Toc21700083"></a><a name="_Toc12010534"></a><a
+name="_Toc19864319"></a></h2>
+
+<p class=MsoNormal>Inlined streams that are annotated as having an <a
+href="https://github.com/oasis-tcs/odata-vocabularies/blob/master/vocabularies/Org.OData.Core.V1.md#AcceptableMediaTypes">acceptable
+media type</a> of <span class=Datatype>application/json</span><span
+class=Datatype><span style='font-family:"Arial",sans-serif'> are represented as
+JSON and not as base64-encoded strings</span></span>.</p>
+
+<h2><a name="sec_NewSimplifiedrepresentationofDeltawi">8.5 </a><a
+href="#sec_NewSimplifiedrepresentationofDeltawi">New: Simplified representation
+of Delta with Expand</a><a name="_Toc21700084"></a><a name="_Toc12010535"></a><a
+name="_Toc19864320"></a></h2>
+
+<p class=MsoNormal>Expanded entities can now be <a href="https://docs.oasis-open.org/odata/odata-json-format/v4.01/odata-json-format-v4.01.html#sec_AddedChangedEntity">nested
+in delta responses</a>, similar to their representation in non-delta messages.
+The nested representation is either a collection of all related entities (in
+case the underlying data store doesn’t track changes of the corresponding
+relationship), or a collection of added, changed, and deleted entities (but no
+added or deleted links).</p>
+
+<h2><a name="sec_ImprovedRepresentationofDeletedEntit"></a><a
+name="_Toc528329385"></a><a name="_Toc469923772">8.6 </a><a
+href="#sec_ImprovedRepresentationofDeletedEntit">Improved: Representation of
+Deleted Entities</a><a name="_Toc21700085"></a><a name="_Toc12010536"></a><a
+name="_Toc19864321"></a></h2>
+
+<p class=MsoNormal>Version 4.01 represents <a href="https://docs.oasis-open.org/odata/odata-json-format/v4.01/odata-json-format-v4.01.html#sec_DeletedEntity">deleted
+entities</a> similar to added and changed entities and marks them with an <span
+class=Datatype>@removed</span> annotation. The deleted entities contain at
+least their key properties or <span class=Datatype>@id</span><span
+class=Datatype><span style='font-family:"Cambria",serif'> </span></span>and can
+contain additional properties.</p>
+
+<h2><a name="sec_ImprovedRepresentationofDeletedLinks"></a><a
+name="_Toc528329386"></a><a name="_Toc469923773">8.7 </a><a
+href="#sec_ImprovedRepresentationofDeletedLinks">Improved: Representation of
+Deleted Links</a><a name="_Toc21700086"></a><a name="_Toc12010537"></a><a
+name="_Toc19864322"></a></h2>
+
+<p class=MsoNormal><a href="https://docs.oasis-open.org/odata/odata-json-format/v4.01/odata-json-format-v4.01.html#sec_DeletedLink">Deleted
+links</a> for single-valued navigation paths no longer need to specify the id
+of the link target as this can be derived from the link source and the
+navigation path.</p>
+
+<h2><a name="sec_NewAdvertiseActionsFunctionsonCollec"></a><a
+name="_Toc528329387"></a><a name="_Toc469923775">8.8 </a><a
+href="#sec_NewAdvertiseActionsFunctionsonCollec">New: Advertise
+Actions/Functions on Collection-Valued Properties</a><a name="_Toc21700087"></a><a
+name="_Toc12010538"></a><a name="_Toc19864323"></a></h2>
+
+<p class=MsoNormal><a href="https://docs.oasis-open.org/odata/odata-json-format/v4.01/odata-json-format-v4.01.html#sec_BoundAction">Bound
+actions</a> and <a href="https://docs.oasis-open.org/odata/odata-json-format/v4.01/odata-json-format-v4.01.html#sec_BoundFunction">functions</a>
+with a collection-valued binding parameter can now be advertised on collection-valued
+properties or in responses representing a collection.</p>
+
+<h2><a name="sec_NewAdvertiseNonAvailabilityofActions"></a><a
+name="_Toc528329388"></a><a name="_Toc469923776">8.9 </a><a
+href="#sec_NewAdvertiseNonAvailabilityofActions">New: Advertise
+Non-Availability of Actions/Functions</a><a name="_Toc21700088"></a><a
+name="_Toc12010539"></a><a name="_Toc19864324"></a></h2>
+
+<p class=MsoNormal><a href="https://docs.oasis-open.org/odata/odata-json-format/v4.01/odata-json-format-v4.01.html#sec_BoundAction">Action</a>/<a href="https://docs.oasis-open.org/odata/odata-json-format/v4.01/odata-json-format-v4.01.html#sec_BoundFunction">function
+advertisements</a> in payloads now allow the value <span class=Datatype>null</span>
+to indicate that this action or function is not available on the current
+instance or collection.</p>
+
+<h2><a name="sec_ImprovedInvokeParameterlessActionswi"></a><a
+name="_Toc528329389"></a><a name="_Toc469923774">8.10 </a><a
+href="#sec_ImprovedInvokeParameterlessActionswi">Improved: Invoke Parameterless
+Actions with Empty Request Body</a><a name="_Toc21700089"></a><a
+name="_Toc12010540"></a><a name="_Toc19864325"></a></h2>
+
+<p class=MsoNormal><a href="https://docs.oasis-open.org/odata/odata-json-format/v4.01/odata-json-format-v4.01.html#sec_ActionInvocation">Invoking
+a parameterless action</a> in version 4.0 requires sending an empty object in
+the request body. This empty object can be omitted in version 4.01, and the
+request body can be empty, saving two bytes.</p>
+
+<h2><a name="sec_NewJSONBatchRequestsandResponses"></a><a name="_Toc528329390">8.11
+</a><a href="#sec_NewJSONBatchRequestsandResponses">New: JSON Batch Requests
+and Responses</a><a name="_Toc21700090"></a><a name="_Toc12010541"></a><a
+name="_Toc19864326"></a></h2>
+
+<p class=MsoNormal>Version 4.0 only defined a multipart format for describing
+batch requests and responses, which was somewhat hard to implement.</p>
+
+<p class=MsoNormal>Version 4.01 introduces an alternative <a href="https://docs.oasis-open.org/odata/odata-json-format/v4.01/odata-json-format-v4.01.html#sec_BatchRequestsandResponses">JSON
+format for batch requests and responses</a>, so clients can now use
+off-the-shelf JSON libraries to compose batch requests and consume batch
+responses. Combined with the CSDL JSON representation <b>[</b><a
+href="#ODataCSDLJSON"><b>OData-CSDLJSON</b></a><b>]</b> this allows pure JSON
+communication with OData 4.01 services.</p>
+
+<p class=MsoNormal>The new JSON Batch format allows more flexible dependencies
+between requests, including expressions for executing a dependent request based
+on return codes or even values from the response bodies of preceding requests.</p>
+
+<h2><a name="sec_NewErrorInformationwithinaSuccessRes"></a><a
+name="_New:_Error_information"></a>8.12 <a
+href="#sec_NewErrorInformationwithinaSuccessRes">New: Error Information within
+a Success Response</a><a name="_Toc21700091"></a><a name="_Toc12010542"></a><a
+name="_Toc19864327"></a></h2>
+
+<p class=MsoNormal>A version 4.01 response may <a href="https://docs.oasis-open.org/odata/odata-json-format/v4.01/odata-json-format-v4.01.html#sec_ReturningErrorInformationinaSuccessP">include
+well-formed error information within a success response</a>. The error
+information, represented by newly introduced exception annotations, may
+represent primitive values that are in error and/or structured values that are
+in error if the client has specified the <span class=Datatype>continue-on-error</span>
+preference.</p>
+
+<h2><a name="sec_NewAnnotatingPrimitiveValueswithinaC">8.13 </a><a
+href="#sec_NewAnnotatingPrimitiveValueswithinaC">New: Annotating Primitive
+Values within a Collection</a><a name="_Toc21700092"></a><a name="_Toc12010543"></a><a
+name="_Toc19864328"></a></h2>
+
+<p class=MsoNormal>A new <a href="https://docs.oasis-open.org/odata/odata-json-format/v4.01/odata-json-format-v4.01.html#sec_ControlInformationcollectionAnnotati"><span
+style='font-family:"Courier New"'>collectionAnnotations</span> control
+information</a> was introduced to enable annotating primitive values within
+collections.</p>
+
+<div style='border:none;border-top:solid gray 1.0pt;padding:6.0pt 0in 0in 0in'>
+
+<p class=AppendixHeading1><a name="sec_Acknowledgments"></a><a
+name="_Toc287337066"></a><a name="_Toc287336983">Appendix A.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></a><a
+href="#sec_Acknowledgments">Acknowledgments</a><a name="_Toc19864329"></a><a
+name="_Toc12010544"></a><a name="_Toc21700093"></a></p>
+
+</div>
+
+<p class=MsoNormal>The contributions of the OASIS OData Technical Committee
+members, enumerated in <b>[</b><b>OData-Protocol</b><b>]</b>, are gratefully
+acknowledged.</p>
+
+<div style='border:none;border-top:solid gray 1.0pt;padding:6.0pt 0in 0in 0in'>
+
+<p class=AppendixHeading1><a name="sec_RevisionHistory">Appendix B.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp; </span></a><a
+href="#sec_RevisionHistory">Revision History</a><a name="_Toc19864330"></a><a
+name="_Toc12010545"></a><a name="_Toc21700094"></a></p>
+
+</div>
+
+<table class=MsoNormalTable border=1 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse;border:none'>
+ <tr>
+  <td width=90 valign=top style='width:67.25pt;border:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'><b>Revision</b></p>
+  </td>
+  <td width=90 valign=top style='width:67.5pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'><b>Date</b></p>
+  </td>
+  <td width=113 valign=top style='width:84.75pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'><b>Editor</b></p>
+  </td>
+  <td width=283 valign=top style='width:212.0pt;border:solid windowtext 1.0pt;
+  border-left:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'><b>Changes Made</b></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=90 valign=top style='width:67.25pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'>WD01</p>
+  </td>
+  <td width=90 valign=top style='width:67.5pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'>2016-12-16</p>
+  </td>
+  <td width=113 valign=top style='width:84.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'>Ralf Handl</p>
+  </td>
+  <td width=283 valign=top style='width:212.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'>Initial version</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=90 valign=top style='width:67.25pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'>CN01</p>
+  </td>
+  <td width=90 valign=top style='width:67.5pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'>2017-06-08</p>
+  </td>
+  <td width=113 valign=top style='width:84.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'>Mike Pizzo, <br>
+  Ralf Handl</p>
+  </td>
+  <td width=283 valign=top style='width:212.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'>Incorporated changes since OData Version 4.01 CSD01</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=90 valign=top style='width:67.25pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'>CN02</p>
+  </td>
+  <td width=90 valign=top style='width:67.5pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'>2017-09-28</p>
+  </td>
+  <td width=113 valign=top style='width:84.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'>Mike Pizzo, <br>
+  Ralf Handl</p>
+  </td>
+  <td width=283 valign=top style='width:212.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'>Incorporated changes since OData Version 4.01 CSD02</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=90 valign=top style='width:67.25pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'>CN03</p>
+  </td>
+  <td width=90 valign=top style='width:67.5pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'>2019-06-21</p>
+  </td>
+  <td width=113 valign=top style='width:84.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'>Mike Pizzo, <br>
+  Ralf Handl, Hubert Heijkers</p>
+  </td>
+  <td width=283 valign=top style='width:212.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'>Incorporated changes since OData Version 4.01 CS01</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=90 valign=top style='width:67.25pt;border:solid windowtext 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'>CN04</p>
+  </td>
+  <td width=90 valign=top style='width:67.5pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'>2019-09-20</p>
+  </td>
+  <td width=113 valign=top style='width:84.75pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'>Mike Pizzo,<br>
+  Ralf Handl,<br>
+  Hubert Heijkers</p>
+  </td>
+  <td width=283 valign=top style='width:212.0pt;border-top:none;border-left:
+  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-top:6.0pt;margin-right:0in;margin-bottom:
+  6.0pt;margin-left:0in'>Incorporated changes since OData Version 4.01 CSD05</p>
+  </td>
+ </tr>
+</table>
+
+<p class=MsoNormal>&nbsp;</p>
+
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+
+</html>
