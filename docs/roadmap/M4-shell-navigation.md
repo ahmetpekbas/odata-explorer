@@ -8,7 +8,7 @@
 - [x] **4.1 Three-pane layout.** Navigator | workspace | inspector with `react-resizable-panels`. The
   inspector can collapse, and the pane sizes persist.
   *Done when:* resizing and collapsing survive a reload.
-- [ ] **4.2 Navigator data.** Build the tree model: per schema (entity types, complex types, enums,
+- [x] **4.2 Navigator data.** Build the tree model: per schema (entity types, complex types, enums,
   type definitions, terms, actions, functions), plus the container (sets, singletons, imports). Add a
   "hide vocabulary schemas" toggle, on by default.
   *Done when:* unit tests check TripPin's tree shape.
