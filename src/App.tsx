@@ -6,10 +6,11 @@ import {
   webDarkTheme,
   webLightTheme,
 } from '@fluentui/react-components';
-import { openFile } from './app/loader.ts';
+import { openFile, openRecent } from './app/loader.ts';
 import { selectActiveDocument, useStore } from './app/store.ts';
 import { useTheme } from './app/theme.ts';
 import { DiagnosticsPanel } from './ui/shell/DiagnosticsPanel.tsx';
+import { RecentFiles } from './ui/shell/RecentFiles.tsx';
 import { StartPage } from './ui/shell/StartPage.tsx';
 import { ThemeMenu } from './ui/shell/ThemeMenu.tsx';
 
@@ -65,6 +66,7 @@ export function App() {
       <main className={styles.main}>
         <div className={styles.content}>
           <StartPage document={document} onOpen={(file) => void openFile(file)} />
+          <RecentFiles onOpen={(file) => void openRecent(file)} />
           {document?.status === 'ready' && (
             <DiagnosticsPanel
               diagnostics={document.resolved.model.diagnostics}

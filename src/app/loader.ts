@@ -3,6 +3,7 @@
 import { proxy, wrap } from 'comlink';
 import type { ParserApi } from '../worker/parser.worker.ts';
 import type { LoadResult, Progress } from '../worker/load.ts';
+import { getRecentText, saveRecent } from './persistence.ts';
 import { useStore } from './store.ts';
 
 export type Parse = (text: string, onProgress: (progress: Progress) => void) => Promise<LoadResult>;
@@ -42,6 +43,8 @@ export async function openText(
       store.failLoading(id, reason ?? 'The document does not contain any schemas.');
     } else {
       store.finishLoading(id, result.resolved, text);
+      // Remembering is a convenience: a full or unavailable IndexedDB must not fail the load.
+      saveRecent({ id, name, format: model.format }, text).catch(() => undefined);
     }
   } catch (e) {
     store.failLoading(id, e instanceof Error ? e.message : String(e));
@@ -60,4 +63,13 @@ export async function openFile(file: File, parse?: Parse): Promise<string> {
     store.failLoading(id, e instanceof Error ? e.message : String(e));
     return id;
   }
+}
+
+/** Reopens a remembered file. Returns undefined when it is gone. */
+export async function openRecent(
+  recent: { id: string; name: string },
+  parse?: Parse,
+): Promise<string | undefined> {
+  const text = await getRecentText(recent.id);
+  return text === undefined ? undefined : openText(recent.name, text, parse);
 }

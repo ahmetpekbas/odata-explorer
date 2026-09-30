@@ -18,7 +18,7 @@
 - [x] **3.4 Diagnostics panel.** A list with severity, message, and location. Selecting an entry
   navigates once M4 exists.
   *Done when:* the unresolved-type fixture shows its warnings.
-- [ ] **3.5 Recent files.** Store files in IndexedDB (`idb`): save on load, list, reopen, forget, and
+- [x] **3.5 Recent files.** Store files in IndexedDB (`idb`): save on load, list, reopen, forget, and
   clear all. Enforce a size budget with oldest-first eviction, and show "Stored only in this browser" on
   the start page.
   *Done when:* after a reload the file reopens without re-dropping, and forgetting it removes it.

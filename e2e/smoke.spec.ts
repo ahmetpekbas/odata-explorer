@@ -40,3 +40,21 @@ test('lists the problems of a document with unresolved references', async ({ pag
   const panel = page.getByRole('region', { name: 'Diagnostics' });
   await expect(panel.getByText('unresolved-reference').first()).toBeVisible();
 });
+
+test('remembers a loaded file across a reload until it is forgotten', async ({ page }) => {
+  await page.goto('./');
+  await expect(page.getByText('Stored only in this browser.')).toBeVisible();
+  await page.getByLabel('Choose a metadata file').setInputFiles('fixtures/trippin.xml');
+  await expect(page.getByText('Loaded trippin.xml')).toBeVisible();
+
+  await page.reload();
+  await expect(page.getByText('Loaded trippin.xml')).toBeHidden();
+  await page.getByRole('button', { name: 'Open trippin.xml' }).click();
+  await expect(page.getByText('Loaded trippin.xml')).toBeVisible();
+
+  await page.reload();
+  await page.getByRole('button', { name: 'Forget trippin.xml' }).click();
+  await expect(page.getByText('No recent files yet.')).toBeVisible();
+  await page.reload();
+  await expect(page.getByText('No recent files yet.')).toBeVisible();
+});
