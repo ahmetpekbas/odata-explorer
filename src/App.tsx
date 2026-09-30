@@ -9,6 +9,7 @@ import {
 import { openFile } from './app/loader.ts';
 import { selectActiveDocument, useStore } from './app/store.ts';
 import { useTheme } from './app/theme.ts';
+import { DiagnosticsPanel } from './ui/shell/DiagnosticsPanel.tsx';
 import { StartPage } from './ui/shell/StartPage.tsx';
 import { ThemeMenu } from './ui/shell/ThemeMenu.tsx';
 
@@ -32,14 +33,22 @@ const useStyles = makeStyles({
   main: {
     flex: 1,
     display: 'grid',
-    placeItems: 'center',
+    placeItems: 'start center',
     padding: tokens.spacingHorizontalL,
+    overflow: 'auto',
+  },
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: tokens.spacingVerticalL,
+    width: 'min(40rem, 100%)',
   },
 });
 
 export function App() {
   const styles = useStyles();
   const document = useStore(selectActiveDocument);
+  const select = useStore((s) => s.select);
   const { preference, setPreference, scheme } = useTheme();
 
   return (
@@ -54,7 +63,16 @@ export function App() {
         <ThemeMenu preference={preference} onChange={setPreference} />
       </header>
       <main className={styles.main}>
-        <StartPage document={document} onOpen={(file) => void openFile(file)} />
+        <div className={styles.content}>
+          <StartPage document={document} onOpen={(file) => void openFile(file)} />
+          {document?.status === 'ready' && (
+            <DiagnosticsPanel
+              diagnostics={document.resolved.model.diagnostics}
+              // Until the navigator exists (M4), selecting only records the target.
+              onSelect={(d) => select(d.target)}
+            />
+          )}
+        </div>
       </main>
     </FluentProvider>
   );

@@ -15,7 +15,7 @@
   loads.
   *Done when:* dropping TripPin shows the type and set counts, and dropping a v2 file shows the
   "not supported" message.
-- [ ] **3.4 Diagnostics panel.** A list with severity, message, and location. Selecting an entry
+- [x] **3.4 Diagnostics panel.** A list with severity, message, and location. Selecting an entry
   navigates once M4 exists.
   *Done when:* the unresolved-type fixture shows its warnings.
 - [ ] **3.5 Recent files.** Store files in IndexedDB (`idb`): save on load, list, reopen, forget, and
