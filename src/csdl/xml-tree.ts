@@ -36,7 +36,11 @@ const MAX_ERRORS = 100;
 /** Thrown inside a saxes handler to abandon the parse, e.g. on a DOCTYPE. */
 class Abort extends Error {}
 
-export function readXml(text: string): XmlTree {
+/** Characters fed to the parser between progress reports. */
+const CHUNK = 1 << 20;
+
+/** `onProgress` receives the number of characters consumed so far. */
+export function readXml(text: string, onProgress?: (chars: number) => void): XmlTree {
   const parser = new SaxesParser({ xmlns: true });
   const errors: XmlError[] = [];
   const stack: XNode[] = [];
@@ -86,7 +90,15 @@ export function readXml(text: string): XmlTree {
   parser.on('cdata', onText);
 
   try {
-    parser.write(text).close();
+    for (let i = 0; i < text.length;) {
+      let end = Math.min(i + CHUNK, text.length);
+      // Never split a surrogate pair across writes.
+      if (end < text.length && (text.charCodeAt(end - 1) & 0xfc00) === 0xd800) end++;
+      parser.write(text.slice(i, end));
+      i = end;
+      onProgress?.(i);
+    }
+    parser.close();
   } catch (e) {
     if (!(e instanceof Abort)) throw e;
   }

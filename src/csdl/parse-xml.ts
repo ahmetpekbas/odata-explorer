@@ -34,7 +34,8 @@ import { readXml, type XNode } from './xml-tree.ts';
 /** EDMX namespaces of OData v1-v3, all under this prefix. */
 const LEGACY_EDMX_NS = 'http://schemas.microsoft.com/ado/';
 
-export function parseXml(text: string): Model {
+/** `onProgress` receives the number of characters of `text` read so far. */
+export function parseXml(text: string, onProgress?: (chars: number) => void): Model {
   const ctx: Ctx = { diagnostics: [] };
   const model: Model = {
     format: 'xml',
@@ -43,7 +44,7 @@ export function parseXml(text: string): Model {
     schemas: [],
     diagnostics: ctx.diagnostics,
   };
-  const tree = readXml(text);
+  const tree = readXml(text, onProgress);
 
   for (const e of tree.errors) {
     ctx.diagnostics.push({

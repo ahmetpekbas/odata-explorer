@@ -5,7 +5,7 @@
 - **Demo:** A dropped file gets parsed in the background, shows its problems, and is remembered.
 - **Needs:** [M1](M1-csdl-core-xml.md), [M2](M2-csdl-json.md)
 
-- [ ] **3.1 Parser worker.** Write `parser.worker.ts` with Comlink: detect the format (`<` vs `{`),
+- [x] **3.1 Parser worker.** Write `parser.worker.ts` with Comlink: detect the format (`<` vs `{`),
   parse, resolve, report progress by bytes, and return errors as data rather than throwing.
   *Done when:* a Vitest worker test (or the E2E smoke test) gets a model and progress events back.
 - [ ] **3.2 Store.** Write zustand `store.ts`: a map of documents (v1 shows one active document), the
