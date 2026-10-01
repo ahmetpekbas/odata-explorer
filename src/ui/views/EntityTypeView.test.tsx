@@ -20,7 +20,10 @@ function open(id: string) {
   return resolved;
 }
 
-const columnHeaders = () => screen.getAllByRole('columnheader').map((h) => h.textContent);
+const columnHeaders = () =>
+  within(screen.getByRole('table', { name: 'Properties' }))
+    .getAllByRole('columnheader')
+    .map((h) => h.textContent);
 
 describe('EntityTypeView', () => {
   it('shows the key and friendly columns', () => {

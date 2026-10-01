@@ -14,7 +14,7 @@
   table, in both modes. Technical mode shows every facet, `Nullable`, abstract/open/`HasStream`.
   *Done when:* Dataverse-sized tables (500+ properties) scroll smoothly, and the toggle switches the
   columns.
-- [ ] **5.3 Entity type: relationships.** "Links to" (navigation with cardinality, containment,
+- [x] **5.3 Entity type: relationships.** "Links to" (navigation with cardinality, containment,
   referential constraints, `OnDelete`), base and derived types, and "Exposed as" (sets and singletons).
   Every reference opens its tab.
   *Done when:* TripPin `Person` shows `Friends` and `Trips`, and its derived type `Employee`.

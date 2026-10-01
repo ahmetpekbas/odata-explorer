@@ -6,6 +6,8 @@ import type { Property, StructuredType } from '../../csdl/model.ts';
 import { DataTable, type Column } from './DataTable.tsx';
 import { Facts, Section, ViewHeader } from './ViewParts.tsx';
 import { TypeText } from './TypeText.tsx';
+import { declaredOn, ownerOf, yesNo } from './members.ts';
+import { EntityRelationships } from './EntityRelationships.tsx';
 import type { ViewProps } from './types.ts';
 
 interface PropertyRow {
@@ -14,10 +16,6 @@ interface PropertyRow {
   owner: string;
   isKey: boolean;
 }
-
-const ownerOf = (id: string) => id.slice(0, id.lastIndexOf('/'));
-
-const yesNo = (value: boolean | undefined) => (value === undefined ? '' : value ? 'Yes' : 'No');
 
 export function EntityTypeView(props: ViewProps<StructuredType>) {
   const { resolved, element, tabId, mode } = props;
@@ -48,14 +46,13 @@ export function EntityTypeView(props: ViewProps<StructuredType>) {
       {mode === 'friendly' ? labelOf(row.property) : row.property.name}
     </>
   );
-  const declaredOn: Column<PropertyRow>[] = hasInherited
+  const declaredOnColumn: Column<PropertyRow>[] = hasInherited
     ? [
         {
           key: 'owner',
           header: 'Declared on',
           width: '10rem',
-          cell: (row) =>
-            row.owner === element.id ? '' : row.owner.slice(row.owner.lastIndexOf('.') + 1),
+          cell: (row) => declaredOn(row.property.id, element.id),
         },
       ]
     : [];
@@ -76,7 +73,7 @@ export function EntityTypeView(props: ViewProps<StructuredType>) {
             width: 'minmax(14rem, 2fr)',
             cell: (row) => descriptionOf(row.property) ?? '',
           },
-          ...declaredOn,
+          ...declaredOnColumn,
         ]
       : [
           { key: 'name', header: 'Name', width: 'minmax(10rem, 1fr)', cell: name },
@@ -123,7 +120,7 @@ export function EntityTypeView(props: ViewProps<StructuredType>) {
             width: '8rem',
             cell: (row) => row.property.facets.defaultValue ?? '',
           },
-          ...declaredOn,
+          ...declaredOnColumn,
         ];
 
   const badges = [
@@ -175,6 +172,7 @@ export function EntityTypeView(props: ViewProps<StructuredType>) {
           emptyText="This type has no properties."
         />
       </Section>
+      <EntityRelationships {...props} />
     </>
   );
 }
