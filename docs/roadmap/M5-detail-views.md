@@ -5,7 +5,7 @@
 - **Demo:** Every element kind has a friendly and a technical page.
 - **Needs:** [M3](M3-load-pipeline.md), [M4](M4-shell-navigation.md)
 
-- [ ] **5.1 Humanize and display helpers.** Write `humanize.ts`: friendly type strings ("Text (max
+- [x] **5.1 Humanize and display helpers.** Write `humanize.ts`: friendly type strings ("Text (max
   100)", "List of Order", "Link to Customer (many)"). Add a label/description helper (`Core.Description`,
   `Core.LongDescription`, `Common.Label`, falling back to the name). Add the global Friendly/Technical
   toggle and a per-view override.

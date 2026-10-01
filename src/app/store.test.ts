@@ -86,4 +86,18 @@ describe('store', () => {
     useStore.getState().setDetailMode('technical');
     expect(useStore.getState().detailMode).toBe('technical');
   });
+
+  it('lets one view override the mode until the global mode changes', () => {
+    const s = useStore.getState();
+    s.setModeOverride('NS.Customer', 'technical');
+    const mode = (id: string) => {
+      const state = useStore.getState();
+      return state.modeOverrides[id] ?? state.detailMode;
+    };
+    expect(mode('NS.Customer')).toBe('technical');
+    expect(mode('NS.Order')).toBe('friendly');
+    s.setDetailMode('technical');
+    s.setDetailMode('friendly');
+    expect(mode('NS.Customer')).toBe('friendly');
+  });
 });

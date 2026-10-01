@@ -36,6 +36,8 @@ export interface StoreState {
   documents: Map<string, AppDocument>;
   activeId: string | undefined;
   detailMode: DetailMode;
+  /** Views that deviate from `detailMode`, by tab ID. The global mode wins again when it changes. */
+  modeOverrides: Record<string, DetailMode>;
   /** Target-path ID of the selected element. */
   selection: string | undefined;
   /** Open tabs of the active document, in display order. */
@@ -56,6 +58,8 @@ export interface StoreState {
   closeDocument: (id: string) => void;
   setActive: (id: string | undefined) => void;
   setDetailMode: (mode: DetailMode) => void;
+  /** Sets the mode of one view; the global mode stays as it is. */
+  setModeOverride: (tabId: string, mode: DetailMode) => void;
   select: (id: string | undefined) => void;
   /** Activates the tab for `target`, opening it first. Without `pin` it becomes the preview tab. */
   openTab: (target: { id: string; kind: TabKind }, pin?: boolean) => void;
@@ -84,6 +88,7 @@ export const useStore = create<StoreState>()((set) => ({
   documents: new Map(),
   activeId: undefined,
   detailMode: 'friendly',
+  modeOverrides: {},
   selection: undefined,
   ...NO_TABS,
 
@@ -132,7 +137,9 @@ export const useStore = create<StoreState>()((set) => ({
       };
     }),
   setActive: (id) => set({ activeId: id, selection: undefined, ...NO_TABS }),
-  setDetailMode: (detailMode) => set({ detailMode }),
+  setDetailMode: (detailMode) => set({ detailMode, modeOverrides: {} }),
+  setModeOverride: (tabId, mode) =>
+    set((s) => ({ modeOverrides: { ...s.modeOverrides, [tabId]: mode } })),
   select: (selection) => set({ selection }),
   openTab: (target, pin = false) =>
     set((s) => {
@@ -173,6 +180,11 @@ export const useStore = create<StoreState>()((set) => ({
   activateTab: (id) =>
     set((s) => (id === undefined || s.tabs.some((t) => t.id === id) ? activated(s.tabs, id) : s)),
 }));
+
+/** The mode a view shows: its own override, else the global mode. */
+export function useViewMode(tabId: string): DetailMode {
+  return useStore((s) => s.modeOverrides[tabId] ?? s.detailMode);
+}
 
 /** The active document, if there is one. */
 export function selectActiveDocument(state: StoreState): AppDocument | undefined {

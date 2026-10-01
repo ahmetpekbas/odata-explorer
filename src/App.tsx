@@ -18,6 +18,7 @@ import { useTheme } from './app/theme.ts';
 import { Navigator } from './ui/navigator/Navigator.tsx';
 import { RecentFiles } from './ui/shell/RecentFiles.tsx';
 import { StartPage } from './ui/shell/StartPage.tsx';
+import { ModeToggle } from './ui/shell/ModeToggle.tsx';
 import { Shell } from './ui/shell/Shell.tsx';
 import { Workspace } from './ui/workspace/Workspace.tsx';
 import { ThemeMenu } from './ui/shell/ThemeMenu.tsx';
@@ -61,6 +62,8 @@ export function App() {
   const activeTab = useStore((s) => s.activeTab);
   const openTab = useStore((s) => s.openTab);
   const select = useStore((s) => s.select);
+  const detailMode = useStore((s) => s.detailMode);
+  const setDetailMode = useStore((s) => s.setDetailMode);
   const closeDocument = useStore((s) => s.closeDocument);
   const { preference, setPreference, scheme } = useTheme();
   useEffect(() => startRouting(), []);
@@ -94,14 +97,17 @@ export function App() {
             />
           }
           toolbar={
-            <Button
-              appearance="subtle"
-              size="small"
-              icon={<ErrorCircleRegular />}
-              onClick={() => openTab(PROBLEMS_TAB, true)}
-            >
-              Problems ({document.resolved.model.diagnostics.length})
-            </Button>
+            <>
+              <Button
+                appearance="subtle"
+                size="small"
+                icon={<ErrorCircleRegular />}
+                onClick={() => openTab(PROBLEMS_TAB, true)}
+              >
+                Problems ({document.resolved.model.diagnostics.length})
+              </Button>
+              <ModeToggle mode={detailMode} onChange={setDetailMode} label="Detail for all views" />
+            </>
           }
           workspace={
             <Workspace
