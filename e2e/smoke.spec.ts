@@ -115,7 +115,7 @@ test('tabs: preview is replaced, double-click pins, middle-click closes, overflo
   await tree.getByRole('treeitem', { name: 'Entity Types' }).click();
   // Fluent renders a tab's text twice (the second copy reserves space for bold), so read the titles.
   const tabs = async () => {
-    const all = await page.getByRole('tab').all();
+    const all = await page.getByRole('main').getByRole('tab').all();
     return Promise.all(all.map(async (t) => (await t.getAttribute('title'))?.split('.').pop()));
   };
   const item = (name: string) => tree.getByRole('treeitem', { name, exact: true });
@@ -229,7 +229,7 @@ test('restores the open tabs and the active one when a file is reopened', async 
   await tree.getByRole('treeitem', { name: 'Flight', exact: true }).click();
   await page.getByRole('tab', { name: 'Trip', exact: true }).click();
   const titles = async () => {
-    const all = await page.getByRole('tab').all();
+    const all = await page.getByRole('main').getByRole('tab').all();
     return Promise.all(all.map(async (t) => (await t.getAttribute('title'))?.split('.').pop()));
   };
   await expect.poll(titles).toEqual(['Person', 'Trip', 'Airline', 'Flight']);
@@ -251,4 +251,30 @@ test('restores the open tabs and the active one when a file is reopened', async 
     'aria-selected',
     'true',
   );
+});
+
+test('the source panel loads its chunk only when the Source tab opens, and follows the selection', async ({
+  page,
+}) => {
+  const chunks: string[] = [];
+  page.on('request', (request) => {
+    if (/SourcePanel/.test(request.url())) chunks.push(request.url());
+  });
+  await page.goto('./');
+  await page.getByLabel('Choose a metadata file').setInputFiles('fixtures/trippin.xml');
+  const tree = page.getByRole('tree', { name: 'Model elements' });
+  await tree.getByRole('treeitem', { name: 'Entity Types' }).click();
+  await tree.getByRole('treeitem', { name: 'Airline', exact: true }).click();
+  await expect(page.getByRole('heading', { level: 2, name: 'Airline' })).toBeVisible();
+  expect(chunks).toEqual([]);
+
+  await page.getByRole('tab', { name: 'Source' }).click();
+  const source = page.getByRole('textbox', { name: 'Source' });
+  await expect(source).toContainText('<EntityType Name="Airline"');
+  expect(chunks).toHaveLength(1);
+
+  // Selecting a row shows that property's own element.
+  await page.getByRole('row', { name: /AirlineCode/ }).click();
+  await expect(source).toContainText('<Property Name="AirlineCode"');
+  await expect(source).not.toContainText('<EntityType');
 });

@@ -21,7 +21,7 @@
 - [x] **6.4 Wire annotations into views.** Capability badges on sets and "Exposed as". Validation hints
   (allowed values, min/max) and Computed/Immutable markers in property tables.
   *Done when:* a fixture with restrictions shows the correct badges.
-- [ ] **6.5 Source panel.** A read-only CodeMirror 6 view in a lazy-loaded chunk, with XML/JSON
+- [x] **6.5 Source panel.** A read-only CodeMirror 6 view in a lazy-loaded chunk, with XML/JSON
   highlighting. It shows the fragment from the span (XML) or the re-serialized subtree (JSON).
   *Done when:* the source follows the selection and the chunk only loads when the panel opens.
 - [ ] **6.6 Jump-to-definition.** Qualified names in the source are clickable and open that element's

@@ -15,7 +15,7 @@ import { PROBLEMS_TAB, startRouting } from './app/routing.ts';
 import { startTabPersistence } from './app/tab-persistence.ts';
 import { selectActiveDocument, useStore } from './app/store.ts';
 import { useTheme } from './app/theme.ts';
-import { AnnotationsPanel } from './ui/inspector/AnnotationsPanel.tsx';
+import { Inspector } from './ui/inspector/Inspector.tsx';
 import { Navigator } from './ui/navigator/Navigator.tsx';
 import { RecentFiles } from './ui/shell/RecentFiles.tsx';
 import { StartPage } from './ui/shell/StartPage.tsx';
@@ -124,8 +124,9 @@ export function App() {
             />
           }
           inspector={
-            <AnnotationsPanel
+            <Inspector
               resolved={document.resolved}
+              text={document.text}
               id={selection === PROBLEMS_TAB.id ? undefined : selection}
               mode={detailMode}
             />

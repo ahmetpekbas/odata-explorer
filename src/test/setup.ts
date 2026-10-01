@@ -13,3 +13,8 @@ globalThis.ResizeObserver ??= class {
   unobserve() {}
   disconnect() {}
 };
+
+// jsdom has no layout, so CodeMirror's measuring finds no Range geometry.
+const noRects = Object.assign([], { item: () => null }) as unknown as DOMRectList;
+Range.prototype.getClientRects = () => noRects;
+Range.prototype.getBoundingClientRect = () => new DOMRect();
