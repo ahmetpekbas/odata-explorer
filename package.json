@@ -24,6 +24,7 @@
     "@codemirror/view": "^6.43.13",
     "@fluentui/react-components": "^9.74.9",
     "@fluentui/react-icons": "^2.0.343",
+    "@leeoniya/ufuzzy": "^1.0.19",
     "@lezer/highlight": "^1.2.5",
     "@tanstack/react-virtual": "^3.14.13",
     "comlink": "^4.4.2",

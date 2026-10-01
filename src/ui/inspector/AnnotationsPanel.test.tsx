@@ -99,7 +99,7 @@ describe('annotations panel', () => {
 describe('selecting a property', () => {
   it('shows its annotations, including external ones', async () => {
     useStore.getState().startLoading({ id: 'doc', name: 'doc.xml', size: DOC.length });
-    useStore.getState().finishLoading('doc', resolved, DOC);
+    useStore.getState().finishLoading('doc', resolved, DOC, []);
     useStore.getState().openTab({ id: 'N.T', kind: 'entityType' }, true);
 
     const Both = () => {

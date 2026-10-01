@@ -3,6 +3,7 @@
 import { create } from 'zustand';
 import type { ElementKind } from '../csdl/model.ts';
 import type { Resolved } from '../csdl/resolve.ts';
+import type { SearchEntry } from '../csdl/search-index.ts';
 import type { Progress } from '../worker/load.ts';
 
 export type DetailMode = 'friendly' | 'technical';
@@ -28,7 +29,7 @@ interface DocumentBase {
 export type AppDocument = DocumentBase &
   (
     | { status: 'loading'; progress: Progress | undefined }
-    | { status: 'ready'; resolved: Resolved; text: string }
+    | { status: 'ready'; resolved: Resolved; index: SearchEntry[]; text: string }
     | { status: 'error'; error: string }
   );
 
@@ -52,6 +53,7 @@ export interface StoreState {
     id: string,
     resolved: Resolved,
     text: string,
+    index: SearchEntry[],
     restored?: { tabs: Tab[]; activeTab: string | undefined },
   ) => void;
   failLoading: (id: string, error: string) => void;
@@ -105,7 +107,7 @@ export const useStore = create<StoreState>()((set) => ({
     })),
   setProgress: (id, progress) =>
     set((s) => replace(s, id, (doc) => (doc.status === 'loading' ? { ...doc, progress } : doc))),
-  finishLoading: (id, resolved, text, restored) =>
+  finishLoading: (id, resolved, text, index, restored) =>
     set((s) => {
       const next = replace(s, id, ({ id, name, size }) => ({
         id,
@@ -113,6 +115,7 @@ export const useStore = create<StoreState>()((set) => ({
         size,
         status: 'ready',
         resolved,
+        index,
         text,
       }));
       return restored && s.activeId === id

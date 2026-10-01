@@ -25,6 +25,7 @@ describe('load', () => {
     expect(events[0]).toEqual({ stage: 'parsing', done: 0, total: text.length });
     expect(events.some((e) => e.stage === 'parsing' && e.done === text.length)).toBe(true);
     expect(events.at(-1)?.stage).toBe('resolving');
+    expect(result.index.some((e) => e.label === 'Person')).toBe(true);
   });
 
   it('parses CSDL JSON', () => {

@@ -1,9 +1,10 @@
-// The load pipeline: detect the format, parse, resolve. Kept free of worker APIs so it runs in Vitest;
+// The load pipeline: detect the format, parse, resolve, index. Kept free of worker APIs so it runs in Vitest;
 // parser.worker.ts only exposes it. Failures come back as data, never as exceptions.
 import { parseJson } from '../csdl/parse-json.ts';
 import { parseXml } from '../csdl/parse-xml.ts';
 import type { Model } from '../csdl/model.ts';
 import { resolve, type Resolved } from '../csdl/resolve.ts';
+import { buildSearchIndex, type SearchEntry } from '../csdl/search-index.ts';
 import { bundledSchemas } from '../vocabularies/index.ts';
 
 export type Format = Model['format'];
@@ -15,7 +16,8 @@ export interface Progress {
   total: number;
 }
 
-export type LoadResult = { ok: true; resolved: Resolved } | { ok: false; error: string };
+export type LoadResult =
+  { ok: true; resolved: Resolved; index: SearchEntry[] } | { ok: false; error: string };
 
 /** The format by the first non-whitespace character: `<` is XML, `{` is JSON. */
 export function detectFormat(text: string): Format | undefined {
@@ -41,7 +43,8 @@ export function load(text: string, onProgress?: (progress: Progress) => void): L
         ? parseXml(text, (done) => onProgress?.({ stage: 'parsing', done, total }))
         : parseJson(text);
     onProgress?.({ stage: 'resolving', done: total, total });
-    return { ok: true, resolved: resolve(model, text, bundledSchemas) };
+    const resolved = resolve(model, text, bundledSchemas);
+    return { ok: true, resolved, index: buildSearchIndex(resolved.model) };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : String(e) };
   }

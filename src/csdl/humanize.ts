@@ -168,6 +168,11 @@ export function labelOf(element: { name: string; annotations: Annotation[] }): s
   return firstString(element, (t) => COMMON_LABEL.test(t)) ?? element.name;
 }
 
+/** The `Common.Label` annotation that gives the element its label, if it has one. */
+export function labelAnnotationOf(element: { annotations: Annotation[] }): Annotation | undefined {
+  return element.annotations.find((a) => COMMON_LABEL.test(a.term) && stringValue(a) !== undefined);
+}
+
 /** Whether the element has a label other than its name. */
 export function hasLabel(element: { name: string; annotations: Annotation[] }): boolean {
   return labelOf(element) !== element.name;

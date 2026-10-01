@@ -56,7 +56,7 @@ export async function openText(
             tabs: [{ id: overview.id, kind: 'schema' as const, pinned: false }],
             activeTab: overview.id,
           };
-      store.finishLoading(id, result.resolved, text, tabs);
+      store.finishLoading(id, result.resolved, text, result.index, tabs);
       // Remembering is a convenience: a full or unavailable IndexedDB must not fail the load.
       saveRecent({ id, name, format: model.format }, text).catch(() => undefined);
     }

@@ -5,7 +5,7 @@
 - **Demo:** Ctrl+K opens any symbol.
 - **Needs:** [M3](M3-load-pipeline.md), [M4](M4-shell-navigation.md)
 
-- [ ] **7.1 Search index.** Build `search-index.ts` in the worker: types, properties, navigation
+- [x] **7.1 Search index.** Build `search-index.ts` in the worker: types, properties, navigation
   properties, sets, singletons, operations, terms, enum members, and annotation labels, each with its
   kind, target path, and label.
   *Done when:* index counts match the model for both fixtures.

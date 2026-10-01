@@ -51,7 +51,13 @@ describe('StartPage', () => {
   it('shows type and set counts when ready', () => {
     const result = load(trippin);
     if (!result.ok) throw new Error(result.error);
-    renderPage({ ...base, status: 'ready', resolved: result.resolved, text: trippin });
+    renderPage({
+      ...base,
+      status: 'ready',
+      resolved: result.resolved,
+      index: result.index,
+      text: trippin,
+    });
     expect(screen.getByText(/\d+ entity types/)).toBeInTheDocument();
     expect(screen.getByText(/\d+ entity sets/)).toBeInTheDocument();
   });

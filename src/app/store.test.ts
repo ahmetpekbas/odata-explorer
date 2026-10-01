@@ -25,11 +25,12 @@ describe('store', () => {
     s.setProgress('a', progress);
     expect(selectActiveDocument(useStore.getState())).toMatchObject({ progress });
 
-    s.finishLoading('a', resolved, 'text');
+    s.finishLoading('a', resolved, 'text', []);
     expect(selectActiveDocument(useStore.getState())).toEqual({
       ...doc,
       status: 'ready',
       resolved,
+      index: [],
       text: 'text',
     });
   });
@@ -50,7 +51,7 @@ describe('store', () => {
     s.startLoading(doc);
     s.closeDocument('a');
     s.setProgress('a', { stage: 'parsing', done: 1, total: 2 });
-    s.finishLoading('a', resolved, 'text');
+    s.finishLoading('a', resolved, 'text', []);
     expect(useStore.getState().documents.size).toBe(0);
     expect(useStore.getState().activeId).toBeUndefined();
   });
@@ -58,7 +59,7 @@ describe('store', () => {
   it('ignores progress that arrives after the document finished', () => {
     const s = useStore.getState();
     s.startLoading(doc);
-    s.finishLoading('a', resolved, 'text');
+    s.finishLoading('a', resolved, 'text', []);
     s.setProgress('a', { stage: 'resolving', done: 2, total: 2 });
     expect(selectActiveDocument(useStore.getState())).toMatchObject({ status: 'ready' });
   });
