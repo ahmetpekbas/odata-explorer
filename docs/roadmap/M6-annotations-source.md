@@ -5,7 +5,7 @@
 - **Demo:** Readable annotations, capability badges, source fragments.
 - **Needs:** [M3](M3-load-pipeline.md), [M4](M4-shell-navigation.md); task 6.4 also needs [M5](M5-detail-views.md)
 
-- [ ] **6.1 Expression rendering.** `annotations.ts` turns dynamic expressions into readable text
+- [x] **6.1 Expression rendering.** `annotations.ts` turns dynamic expressions into readable text
   (`$filter`-like syntax for `Apply` and logic, path notation). Add a generic record/collection/value
   tree renderer.
   *Done when:* every expression from the 1.5 fixture renders, with snapshot tests.
