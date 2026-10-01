@@ -1,6 +1,7 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { FluentProvider, webLightTheme } from '@fluentui/react-components';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { useStore } from '../../app/store.ts';
 import trippin from '../../../fixtures/trippin.xml?raw';
 import csdlJson from '../../../fixtures/csdl-schemas/csdl-16.1.json?raw';
 import { stubLayout } from '../../test/layout.ts';
@@ -8,7 +9,10 @@ import { loadResolved, renderView } from '../../test/views.tsx';
 import { Inspector } from './Inspector.tsx';
 
 const NS = 'Microsoft.OData.SampleService.Models.TripPin';
-beforeEach(() => stubLayout());
+beforeEach(() => {
+  useStore.setState(useStore.getInitialState(), true);
+  stubLayout();
+});
 
 const openSource = () => fireEvent.click(screen.getByRole('tab', { name: 'Source' }));
 const editor = () => screen.findByRole('textbox', { name: 'Source' });
@@ -70,5 +74,40 @@ describe('Inspector', () => {
     expect(
       await screen.findByText('No source is available for this selection.'),
     ).toBeInTheDocument();
+  });
+});
+
+describe('jump to definition', () => {
+  const resolved = loadResolved(trippin);
+  const links = async () => {
+    await editor();
+    return [...document.querySelectorAll<HTMLElement>('.cm-oe-link')];
+  };
+
+  it('links the qualified names the model defines, and no others', async () => {
+    renderView(
+      <Inspector resolved={resolved} text={trippin} id={`${NS}.Person`} mode="friendly" />,
+    );
+    openSource();
+    const found = await links();
+    const ids = new Set(found.map((l) => l.dataset.linkId));
+    expect(ids).toContain(`${NS}.Trip`);
+    expect(ids).toContain(`${NS}.PersonGender`);
+    // `Edm.String` is not in the model, so it stays plain text.
+    expect(found.some((l) => l.textContent?.startsWith('Edm.'))).toBe(false);
+  });
+
+  it('opens the element in a tab when its name is clicked', async () => {
+    renderView(
+      <Inspector resolved={resolved} text={trippin} id={`${NS}.Person`} mode="friendly" />,
+    );
+    openSource();
+    const trip = (await links()).find((l) => l.dataset.linkId === `${NS}.Trip`);
+    expect(trip).toBeDefined();
+    fireEvent.click(trip as HTMLElement);
+    expect(useStore.getState().activeTab).toBe(`${NS}.Trip`);
+    expect(useStore.getState().tabs.map((t) => [t.id, t.kind])).toEqual([
+      [`${NS}.Trip`, 'entityType'],
+    ]);
   });
 });

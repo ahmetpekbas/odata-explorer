@@ -24,6 +24,6 @@
 - [x] **6.5 Source panel.** A read-only CodeMirror 6 view in a lazy-loaded chunk, with XML/JSON
   highlighting. It shows the fragment from the span (XML) or the re-serialized subtree (JSON).
   *Done when:* the source follows the selection and the chunk only loads when the panel opens.
-- [ ] **6.6 Jump-to-definition.** Qualified names in the source are clickable and open that element's
+- [x] **6.6 Jump-to-definition.** Qualified names in the source are clickable and open that element's
   tab.
   *Done when:* clicking `Type="NS.Trip"` opens `Trip`.

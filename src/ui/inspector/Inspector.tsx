@@ -1,7 +1,7 @@
 import { lazy, Suspense, useMemo, useState } from 'react';
 import { Body1, makeStyles, Tab, TabList, tokens } from '@fluentui/react-components';
 import { sourceOf } from '../../app/source.ts';
-import type { DetailMode } from '../../app/store.ts';
+import { useStore, type DetailMode } from '../../app/store.ts';
 import type { Resolved } from '../../csdl/resolve.ts';
 import { AnnotationsPanel } from './AnnotationsPanel.tsx';
 
@@ -33,6 +33,7 @@ interface InspectorProps {
 export function Inspector({ resolved, text, id, mode }: InspectorProps) {
   const styles = useStyles();
   const [tab, setTab] = useState<InspectorTab>('annotations');
+  const openTab = useStore((s) => s.openTab);
   // Only worked out while the source tab is showing: a JSON document is indexed on first use.
   const source = useMemo(
     () => (tab === 'source' ? sourceOf(resolved, text, id) : undefined),
@@ -54,7 +55,7 @@ export function Inspector({ resolved, text, id, mode }: InspectorProps) {
           <AnnotationsPanel resolved={resolved} id={id} mode={mode} />
         ) : (
           <Suspense fallback={<Body1 className={styles.loading}>Loading source…</Body1>}>
-            <SourcePanel source={source} />
+            <SourcePanel source={source} resolved={resolved} onOpen={openTab} />
           </Suspense>
         )}
       </div>

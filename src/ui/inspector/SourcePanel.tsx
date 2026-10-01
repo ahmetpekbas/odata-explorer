@@ -1,6 +1,6 @@
 // A read-only CodeMirror 6 view of one element's source. This file and everything it imports from
 // CodeMirror load in their own chunk, the first time the Source tab opens (see Inspector.tsx).
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { Body1, Caption1, makeStyles, tokens } from '@fluentui/react-components';
 import { json } from '@codemirror/lang-json';
 import { xml } from '@codemirror/lang-xml';
@@ -9,6 +9,9 @@ import { Compartment, EditorState } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
 import { tags } from '@lezer/highlight';
 import { MAX_FRAGMENT, type SourceFragment } from '../../app/source.ts';
+import { linkResolver, type LinkTarget } from '../../app/source-links.ts';
+import type { Resolved } from '../../csdl/resolve.ts';
+import { nameLinks } from './nameLinks.ts';
 
 const useStyles = makeStyles({
   root: { display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 },
@@ -28,6 +31,11 @@ const theme = EditorView.theme({
   '.cm-scroller': { fontFamily: tokens.fontFamilyMonospace, lineHeight: '1.5' },
   '.cm-content': { padding: `${tokens.spacingVerticalS} 0` },
   '.cm-line': { padding: `0 ${tokens.spacingHorizontalM}` },
+  '.cm-oe-link': {
+    color: tokens.colorBrandForegroundLink,
+    textDecoration: 'underline',
+    cursor: 'pointer',
+  },
   '.cm-selectionBackground, &.cm-focused .cm-selectionBackground': {
     backgroundColor: tokens.colorNeutralBackground1Selected,
   },
@@ -47,9 +55,19 @@ const highlight = HighlightStyle.define([
 
 const languageFor = (language: SourceFragment['language']) => (language === 'xml' ? xml() : json());
 
+interface SourcePanelProps {
+  source: SourceFragment | undefined;
+  /** Names in the source are looked up here; the ones it defines become links. */
+  resolved: Resolved;
+  onOpen: (target: LinkTarget) => void;
+}
+
 /** Shows `source` read-only; the editor is created once and its content replaced as the selection moves. */
-export default function SourcePanel({ source }: { source: SourceFragment | undefined }) {
+export default function SourcePanel({ source, resolved, onOpen }: SourcePanelProps) {
   const styles = useStyles();
+  // The editor is created once, so what it calls on a click or an update is read from here.
+  const resolveName = useMemo(() => linkResolver(resolved), [resolved]);
+  const live = useRef({ resolveName, onOpen });
   const host = useRef<HTMLDivElement>(null);
   const view = useRef<EditorView>(undefined);
   const language = useRef(new Compartment());
@@ -69,6 +87,10 @@ export default function SourcePanel({ source }: { source: SourceFragment | undef
           EditorView.contentAttributes.of({ 'aria-label': 'Source', 'aria-readonly': 'true' }),
           language.current.of(languageFor(initial.current?.language ?? 'xml')),
           syntaxHighlighting(highlight),
+          nameLinks(
+            () => live.current.resolveName,
+            (target) => live.current.onOpen(target),
+          ),
           theme,
         ],
       }),
@@ -79,6 +101,10 @@ export default function SourcePanel({ source }: { source: SourceFragment | undef
       view.current = undefined;
     };
   }, []);
+
+  useEffect(() => {
+    live.current = { resolveName, onOpen };
+  }, [resolveName, onOpen]);
 
   useEffect(() => {
     const editor = view.current;

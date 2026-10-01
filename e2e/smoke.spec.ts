@@ -278,3 +278,17 @@ test('the source panel loads its chunk only when the Source tab opens, and follo
   await expect(source).toContainText('<Property Name="AirlineCode"');
   await expect(source).not.toContainText('<EntityType');
 });
+
+test('a qualified name in the source opens that element', async ({ page }) => {
+  await page.goto('./');
+  await page.getByLabel('Choose a metadata file').setInputFiles('fixtures/trippin.xml');
+  const tree = page.getByRole('tree', { name: 'Model elements' });
+  await tree.getByRole('treeitem', { name: 'Entity Types' }).click();
+  await tree.getByRole('treeitem', { name: 'Person', exact: true }).click();
+  await page.getByRole('tab', { name: 'Source' }).click();
+
+  const trips = page.locator('.cm-oe-link[data-link-id$=".Trip"]').first();
+  await expect(trips).toBeVisible();
+  await trips.click();
+  await expect(page.getByRole('heading', { level: 2, name: 'Trip' })).toBeVisible();
+});
