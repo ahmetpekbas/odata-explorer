@@ -10,7 +10,7 @@
   `Core.LongDescription`, `Common.Label`, falling back to the name). Add the global Friendly/Technical
   toggle and a per-view override.
   *Done when:* unit tests cover every `Edm.*` primitive, collections, enums, and navigation.
-- [ ] **5.2 Entity type: header and properties.** Label, description, key, and a virtualized property
+- [x] **5.2 Entity type: header and properties.** Label, description, key, and a virtualized property
   table, in both modes. Technical mode shows every facet, `Nullable`, abstract/open/`HasStream`.
   *Done when:* Dataverse-sized tables (500+ properties) scroll smoothly, and the toggle switches the
   columns.

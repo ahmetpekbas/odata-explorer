@@ -1,8 +1,8 @@
 import { Body1, makeStyles, tokens } from '@fluentui/react-components';
-import { useStore } from '../../app/store.ts';
+import { selectActiveDocument, useStore } from '../../app/store.ts';
 import type { Diagnostic } from '../../csdl/model.ts';
 import { DiagnosticsPanel } from '../shell/DiagnosticsPanel.tsx';
-import { PlaceholderView } from './PlaceholderView.tsx';
+import { ElementView } from '../views/ElementView.tsx';
 import { TabStrip } from './TabStrip.tsx';
 
 const useStyles = makeStyles({
@@ -10,6 +10,7 @@ const useStyles = makeStyles({
   view: { flex: 1, minHeight: 0, overflow: 'auto' },
   empty: { padding: tokens.spacingHorizontalL },
   diagnostics: { padding: tokens.spacingHorizontalL },
+  element: { padding: tokens.spacingHorizontalL },
 });
 
 interface WorkspaceProps {
@@ -22,6 +23,7 @@ export function Workspace({ diagnostics, onSelectDiagnostic }: WorkspaceProps) {
   const styles = useStyles();
   const tabs = useStore((s) => s.tabs);
   const activeTab = useStore((s) => s.activeTab);
+  const document = useStore(selectActiveDocument);
   const { activateTab, pinTab, closeTab, closeOtherTabs } = useStore.getState();
   const active = tabs.find((t) => t.id === activeTab);
 
@@ -44,9 +46,11 @@ export function Workspace({ diagnostics, onSelectDiagnostic }: WorkspaceProps) {
           <div className={styles.diagnostics}>
             <DiagnosticsPanel diagnostics={diagnostics} onSelect={onSelectDiagnostic} />
           </div>
-        ) : (
-          <PlaceholderView tab={active} />
-        )}
+        ) : document?.status === 'ready' ? (
+          <div className={styles.element}>
+            <ElementView key={active.id} tab={active} resolved={document.resolved} />
+          </div>
+        ) : null}
       </div>
     </div>
   );
