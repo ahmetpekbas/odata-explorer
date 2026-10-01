@@ -1,6 +1,8 @@
 import { useViewMode, type Tab } from '../../app/store.ts';
 import type { Resolved } from '../../csdl/resolve.ts';
 import { PlaceholderView } from '../workspace/PlaceholderView.tsx';
+import { ContainerView } from './ContainerView.tsx';
+import { EntitySetView } from './EntitySetView.tsx';
 import { EnumTypeView } from './EnumTypeView.tsx';
 import { StructuredTypeView } from './StructuredTypeView.tsx';
 import { TermView } from './TermView.tsx';
@@ -19,6 +21,11 @@ export function ElementView({ tab, resolved }: { tab: Tab; resolved: Resolved })
       return <EnumTypeView {...props} element={element} />;
     case 'typeDefinition':
       return <TypeDefinitionView {...props} element={element} />;
+    case 'entityContainer':
+      return <ContainerView {...props} element={element} />;
+    case 'entitySet':
+    case 'singleton':
+      return <EntitySetView {...props} element={element} />;
     case 'term':
       return <TermView {...props} element={element} />;
     default:

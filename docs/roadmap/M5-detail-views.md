@@ -21,7 +21,7 @@
 - [x] **5.4 Complex, enum, type definition, and term views.** Enum members with values and `IsFlags`.
   The underlying type and facets of a type definition. Each term's type, `AppliesTo`, and default.
   *Done when:* each view renders fixture examples in both modes.
-- [ ] **5.5 Entity set, singleton, and container views.** The entity type link, the navigation bindings
+- [x] **5.5 Entity set, singleton, and container views.** The entity type link, the navigation bindings
   table, and a container overview (`Extends`, member lists).
   *Done when:* TripPin `People` shows its bindings.
 - [ ] **5.6 Operation view.** Overloads grouped under one name, with parameters, the return type, the
