@@ -7,8 +7,8 @@ import {
   webDarkTheme,
   webLightTheme,
 } from '@fluentui/react-components';
-import { ErrorCircleRegular } from '@fluentui/react-icons';
-import { useEffect } from 'react';
+import { ErrorCircleRegular, SearchRegular } from '@fluentui/react-icons';
+import { useEffect, useState } from 'react';
 import { openFile, openRecent } from './app/loader.ts';
 import { openableTarget } from './app/openable.ts';
 import { PROBLEMS_TAB, startRouting } from './app/routing.ts';
@@ -17,6 +17,7 @@ import { selectActiveDocument, useStore } from './app/store.ts';
 import { useTheme } from './app/theme.ts';
 import { Inspector } from './ui/inspector/Inspector.tsx';
 import { Navigator } from './ui/navigator/Navigator.tsx';
+import { CommandPalette } from './ui/shell/CommandPalette.tsx';
 import { RecentFiles } from './ui/shell/RecentFiles.tsx';
 import { StartPage } from './ui/shell/StartPage.tsx';
 import { ModeToggle } from './ui/shell/ModeToggle.tsx';
@@ -70,6 +71,20 @@ export function App() {
   const { preference, setPreference, scheme } = useTheme();
   useEffect(() => startRouting(), []);
   useEffect(() => startTabPersistence(), []);
+  const [paletteOpen, setPaletteOpen] = useState(false);
+  const ready = document?.status === 'ready';
+  useEffect(() => {
+    if (!ready) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setPaletteOpen(true);
+      }
+    };
+    // Captured, so that the source view's editor cannot swallow the shortcut.
+    window.addEventListener('keydown', onKeyDown, true);
+    return () => window.removeEventListener('keydown', onKeyDown, true);
+  }, [ready]);
 
   return (
     <FluentProvider
@@ -100,6 +115,14 @@ export function App() {
           }
           toolbar={
             <>
+              <Button
+                appearance="subtle"
+                size="small"
+                icon={<SearchRegular />}
+                onClick={() => setPaletteOpen(true)}
+              >
+                Search (Ctrl+K)
+              </Button>
               <Button
                 appearance="subtle"
                 size="small"
@@ -139,6 +162,20 @@ export function App() {
             <RecentFiles onOpen={(file) => void openRecent(file)} />
           </div>
         </main>
+      )}
+      {document?.status === 'ready' && (
+        <CommandPalette
+          open={paletteOpen}
+          onOpenChange={setPaletteOpen}
+          index={document.index}
+          onChoose={(entry) => {
+            const target = openableTarget(document.resolved, entry.id);
+            if (!target) return;
+            openTab(target);
+            // A property opens its type, with the property itself selected; a label, its element.
+            select(entry.kind === 'annotation' ? entry.parent : entry.id);
+          }}
+        />
       )}
     </FluentProvider>
   );

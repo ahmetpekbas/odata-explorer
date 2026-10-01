@@ -292,3 +292,19 @@ test('a qualified name in the source opens that element', async ({ page }) => {
   await trips.click();
   await expect(page.getByRole('heading', { level: 2, name: 'Trip' })).toBeVisible();
 });
+
+test('finds a symbol with Ctrl+K and opens it from the keyboard alone', async ({ page }) => {
+  await page.goto('./');
+  await page.getByLabel('Choose a metadata file').setInputFiles('fixtures/trippin.xml');
+  await expect(page.getByRole('navigation', { name: 'Navigator' })).toBeVisible();
+
+  await page.keyboard.press('Control+k');
+  const box = page.getByRole('combobox', { name: 'Search the model' });
+  await expect(box).toBeFocused();
+  await page.keyboard.type('airline');
+  await expect(page.getByRole('option').first()).toContainText('Entity type');
+  await page.keyboard.press('Enter');
+
+  await expect(box).toBeHidden();
+  await expect(page.getByRole('heading', { level: 2, name: 'Airline' })).toBeVisible();
+});

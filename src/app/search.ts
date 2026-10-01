@@ -45,11 +45,49 @@ const KIND_RANK: Record<SearchKind, number> = {
 };
 
 // One typo per term (intraMode 1) is what makes it fuzzy; the default only matches whole substrings.
+export const KIND_LABEL: Record<SearchKind, string> = {
+  entityType: 'Entity type',
+  complexType: 'Complex type',
+  enumType: 'Enum',
+  typeDefinition: 'Type definition',
+  entitySet: 'Entity set',
+  singleton: 'Singleton',
+  function: 'Function',
+  action: 'Action',
+  functionImport: 'Function import',
+  actionImport: 'Action import',
+  term: 'Term',
+  property: 'Property',
+  navigationProperty: 'Navigation property',
+  enumMember: 'Enum member',
+  annotation: 'Label',
+};
+
+/** The kind filters the palette offers; each switches on several kinds. */
+export const KIND_GROUPS: { label: string; kinds: SearchKind[] }[] = [
+  { label: 'Types', kinds: ['entityType', 'complexType', 'enumType', 'typeDefinition'] },
+  { label: 'Properties', kinds: ['property', 'navigationProperty'] },
+  { label: 'Sets', kinds: ['entitySet', 'singleton'] },
+  { label: 'Operations', kinds: ['function', 'action', 'functionImport', 'actionImport'] },
+  { label: 'Terms', kinds: ['term'] },
+  { label: 'Enum members', kinds: ['enumMember'] },
+  { label: 'Labels', kinds: ['annotation'] },
+];
+
 const fuzzy = new uFuzzy({ intraMode: 1 });
 
 export function prepareIndex(entries: SearchEntry[]): PreparedIndex {
   const labels = entries.map((e) => e.label);
   return { entries, labels, lower: labels.map((l) => l.toLowerCase()) };
+}
+
+const prepared = new WeakMap<SearchEntry[], PreparedIndex>();
+
+/** `prepareIndex`, done once per index: the palette asks again every time it opens. */
+export function preparedIndex(entries: SearchEntry[]): PreparedIndex {
+  let index = prepared.get(entries);
+  if (!index) prepared.set(entries, (index = prepareIndex(entries)));
+  return index;
 }
 
 export function searchIndex(

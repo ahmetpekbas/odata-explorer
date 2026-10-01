@@ -11,6 +11,6 @@
   *Done when:* index counts match the model for both fixtures.
 - [x] **7.2 Ranking.** Exact > prefix > substring > fuzzy (uFuzzy), with kind filters.
   *Done when:* ranking tests pass, and a query on Graph-sized input answers in under 30 ms.
-- [ ] **7.3 Ctrl+K palette.** A Fluent Dialog with a search box and virtualized results, showing each
+- [x] **7.3 Ctrl+K palette.** A Fluent Dialog with a search box and virtualized results, showing each
   result's kind and parent. Enter opens the result in a tab.
   *Done when:* it works from the keyboard alone, and results open the right tab.
