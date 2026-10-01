@@ -9,7 +9,7 @@
   (`$filter`-like syntax for `Apply` and logic, path notation). Add a generic record/collection/value
   tree renderer.
   *Done when:* every expression from the 1.5 fixture renders, with snapshot tests.
-- [ ] **6.2 Term summarizers.** Summaries for Core (Description, LongDescription, Computed, Immutable,
+- [x] **6.2 Term summarizers.** Summaries for Core (Description, LongDescription, Computed, Immutable,
   Permissions, OptimisticConcurrency), Capabilities (the Insert, Update, Delete, Filter, Sort, Search,
   Expand, Count, and Navigation restrictions; TopSupported and SkipSupported), Validation (AllowedValues,
   Minimum, Maximum, Pattern), and Measures (ISOCurrency, Unit).
