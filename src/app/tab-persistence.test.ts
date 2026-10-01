@@ -10,6 +10,9 @@ import { useStore } from './store.ts';
 const initial = useStore.getInitialState();
 const inline: Parse = (text, onProgress) => Promise.resolve(load(text, onProgress));
 
+// A file that comes back with no tabs, so the schema overview does not open.
+const none = { tabs: [], activeTab: undefined };
+
 describe('startTabPersistence', () => {
   let stop: () => void;
   beforeEach(async () => {
@@ -20,7 +23,7 @@ describe('startTabPersistence', () => {
   afterEach(() => stop());
 
   it('saves tab changes of the open file', async () => {
-    const id = await openText('trippin.xml', trippin, inline);
+    const id = await openText('trippin.xml', trippin, inline, undefined, none);
     useStore.getState().openTab({ id: 'NS.A', kind: 'entityType' }, true);
     useStore.getState().openTab({ id: 'NS.B', kind: 'complexType' });
     await vi.waitFor(async () =>
@@ -38,7 +41,7 @@ describe('startTabPersistence', () => {
   });
 
   it('does not save an empty tab list when the file closes', async () => {
-    const id = await openText('trippin.xml', trippin, inline);
+    const id = await openText('trippin.xml', trippin, inline, undefined, none);
     useStore.getState().openTab({ id: 'NS.A', kind: 'entityType' }, true);
     await vi.waitFor(async () => expect((await listRecent())[0]?.tabs).toHaveLength(1));
     useStore.getState().closeDocument(id);

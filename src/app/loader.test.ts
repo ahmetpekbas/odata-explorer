@@ -25,6 +25,19 @@ describe('openText', () => {
     });
   });
 
+  it('opens the schema overview of a new file, but not over restored tabs', async () => {
+    await openText('trippin.xml', trippin, inline);
+    const ns = 'Microsoft.OData.SampleService.Models.TripPin';
+    expect(useStore.getState()).toMatchObject({
+      activeTab: ns,
+      tabs: [{ id: ns, kind: 'schema', pinned: false }],
+    });
+
+    useStore.setState(initial, true);
+    await openText('trippin.xml', trippin, inline, 'same', { tabs: [], activeTab: undefined });
+    expect(useStore.getState().tabs).toEqual([]);
+  });
+
   it('records progress while loading', async () => {
     const seen: unknown[] = [];
     const unsubscribe = useStore.subscribe((s) => {

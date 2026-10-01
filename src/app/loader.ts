@@ -5,6 +5,7 @@ import type { ParserApi } from '../worker/parser.worker.ts';
 import type { LoadResult, Progress } from '../worker/load.ts';
 import { getRecent, getRecentText, saveRecent, type RecentFile } from './persistence.ts';
 import { useStore } from './store.ts';
+import { defaultSchema } from './summary.ts';
 
 export type Parse = (text: string, onProgress: (progress: Progress) => void) => Promise<LoadResult>;
 
@@ -46,12 +47,16 @@ export async function openText(
       const reason = model.diagnostics.find((d) => d.severity === 'error')?.message;
       store.failLoading(id, reason ?? 'The document does not contain any schemas.');
     } else {
-      store.finishLoading(
-        id,
-        result.resolved,
-        text,
-        restored?.tabs && { tabs: restored.tabs, activeTab: restored.activeTab },
-      );
+      // A file that comes back with its tabs keeps them; a new one opens on its schema overview, as a
+      // preview that a deep link or the first click replaces.
+      const overview = defaultSchema(model);
+      const tabs = restored?.tabs
+        ? { tabs: restored.tabs, activeTab: restored.activeTab }
+        : overview && {
+            tabs: [{ id: overview.id, kind: 'schema' as const, pinned: false }],
+            activeTab: overview.id,
+          };
+      store.finishLoading(id, result.resolved, text, tabs);
       // Remembering is a convenience: a full or unavailable IndexedDB must not fail the load.
       saveRecent({ id, name, format: model.format }, text).catch(() => undefined);
     }

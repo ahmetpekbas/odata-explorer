@@ -183,12 +183,39 @@ test('routing: a problem with a target opens its element', async ({ page }) => {
   await page.getByLabel('Choose a metadata file').setInputFiles('fixtures/unresolved.xml');
   await page.getByRole('button', { name: /Problems \(/ }).click();
   const rows = page.getByRole('region', { name: 'Diagnostics' }).getByRole('button');
-  const before = await page.getByRole('tab').count();
+  const problems = page.getByRole('tab', { name: 'Problems' });
+  // A problem about an element opens that element, which takes the place of the schema preview.
   for (const row of await rows.all()) {
     await row.click();
-    if ((await page.getByRole('tab').count()) > before) break;
+    if ((await problems.getAttribute('aria-selected')) === 'false') break;
   }
-  expect(await page.getByRole('tab').count()).toBeGreaterThan(before);
+  await expect(problems).toHaveAttribute('aria-selected', 'false');
+});
+
+test('detail views: a new file opens on its schema, and an entity shows both modes', async ({
+  page,
+}) => {
+  await page.goto('./');
+  await page.getByLabel('Choose a metadata file').setInputFiles('fixtures/trippin.xml');
+  await expect(page.getByRole('heading', { name: 'What it defines' })).toBeVisible();
+
+  const tree = page.getByRole('tree', { name: 'Model elements' });
+  await tree.getByRole('treeitem', { name: 'Entity Types' }).click();
+  await tree.getByRole('treeitem', { name: 'Person', exact: true }).click();
+  const properties = page.getByRole('table', { name: 'Properties', exact: true });
+  await expect(properties.getByRole('columnheader', { name: 'Required' })).toBeVisible();
+  await expect(properties.getByRole('cell', { name: 'List of Text' })).toBeVisible();
+
+  // A link in a view opens its target.
+  await page.getByRole('button', { name: 'Link to Trip (many)' }).click();
+  await expect(page.getByRole('heading', { level: 2, name: 'Trip' })).toBeVisible();
+
+  await page
+    .getByRole('group', { name: 'Detail for this view' })
+    .getByRole('button', { name: 'Technical' })
+    .click();
+  await expect(properties.getByRole('columnheader', { name: 'Nullable' })).toBeVisible();
+  await expect(properties.getByRole('cell', { name: 'Edm.Guid' })).toBeVisible();
 });
 
 test('restores the open tabs and the active one when a file is reopened', async ({ page }) => {

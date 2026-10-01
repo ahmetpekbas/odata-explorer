@@ -27,6 +27,6 @@
 - [x] **5.6 Operation view.** Overloads grouped under one name, with parameters, the return type, the
   binding parameter, composability, `EntitySetPath`, and the imports that expose it.
   *Done when:* a bound function and an unbound action from the fixtures render correctly.
-- [ ] **5.7 Schema overview.** Namespace, alias, counts per kind, and resolved/unresolved references.
+- [x] **5.7 Schema overview.** Namespace, alias, counts per kind, and resolved/unresolved references.
   This is the default tab after loading a file.
   *Done when:* it shows correct counts for both fixtures.

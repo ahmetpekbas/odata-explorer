@@ -51,7 +51,7 @@ describe('startRouting', () => {
   it('writes the active tab to the hash and back to the start when the file closes', async () => {
     stop = startRouting();
     const id = await openText('trippin.xml', trippin, inline);
-    expect(location.hash).toBe(`#/d/${id}`);
+    expect(location.hash).toBe(`#/d/${id}/schema/${NS}`);
     useStore.getState().openTab({ id: `${NS}.Person`, kind: 'entityType' });
     expect(location.hash).toBe(`#/d/${id}/entityType/${NS}.Person`);
     useStore.getState().closeDocument(id);
