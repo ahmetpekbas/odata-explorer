@@ -1,6 +1,8 @@
 import { descriptionOf, labelOf, longDescriptionOf, shortName } from '../../csdl/humanize.ts';
 import type { EntitySet, Singleton } from '../../csdl/model.ts';
 import type { ResolvedBinding } from '../../csdl/resolve-structure.ts';
+import { capabilitiesOf } from '../../csdl/term-summaries.ts';
+import { CapabilityBadges } from './CapabilityBadges.tsx';
 import { DataTable, type Column } from './DataTable.tsx';
 import { ElementLink } from './ElementLink.tsx';
 import { ownerOf } from './members.ts';
@@ -91,6 +93,11 @@ export function EntitySetView({
           ]}
         />
       </Section>
+      {capabilitiesOf(element.annotations).length > 0 && (
+        <Section title="Capabilities">
+          <CapabilityBadges annotations={element.annotations} />
+        </Section>
+      )}
       <Section title={`Navigation bindings (${bindings.length})`}>
         <DataTable
           label="Navigation bindings"

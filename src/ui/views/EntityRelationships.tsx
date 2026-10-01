@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, type ReactNode } from 'react';
 import {
   descriptionOf,
   friendlyLink,
@@ -7,7 +7,9 @@ import {
   technicalType,
 } from '../../csdl/humanize.ts';
 import type { NavigationProperty, StructuredType } from '../../csdl/model.ts';
+import { capabilitiesOf } from '../../csdl/term-summaries.ts';
 import type { Resolved } from '../../csdl/resolve.ts';
+import { CapabilityBadges } from './CapabilityBadges.tsx';
 import { DataTable, type Column } from './DataTable.tsx';
 import { ElementLink } from './ElementLink.tsx';
 import { declaredOn, yesNo } from './members.ts';
@@ -15,13 +17,21 @@ import type { ViewProps } from './types.ts';
 import { Chips, Facts, Section } from './ViewParts.tsx';
 
 /** A row of links to elements, or undefined when there are none. */
-function links(resolved: Resolved, ids: string[], label: (id: string) => string) {
+function links(
+  resolved: Resolved,
+  ids: string[],
+  label: (id: string) => string,
+  after?: (id: string) => ReactNode,
+) {
   return ids.length === 0 ? undefined : (
     <Chips>
       {ids.map((id) => (
-        <ElementLink key={id} resolved={resolved} id={id}>
-          {label(id)}
-        </ElementLink>
+        <span key={id}>
+          <ElementLink resolved={resolved} id={id}>
+            {label(id)}
+          </ElementLink>
+          {after?.(id)}
+        </span>
       ))}
     </Chips>
   );
@@ -114,6 +124,16 @@ export function EntityRelationships({ resolved, element, mode }: ViewProps<Struc
   const hasHierarchy = Boolean(element.baseType) || (info?.derived.length ?? 0) > 0;
   const exposure = resolved.exposure.get(element.id);
   const nameOf = (id: string) => resolved.elements.get(id)?.name ?? shortName(id);
+  // What each set or singleton allows, when its annotations say.
+  const badges = (id: string) => {
+    const annotations = resolved.elements.get(id)?.annotations ?? [];
+    return capabilitiesOf(annotations).length > 0 ? (
+      <>
+        {' '}
+        <CapabilityBadges annotations={annotations} />
+      </>
+    ) : null;
+  };
 
   return (
     <>
@@ -156,8 +176,8 @@ export function EntityRelationships({ resolved, element, mode }: ViewProps<Struc
         <Section title="Exposed as">
           <Facts
             rows={[
-              ['Entity sets', links(resolved, exposure.entitySets, nameOf)],
-              ['Singletons', links(resolved, exposure.singletons, nameOf)],
+              ['Entity sets', links(resolved, exposure.entitySets, nameOf, badges)],
+              ['Singletons', links(resolved, exposure.singletons, nameOf, badges)],
             ]}
           />
         </Section>

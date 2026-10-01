@@ -3,8 +3,10 @@ import { Body1, Caption1 } from '@fluentui/react-components';
 import { KeyRegular } from '@fluentui/react-icons';
 import { descriptionOf, hasLabel, labelOf, longDescriptionOf } from '../../csdl/humanize.ts';
 import type { Property, StructuredType } from '../../csdl/model.ts';
+import { hasHints, propertyHints } from '../../csdl/term-summaries.ts';
 import { DataTable, type Column } from './DataTable.tsx';
 import { Facts, Section, ViewHeader } from './ViewParts.tsx';
+import { PropertyNotes } from './PropertyNotes.tsx';
 import { TypeText } from './TypeText.tsx';
 import { declaredOn, ownerOf, yesNo } from './members.ts';
 import { EntityRelationships } from './EntityRelationships.tsx';
@@ -48,6 +50,18 @@ export function StructuredTypeView(props: ViewProps<StructuredType>) {
       {mode === 'friendly' ? labelOf(row.property) : row.property.name}
     </>
   );
+  const notesColumn: Column<PropertyRow>[] = rows.some((r) =>
+    hasHints(propertyHints(r.property.annotations)),
+  )
+    ? [
+        {
+          key: 'notes',
+          header: 'Notes',
+          width: 'minmax(12rem, 2fr)',
+          cell: (row) => <PropertyNotes hints={propertyHints(row.property.annotations)} />,
+        },
+      ]
+    : [];
   const declaredOnColumn: Column<PropertyRow>[] = hasInherited
     ? [
         {
@@ -75,6 +89,7 @@ export function StructuredTypeView(props: ViewProps<StructuredType>) {
             width: 'minmax(14rem, 2fr)',
             cell: (row) => descriptionOf(row.property) ?? '',
           },
+          ...notesColumn,
           ...declaredOnColumn,
         ]
       : [
@@ -122,6 +137,7 @@ export function StructuredTypeView(props: ViewProps<StructuredType>) {
             width: '8rem',
             cell: (row) => row.property.facets.defaultValue ?? '',
           },
+          ...notesColumn,
           ...declaredOnColumn,
         ];
 

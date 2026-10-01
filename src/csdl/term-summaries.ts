@@ -258,3 +258,62 @@ export function summarizeAnnotation(annotation: Annotation): string | undefined 
 export function describeAnnotation(annotation: Annotation): string {
   return summarizeAnnotation(annotation) ?? annotationText(annotation);
 }
+
+// ---------------------------------------------------------------------------------------------
+// Structured readings for badges and table cells
+
+export interface Capability {
+  /** `Insertable`, `Updatable`, ... */
+  label: string;
+  enabled: boolean;
+  /** Whether an annotation of the element states it, rather than the vocabulary default applying. */
+  explicit: boolean;
+}
+
+/** The restriction terms and the Boolean property of each that switches the capability. */
+const CAPABILITY_TERMS = Object.entries(RESTRICTIONS).map(([name, r]) => ({
+  term: `${CAPABILITIES}${name}`,
+  flag: r.flag,
+}));
+
+/**
+ * The capabilities an entity set or singleton states, in a fixed order. Empty when it carries no
+ * restriction annotation at all: then nothing is known, and the vocabulary defaults say nothing about
+ * what the service actually supports. Otherwise every capability is listed, those the annotations
+ * leave out with their default (enabled).
+ */
+export function capabilitiesOf(annotations: readonly Annotation[]): Capability[] {
+  const found = CAPABILITY_TERMS.map((c) => ({
+    c,
+    annotation: annotations.find((a) => a.term === c.term && a.value?.kind === 'record'),
+  }));
+  if (found.every((f) => !f.annotation)) return [];
+  return found.map(({ c, annotation }) => ({
+    label: c.flag,
+    enabled: annotation ? flag(annotation, c.flag, true) : true,
+    explicit: annotation !== undefined,
+  }));
+}
+
+/** Whether there is anything to show for a property. */
+export const hasHints = (h: PropertyHints) => h.computed || h.immutable || h.rules.length > 0;
+
+export interface PropertyHints {
+  computed: boolean;
+  immutable: boolean;
+  /** Validation rules as short sentences: allowed values, bounds, pattern. */
+  rules: string[];
+}
+
+const RULE_TERMS = ['AllowedValues', 'Minimum', 'Maximum', 'Pattern'].map(
+  (name) => `${VALIDATION}${name}`,
+);
+
+/** The Core.Computed/Core.Immutable markers and the Validation rules of a property or parameter. */
+export function propertyHints(annotations: readonly Annotation[]): PropertyHints {
+  const marked = (name: string) => annotations.some((a) => a.term === `${CORE}${name}` && tag(a));
+  const rules = annotations
+    .filter((a) => RULE_TERMS.includes(a.term))
+    .flatMap((a) => summarizeAnnotation(a) ?? []);
+  return { computed: marked('Computed'), immutable: marked('Immutable'), rules };
+}

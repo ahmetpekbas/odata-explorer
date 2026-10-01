@@ -30,7 +30,7 @@ describe('StructuredTypeView', () => {
     open(`${NS}.Person`);
     expect(screen.getByRole('heading', { level: 2, name: 'Person' })).toBeInTheDocument();
     expect(screen.getByText('Identified by')).toBeInTheDocument();
-    expect(columnHeaders()).toEqual(['Name', 'Type', 'Required', 'Description']);
+    expect(columnHeaders()).toEqual(['Name', 'Type', 'Required', 'Description', 'Notes']);
     const table = screen.getByRole('table', { name: 'Properties' });
     const userName = within(table)
       .getAllByRole('row')
@@ -53,6 +53,7 @@ describe('StructuredTypeView', () => {
       'SRID',
       'Unicode',
       'DefaultValue',
+      'Notes',
     ]);
     expect(screen.getByText('open type')).toBeInTheDocument();
     expect(screen.getByText('Collection(Edm.String)')).toBeInTheDocument();

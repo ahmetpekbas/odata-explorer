@@ -18,7 +18,7 @@
   and origin (inline or external). Term tooltips come from the bundled vocabulary definitions. The
   panel follows the active tab and the selected row.
   *Done when:* selecting a property shows its annotations, including external ones.
-- [ ] **6.4 Wire annotations into views.** Capability badges on sets and "Exposed as". Validation hints
+- [x] **6.4 Wire annotations into views.** Capability badges on sets and "Exposed as". Validation hints
   (allowed values, min/max) and Computed/Immutable markers in property tables.
   *Done when:* a fixture with restrictions shows the correct badges.
 - [ ] **6.5 Source panel.** A read-only CodeMirror 6 view in a lazy-loaded chunk, with XML/JSON

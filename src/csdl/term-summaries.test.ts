@@ -2,7 +2,12 @@ import { describe, expect, it } from 'vitest';
 import type { Annotation } from './model.ts';
 import { parseXml } from './parse-xml.ts';
 import { resolve } from './resolve.ts';
-import { describeAnnotation, summarizeAnnotation } from './term-summaries.ts';
+import {
+  capabilitiesOf,
+  describeAnnotation,
+  propertyHints,
+  summarizeAnnotation,
+} from './term-summaries.ts';
 
 const VOCABULARIES = ['Core', 'Capabilities', 'Validation', 'Measures'];
 const references = VOCABULARIES.map(
@@ -206,5 +211,64 @@ describe('describeAnnotation', () => {
     expect(describeAnnotation(annotation('<Annotation Term="Core.Computed"/>'))).toBe(
       'Computed by the service',
     );
+  });
+});
+
+describe('capabilitiesOf', () => {
+  const caps = (...xml: string[]) => capabilitiesOf(xml.map(annotation));
+
+  it('says nothing when no restriction is annotated', () => {
+    expect(caps()).toEqual([]);
+    expect(caps('<Annotation Term="Capabilities.TopSupported"/>')).toEqual([]);
+  });
+
+  it('lists every capability, defaulting the ones that are not annotated to enabled', () => {
+    const list = caps(record('InsertRestrictions', bool('Insertable', false)));
+    expect(list.map((c) => c.label)).toEqual([
+      'Insertable',
+      'Updatable',
+      'Deletable',
+      'Filterable',
+      'Sortable',
+      'Searchable',
+      'Expandable',
+      'Countable',
+    ]);
+    expect(list[0]).toEqual({ label: 'Insertable', enabled: false, explicit: true });
+    expect(list[1]).toEqual({ label: 'Updatable', enabled: true, explicit: false });
+  });
+
+  it('treats an annotation without its flag as enabled but explicit', () => {
+    const [insertable] = caps(record('InsertRestrictions', paths('RequiredProperties', 'A')));
+    expect(insertable).toEqual({ label: 'Insertable', enabled: true, explicit: true });
+  });
+});
+
+describe('propertyHints', () => {
+  const hints = (...xml: string[]) => propertyHints(xml.map(annotation));
+
+  it('is empty for a property without annotations', () => {
+    expect(hints()).toEqual({ computed: false, immutable: false, rules: [] });
+  });
+
+  it('marks Computed and Immutable, a bare tag being true and false being off', () => {
+    expect(
+      hints('<Annotation Term="Core.Computed"/>', '<Annotation Term="Core.Immutable"/>'),
+    ).toMatchObject({
+      computed: true,
+      immutable: true,
+    });
+    expect(hints('<Annotation Term="Core.Computed" Bool="false"/>').computed).toBe(false);
+  });
+
+  it('collects the validation rules in document order', () => {
+    expect(
+      hints(
+        '<Annotation Term="Validation.Maximum" Int="9"/>',
+        '<Annotation Term="Core.Description" String="ignored"/>',
+        '<Annotation Term="Validation.Minimum" Int="1"/>',
+        '<Annotation Term="Validation.Pattern" String="^a"/>',
+      ).rules,
+    ).toEqual(['At most 9', 'At least 1', 'Matches: ^a']);
   });
 });
