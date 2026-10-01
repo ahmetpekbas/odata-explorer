@@ -24,7 +24,7 @@
 - [x] **5.5 Entity set, singleton, and container views.** The entity type link, the navigation bindings
   table, and a container overview (`Extends`, member lists).
   *Done when:* TripPin `People` shows its bindings.
-- [ ] **5.6 Operation view.** Overloads grouped under one name, with parameters, the return type, the
+- [x] **5.6 Operation view.** Overloads grouped under one name, with parameters, the return type, the
   binding parameter, composability, `EntitySetPath`, and the imports that expose it.
   *Done when:* a bound function and an unbound action from the fixtures render correctly.
 - [ ] **5.7 Schema overview.** Namespace, alias, counts per kind, and resolved/unresolved references.
