@@ -14,7 +14,7 @@
   Expand, Count, and Navigation restrictions; TopSupported and SkipSupported), Validation (AllowedValues,
   Minimum, Maximum, Pattern), and Measures (ISOCurrency, Unit).
   *Done when:* each summarizer has unit tests, including the "absent means default" cases.
-- [ ] **6.3 Annotations inspector.** Groups annotations by vocabulary and shows each one's qualifier
+- [x] **6.3 Annotations inspector.** Groups annotations by vocabulary and shows each one's qualifier
   and origin (inline or external). Term tooltips come from the bundled vocabulary definitions. The
   panel follows the active tab and the selected row.
   *Done when:* selecting a property shows its annotations, including external ones.

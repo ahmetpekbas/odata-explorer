@@ -119,7 +119,12 @@ export function EntityRelationships({ resolved, element, mode }: ViewProps<Struc
     <>
       {navigations.length > 0 && (
         <Section title={`Links to (${navigations.length})`}>
-          <DataTable label="Navigation properties" columns={columns} rows={navigations} />
+          <DataTable
+            label="Navigation properties"
+            columns={columns}
+            rows={navigations}
+            rowId={(n) => n.id}
+          />
         </Section>
       )}
       {hasHierarchy && (

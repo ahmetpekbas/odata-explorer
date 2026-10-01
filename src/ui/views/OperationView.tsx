@@ -159,7 +159,12 @@ function Overload({
       {rows.length === 0 ? (
         <Body1>No parameters.</Body1>
       ) : (
-        <DataTable label={`Parameters of ${op.name}`} columns={columns} rows={rows} />
+        <DataTable
+          label={`Parameters of ${op.name}`}
+          columns={columns}
+          rows={rows}
+          rowId={(r) => r.parameter.id}
+        />
       )}
     </Section>
   );

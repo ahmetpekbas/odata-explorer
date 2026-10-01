@@ -3,12 +3,12 @@ import type { ValueNode } from '../../csdl/annotations.ts';
 
 const useStyles = makeStyles({
   list: {
-    listStyleType: 'none',
+    listStyle: 'none',
     margin: 0,
     paddingInlineStart: tokens.spacingHorizontalM,
-    borderInlineStart: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStroke2}`,
+    borderLeft: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStroke2}`,
   },
-  root: { listStyleType: 'none', margin: 0, padding: 0 },
+  root: { listStyle: 'none', margin: 0, padding: 0 },
   label: { color: tokens.colorNeutralForeground3, marginInlineEnd: tokens.spacingHorizontalXS },
   text: { fontFamily: tokens.fontFamilyMonospace, overflowWrap: 'anywhere' },
   heading: { color: tokens.colorNeutralForeground2 },

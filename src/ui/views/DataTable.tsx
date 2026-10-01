@@ -1,6 +1,7 @@
 import { useRef, type ReactNode } from 'react';
 import { makeStyles, mergeClasses, tokens } from '@fluentui/react-components';
 import { useVirtualizer } from '@tanstack/react-virtual';
+import { useStore } from '../../app/store.ts';
 
 const ROW_HEIGHT = 36;
 const HEADER_HEIGHT = 32;
@@ -28,6 +29,12 @@ const useStyles = makeStyles({
     boxSizing: 'border-box',
     borderBottom: `${tokens.strokeWidthThin} solid ${tokens.colorNeutralStroke3}`,
   },
+  selectable: {
+    cursor: 'pointer',
+    ':hover': { backgroundColor: tokens.colorSubtleBackgroundHover },
+    ':focus-visible': { outline: `${tokens.strokeWidthThick} solid ${tokens.colorStrokeFocus2}` },
+  },
+  selected: { backgroundColor: tokens.colorSubtleBackgroundSelected },
   cell: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
   empty: { color: tokens.colorNeutralForeground3 },
 });
@@ -46,11 +53,15 @@ interface DataTableProps<T> {
   rows: readonly T[];
   /** Shown instead of the table when there are no rows. */
   emptyText?: string;
+  /** The element ID of a row. Rows that have one can be selected, which the inspector follows. */
+  rowId?: (row: T) => string;
 }
 
 /** A table that only renders the rows in view, so a type with hundreds of properties stays smooth. */
-export function DataTable<T>({ label, columns, rows, emptyText }: DataTableProps<T>) {
+export function DataTable<T>({ label, columns, rows, emptyText, rowId }: DataTableProps<T>) {
   const styles = useStyles();
+  const selection = useStore((s) => s.selection);
+  const select = useStore((s) => s.select);
   const scrollRef = useRef<HTMLDivElement>(null);
   // TanStack Virtual returns functions the React Compiler cannot memoize; nothing here depends on that.
   // eslint-disable-next-line react-hooks/incompatible-library
@@ -82,12 +93,31 @@ export function DataTable<T>({ label, columns, rows, emptyText }: DataTableProps
           {virtualizer.getVirtualItems().map((item) => {
             const row = rows[item.index];
             if (row === undefined) return null;
+            const id = rowId?.(row);
+            const selected = id !== undefined && id === selection;
             return (
               <div
                 key={item.index}
                 role="row"
                 aria-rowindex={item.index + 2}
-                className={styles.row}
+                aria-selected={id === undefined ? undefined : selected}
+                tabIndex={id === undefined ? undefined : 0}
+                onClick={id === undefined ? undefined : () => select(id)}
+                onKeyDown={
+                  id === undefined
+                    ? undefined
+                    : (e) => {
+                        if (e.target !== e.currentTarget || (e.key !== 'Enter' && e.key !== ' '))
+                          return;
+                        e.preventDefault();
+                        select(id);
+                      }
+                }
+                className={mergeClasses(
+                  styles.row,
+                  id !== undefined && styles.selectable,
+                  selected && styles.selected,
+                )}
                 style={{
                   gridTemplateColumns: template,
                   position: 'absolute',

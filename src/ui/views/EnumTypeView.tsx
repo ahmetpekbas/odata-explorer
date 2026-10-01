@@ -63,6 +63,7 @@ export function EnumTypeView({ element, tabId, mode }: ViewProps<EnumType>) {
           label="Members"
           columns={columns}
           rows={rows}
+          rowId={(r) => r.id}
           emptyText="This enum has no members."
         />
       </Section>

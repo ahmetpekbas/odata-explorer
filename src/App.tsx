@@ -15,6 +15,7 @@ import { PROBLEMS_TAB, startRouting } from './app/routing.ts';
 import { startTabPersistence } from './app/tab-persistence.ts';
 import { selectActiveDocument, useStore } from './app/store.ts';
 import { useTheme } from './app/theme.ts';
+import { AnnotationsPanel } from './ui/inspector/AnnotationsPanel.tsx';
 import { Navigator } from './ui/navigator/Navigator.tsx';
 import { RecentFiles } from './ui/shell/RecentFiles.tsx';
 import { StartPage } from './ui/shell/StartPage.tsx';
@@ -60,6 +61,7 @@ export function App() {
   const styles = useStyles();
   const document = useStore(selectActiveDocument);
   const activeTab = useStore((s) => s.activeTab);
+  const selection = useStore((s) => s.selection);
   const openTab = useStore((s) => s.openTab);
   const select = useStore((s) => s.select);
   const detailMode = useStore((s) => s.detailMode);
@@ -121,7 +123,13 @@ export function App() {
               }}
             />
           }
-          inspector={null}
+          inspector={
+            <AnnotationsPanel
+              resolved={document.resolved}
+              id={selection === PROBLEMS_TAB.id ? undefined : selection}
+              mode={detailMode}
+            />
+          }
         />
       ) : (
         <main className={styles.main}>

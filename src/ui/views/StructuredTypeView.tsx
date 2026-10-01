@@ -173,6 +173,7 @@ export function StructuredTypeView(props: ViewProps<StructuredType>) {
           label="Properties"
           columns={columns}
           rows={rows}
+          rowId={(row) => row.property.id}
           emptyText="This type has no properties."
         />
       </Section>
