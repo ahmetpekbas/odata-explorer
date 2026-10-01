@@ -25,7 +25,7 @@ const columnHeaders = () =>
     .getAllByRole('columnheader')
     .map((h) => h.textContent);
 
-describe('EntityTypeView', () => {
+describe('StructuredTypeView', () => {
   it('shows the key and friendly columns', () => {
     open(`${NS}.Person`);
     expect(screen.getByRole('heading', { level: 2, name: 'Person' })).toBeInTheDocument();

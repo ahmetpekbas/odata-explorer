@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
   descriptionOf,
-  enumMemberValues,
   facetEntries,
   friendlyAppliesTo,
   friendlyLink,
@@ -13,7 +12,7 @@ import {
   technicalType,
 } from './humanize.ts';
 import { typeRef } from './ids.ts';
-import type { Annotation, EnumType } from './model.ts';
+import type { Annotation } from './model.ts';
 
 const PRIMITIVES = [
   'Binary',
@@ -208,41 +207,5 @@ describe('shortName', () => {
   it('drops the namespace', () => {
     expect(shortName('A.B.C')).toBe('C');
     expect(shortName('C')).toBe('C');
-  });
-});
-
-describe('enumMemberValues', () => {
-  const enumOf = (isFlags: boolean, values: (string | undefined)[]): EnumType => ({
-    kind: 'enumType',
-    id: 'NS.E',
-    name: 'E',
-    annotations: [],
-    isFlags,
-    underlyingType: 'Edm.Int32',
-    members: values.map((value, i) => ({
-      kind: 'enumMember',
-      id: `NS.E/M${i}`,
-      name: `M${i}`,
-      annotations: [],
-      ...(value !== undefined && { value }),
-    })),
-  });
-
-  it('continues from the previous value', () => {
-    expect(enumMemberValues(enumOf(false, [undefined, undefined, '10', undefined]))).toEqual([
-      { value: '0', implicit: true },
-      { value: '1', implicit: true },
-      { value: '10', implicit: false },
-      { value: '11', implicit: true },
-    ]);
-  });
-
-  it('uses powers of two for flags', () => {
-    expect(enumMemberValues(enumOf(true, [undefined, undefined, '3', undefined]))).toEqual([
-      { value: '1', implicit: true },
-      { value: '2', implicit: true },
-      { value: '3', implicit: false },
-      { value: '4', implicit: true },
-    ]);
   });
 });

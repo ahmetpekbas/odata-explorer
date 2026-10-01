@@ -18,7 +18,7 @@
   referential constraints, `OnDelete`), base and derived types, and "Exposed as" (sets and singletons).
   Every reference opens its tab.
   *Done when:* TripPin `Person` shows `Friends` and `Trips`, and its derived type `Employee`.
-- [ ] **5.4 Complex, enum, type definition, and term views.** Enum members with values and `IsFlags`.
+- [x] **5.4 Complex, enum, type definition, and term views.** Enum members with values and `IsFlags`.
   The underlying type and facets of a type definition. Each term's type, `AppliesTo`, and default.
   *Done when:* each view renders fixture examples in both modes.
 - [ ] **5.5 Entity set, singleton, and container views.** The entity type link, the navigation bindings

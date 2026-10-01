@@ -17,7 +17,8 @@ interface PropertyRow {
   isKey: boolean;
 }
 
-export function EntityTypeView(props: ViewProps<StructuredType>) {
+/** An entity type or a complex type: header, key (entities), properties, links and hierarchy. */
+export function StructuredTypeView(props: ViewProps<StructuredType>) {
   const { resolved, element, tabId, mode } = props;
   const info = resolved.types.get(element.id);
 
@@ -31,6 +32,7 @@ export function EntityTypeView(props: ViewProps<StructuredType>) {
     });
   }, [info, resolved]);
 
+  const isEntity = element.kind === 'entityType';
   const hasInherited = rows.some((r) => r.owner !== element.id);
   const type = (row: PropertyRow) => (
     <TypeText
@@ -135,7 +137,7 @@ export function EntityTypeView(props: ViewProps<StructuredType>) {
   return (
     <>
       <ViewHeader
-        kind="Entity type"
+        kind={isEntity ? 'Entity type' : 'Complex type'}
         title={mode === 'friendly' ? labelOf(element) : element.name}
         id={element.id}
         tabId={tabId}
@@ -147,23 +149,25 @@ export function EntityTypeView(props: ViewProps<StructuredType>) {
       {mode === 'technical' && hasLabel(element) && (
         <Caption1 block>Label: {labelOf(element)}</Caption1>
       )}
-      <Section title={mode === 'friendly' ? 'Identified by' : 'Key'}>
-        {keyText === '' ? (
-          <Body1>This type has no key.</Body1>
-        ) : (
-          <Facts
-            rows={[
-              [mode === 'friendly' ? 'Properties' : 'PropertyRef', keyText],
-              [
-                'Declared on',
-                mode === 'technical' && info?.keyOwner && info.keyOwner !== element.id
-                  ? info.keyOwner
-                  : undefined,
-              ],
-            ]}
-          />
-        )}
-      </Section>
+      {isEntity && (
+        <Section title={mode === 'friendly' ? 'Identified by' : 'Key'}>
+          {keyText === '' ? (
+            <Body1>This type has no key.</Body1>
+          ) : (
+            <Facts
+              rows={[
+                [mode === 'friendly' ? 'Properties' : 'PropertyRef', keyText],
+                [
+                  'Declared on',
+                  mode === 'technical' && info?.keyOwner && info.keyOwner !== element.id
+                    ? info.keyOwner
+                    : undefined,
+                ],
+              ]}
+            />
+          )}
+        </Section>
+      )}
       <Section title={`Properties (${rows.length})`}>
         <DataTable
           label="Properties"

@@ -1,7 +1,7 @@
 // Friendly wording for the model: type strings ("Text (max 100)", "List of Order"), labels and
 // descriptions. Pure TypeScript, so the same text can feed the UI, search and exports.
 import { typeRefString } from './ids.ts';
-import type { Annotation, ElementKind, EnumType, Facets, TypeRef } from './model.ts';
+import type { Annotation, ElementKind, Facets, TypeRef } from './model.ts';
 
 const PRIMITIVE_NAMES: Record<string, string> = {
   Binary: 'Binary data',
@@ -181,30 +181,4 @@ export function descriptionOf(element: { annotations: Annotation[] }): string | 
 /** `Core.LongDescription`, else undefined. */
 export function longDescriptionOf(element: { annotations: Annotation[] }): string | undefined {
   return firstString(element, (t) => t === LONG_DESCRIPTION);
-}
-
-// ---------------------------------------------------------------------------------------------
-// Enums
-
-function nextPowerOfTwo(after: number): number {
-  let power = 1;
-  while (power <= after) power *= 2;
-  return power;
-}
-
-/**
- * The numeric value of each member, as written or implied: members without a value continue from the
- * previous one, and in a flags enum from the next power of two. `implicit` marks the implied ones.
- */
-export function enumMemberValues(type: EnumType): { value: string; implicit: boolean }[] {
-  let previous = -1;
-  return type.members.map((member) => {
-    if (member.value !== undefined) {
-      const parsed = Number(member.value);
-      if (Number.isFinite(parsed)) previous = parsed;
-      return { value: member.value, implicit: false };
-    }
-    previous = type.isFlags ? nextPowerOfTwo(previous) : previous + 1;
-    return { value: String(previous), implicit: true };
-  });
 }
