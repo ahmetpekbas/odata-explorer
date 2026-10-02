@@ -23,7 +23,7 @@ import { StartPage } from './ui/shell/StartPage.tsx';
 import { ModeToggle } from './ui/shell/ModeToggle.tsx';
 import { Shell } from './ui/shell/Shell.tsx';
 import { Workspace } from './ui/workspace/Workspace.tsx';
-import { ThemeMenu } from './ui/shell/ThemeMenu.tsx';
+import { ThemeToggle } from './ui/shell/ThemeToggle.tsx';
 
 const useStyles = makeStyles({
   root: {
@@ -87,96 +87,104 @@ export function App() {
   }, [ready]);
 
   return (
+    // Not `className`: Fluent copies it onto the root of every portal (tooltips, menus, dialogs), and
+    // `styles.root` there is a full-height, opaque box that covers the app.
     <FluentProvider
       theme={scheme === 'dark' ? webDarkTheme : webLightTheme}
-      className={styles.root}
+      style={{ height: '100%' }}
     >
-      <header className={styles.header}>
-        <Text as="h1" size={500} weight="semibold" className={styles.title}>
-          OData Explorer
-        </Text>
-        <div className={styles.actions}>
-          {document?.status === 'ready' && (
-            <Button appearance="subtle" onClick={() => closeDocument(document.id)}>
-              Close {document.name}
-            </Button>
-          )}
-          <ThemeMenu preference={preference} onChange={setPreference} />
-        </div>
-      </header>
-      {document?.status === 'ready' ? (
-        <Shell
-          navigator={
-            <Navigator
-              model={document.resolved.model}
-              selectedId={activeTab}
-              onOpen={(target, pin) => openTab(target, pin)}
-            />
-          }
-          toolbar={
-            <>
-              <Button
-                appearance="subtle"
-                size="small"
-                icon={<SearchRegular />}
-                onClick={() => setPaletteOpen(true)}
-              >
-                Search (Ctrl+K)
+      <div className={styles.root}>
+        <header className={styles.header}>
+          <Text as="h1" size={500} weight="semibold" className={styles.title}>
+            OData Explorer
+          </Text>
+          <div className={styles.actions}>
+            {document?.status === 'ready' && (
+              <Button appearance="subtle" onClick={() => closeDocument(document.id)}>
+                Close {document.name}
               </Button>
-              <Button
-                appearance="subtle"
-                size="small"
-                icon={<ErrorCircleRegular />}
-                onClick={() => openTab(PROBLEMS_TAB, true)}
-              >
-                Problems ({document.resolved.model.diagnostics.length})
-              </Button>
-              <ModeToggle mode={detailMode} onChange={setDetailMode} label="Detail for all views" />
-            </>
-          }
-          workspace={
-            <Workspace
-              diagnostics={document.resolved.model.diagnostics}
-              onSelectDiagnostic={(d) => {
-                const target = d.target && openableTarget(document.resolved, d.target);
-                if (!target || !d.target) return;
-                openTab(target);
-                // A property or parameter opens its type, with the element itself selected.
-                select(d.target);
-              }}
-            />
-          }
-          inspector={
-            <Inspector
-              resolved={document.resolved}
-              text={document.text}
-              id={selection === PROBLEMS_TAB.id ? undefined : selection}
-              mode={detailMode}
-            />
-          }
-        />
-      ) : (
-        <main className={styles.main}>
-          <div className={styles.content}>
-            <StartPage document={document} onOpen={(file) => void openFile(file)} />
-            <RecentFiles onOpen={(file) => void openRecent(file)} />
+            )}
+            <ThemeToggle preference={preference} onChange={setPreference} />
           </div>
-        </main>
-      )}
-      {document?.status === 'ready' && (
-        <CommandPalette
-          open={paletteOpen}
-          onOpenChange={setPaletteOpen}
-          index={document.index}
-          onChoose={(entry) => {
-            const target = openableTarget(document.resolved, entry.id);
-            if (!target) return;
-            openTab(target);
-            // A property opens its type, with the property itself selected; a label, its element.
-            select(entry.kind === 'annotation' ? entry.parent : entry.id);
-          }}
-        />
-      )}
+        </header>
+        {document?.status === 'ready' ? (
+          <Shell
+            navigator={
+              <Navigator
+                model={document.resolved.model}
+                selectedId={activeTab}
+                onOpen={(target, pin) => openTab(target, pin)}
+              />
+            }
+            toolbar={
+              <>
+                <Button
+                  appearance="subtle"
+                  size="small"
+                  icon={<SearchRegular />}
+                  onClick={() => setPaletteOpen(true)}
+                >
+                  Search (Ctrl+K)
+                </Button>
+                <Button
+                  appearance="subtle"
+                  size="small"
+                  icon={<ErrorCircleRegular />}
+                  onClick={() => openTab(PROBLEMS_TAB, true)}
+                >
+                  Problems ({document.resolved.model.diagnostics.length})
+                </Button>
+                <ModeToggle
+                  mode={detailMode}
+                  onChange={setDetailMode}
+                  label="Detail for all views"
+                />
+              </>
+            }
+            workspace={
+              <Workspace
+                diagnostics={document.resolved.model.diagnostics}
+                onSelectDiagnostic={(d) => {
+                  const target = d.target && openableTarget(document.resolved, d.target);
+                  if (!target || !d.target) return;
+                  openTab(target);
+                  // A property or parameter opens its type, with the element itself selected.
+                  select(d.target);
+                }}
+              />
+            }
+            inspector={
+              <Inspector
+                resolved={document.resolved}
+                text={document.text}
+                id={selection === PROBLEMS_TAB.id ? undefined : selection}
+                mode={detailMode}
+              />
+            }
+          />
+        ) : (
+          <main className={styles.main}>
+            <div className={styles.content}>
+              <StartPage document={document} onOpen={(file) => void openFile(file)} />
+              <RecentFiles onOpen={(file) => void openRecent(file)} />
+            </div>
+          </main>
+        )}
+        {document?.status === 'ready' && (
+          <CommandPalette
+            open={paletteOpen}
+            onOpenChange={setPaletteOpen}
+            index={document.index}
+            onChoose={(entry) => {
+              const target = openableTarget(document.resolved, entry.id);
+              if (!target) return;
+              openTab(target);
+              // A property opens its type, with the property itself selected; a label, its element.
+              select(entry.kind === 'annotation' ? entry.parent : entry.id);
+            }}
+          />
+        )}
+      </div>
     </FluentProvider>
   );
 }

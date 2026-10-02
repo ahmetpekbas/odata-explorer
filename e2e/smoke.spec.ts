@@ -11,8 +11,13 @@ test('starts from a subpath, follows the OS theme, and keeps a manual choice', a
   const html = page.locator('html');
   await expect(html).toHaveCSS('color-scheme', 'dark');
 
+  // Cycles system -> light -> dark -> system.
   await page.getByRole('button', { name: 'Theme' }).click();
-  await page.getByRole('menuitemradio', { name: 'Light' }).click();
+  await expect(html).toHaveCSS('color-scheme', 'light');
+  await page.getByRole('button', { name: 'Theme' }).click();
+  await expect(html).toHaveCSS('color-scheme', 'dark');
+  await page.getByRole('button', { name: 'Theme' }).click();
+  await page.getByRole('button', { name: 'Theme' }).click();
   await expect(html).toHaveCSS('color-scheme', 'light');
 
   await page.reload();
