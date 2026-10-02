@@ -1,7 +1,6 @@
 import 'fake-indexeddb/auto';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-  BUDGET_BYTES,
   clearRecent,
   forgetRecent,
   getRecentText,
@@ -11,6 +10,8 @@ import {
   saveTabs,
 } from './persistence.ts';
 
+// A small budget keeps the eviction tests from allocating hundreds of megabytes.
+const BUDGET = 1000;
 const file = (id: string, name = `${id}.xml`) => ({ id, name, format: 'xml' as const });
 
 beforeEach(() => clearRecent());
@@ -50,17 +51,17 @@ describe('recent files', () => {
   });
 
   it('evicts the oldest files beyond the budget', async () => {
-    const big = 'x'.repeat(BUDGET_BYTES / 2 - 1);
-    await saveRecent(file('a'), big, 1);
-    await saveRecent(file('b'), big, 2);
-    await saveRecent(file('c'), big, 3);
+    const big = 'x'.repeat(BUDGET / 2 - 1);
+    await saveRecent(file('a'), big, 1, BUDGET);
+    await saveRecent(file('b'), big, 2, BUDGET);
+    await saveRecent(file('c'), big, 3, BUDGET);
     expect((await listRecent()).map((f) => f.id)).toEqual(['c', 'b']);
     expect(await getRecentText('a')).toBeUndefined();
   });
 
   it('does not store a file larger than the budget', async () => {
     await saveRecent(file('a'), 'x', 1);
-    expect(await saveRecent(file('b'), 'x'.repeat(BUDGET_BYTES + 1), 2)).toBe(false);
+    expect(await saveRecent(file('b'), 'x'.repeat(BUDGET + 1), 2, BUDGET)).toBe(false);
     expect((await listRecent()).map((f) => f.id)).toEqual(['a']);
   });
 

@@ -2,6 +2,7 @@ import {
   Button,
   FluentProvider,
   makeStyles,
+  Spinner,
   Text,
   tokens,
   webDarkTheme,
@@ -9,6 +10,7 @@ import {
 } from '@fluentui/react-components';
 import { ErrorCircleRegular, SearchRegular } from '@fluentui/react-icons';
 import { useEffect, useState } from 'react';
+import { useBoot } from './app/boot.ts';
 import { openFile, openRecent } from './app/loader.ts';
 import { openableTarget } from './app/openable.ts';
 import { PROBLEMS_TAB, startRouting } from './app/routing.ts';
@@ -50,6 +52,7 @@ const useStyles = makeStyles({
     padding: tokens.spacingHorizontalL,
     overflow: 'auto',
   },
+  loading: { flex: 1, display: 'grid', placeItems: 'center' },
   content: {
     display: 'flex',
     flexDirection: 'column',
@@ -72,6 +75,7 @@ export function App() {
   useEffect(() => startRouting(), []);
   useEffect(() => startTabPersistence(), []);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const booting = useBoot(document);
   const ready = document?.status === 'ready';
   useEffect(() => {
     if (!ready) return;
@@ -107,7 +111,11 @@ export function App() {
             <ThemeToggle preference={preference} onChange={setPreference} />
           </div>
         </header>
-        {document?.status === 'ready' ? (
+        {booting ? (
+          <main className={styles.loading}>
+            <Spinner label={document ? `Opening ${document.name}…` : 'Loading…'} />
+          </main>
+        ) : document?.status === 'ready' ? (
           <Shell
             navigator={
               <Navigator

@@ -47,9 +47,12 @@ test('lists the problems of a document with unresolved references', async ({ pag
   await expect(panel.getByText('unresolved-reference').first()).toBeVisible();
 });
 
-test('remembers a loaded file across a reload until it is forgotten', async ({ page }) => {
+test('reopens the latest file on a fresh start, and shows the start page only without one', async ({
+  page,
+}) => {
   await page.goto('./');
   await expect(page.getByText('Stored only in this browser.')).toBeVisible();
+  await expect(page.getByText('No recent files yet.')).toBeVisible();
   await page.getByLabel('Choose a metadata file').setInputFiles('fixtures/trippin.xml');
   await expect(page.getByRole('button', { name: 'Close trippin.xml' })).toBeVisible();
 
@@ -57,13 +60,19 @@ test('remembers a loaded file across a reload until it is forgotten', async ({ p
   await page.reload();
   await expect(page.getByRole('button', { name: 'Close trippin.xml' })).toBeVisible();
 
+  // A closed file clears the URL; a fresh start then opens the latest file, never the start page.
   await page.getByRole('button', { name: 'Close trippin.xml' }).click();
+  await expect(page.getByText('Stored only in this browser.')).toBeVisible();
   await page.reload();
+  await expect(page.getByRole('button', { name: 'Close trippin.xml' })).toBeVisible();
+  await expect(page.getByText('Drop an OData $metadata file here')).toBeHidden();
+
+  // Closing it in the session shows the start page and the list, where a file can be reopened or forgotten.
+  await page.getByRole('button', { name: 'Close trippin.xml' }).click();
   await page.getByRole('button', { name: 'Open trippin.xml' }).click();
   await expect(page.getByRole('button', { name: 'Close trippin.xml' })).toBeVisible();
 
   await page.getByRole('button', { name: 'Close trippin.xml' }).click();
-  await page.reload();
   await page.getByRole('button', { name: 'Forget trippin.xml' }).click();
   await expect(page.getByText('No recent files yet.')).toBeVisible();
   await page.reload();
@@ -247,10 +256,9 @@ test('restores the open tabs and the active one when a file is reopened', async 
     'true',
   );
 
-  // From the start page, the recent file brings them back too.
+  // With the URL cleared, the latest file comes back with them too.
   await page.getByRole('button', { name: 'Close trippin.xml' }).click();
   await page.reload();
-  await page.getByRole('button', { name: 'Open trippin.xml' }).click();
   await expect.poll(titles).toEqual(['Person', 'Trip', 'Airline', 'Flight']);
   await expect(page.getByRole('tab', { name: 'Trip', exact: true })).toHaveAttribute(
     'aria-selected',

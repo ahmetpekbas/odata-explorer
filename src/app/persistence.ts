@@ -23,7 +23,7 @@ interface Schema extends DBSchema {
 }
 
 /** The most the recent files may occupy together; the oldest are evicted beyond it. */
-export const BUDGET_BYTES = 50 * 1024 * 1024;
+export const BUDGET_BYTES = 256 * 1024 * 1024;
 
 let db: Promise<IDBPDatabase<Schema>> | undefined;
 
@@ -57,9 +57,10 @@ export async function saveRecent(
   file: Omit<RecentFile, 'size' | 'openedAt'>,
   text: string,
   now = Date.now(),
+  budget = BUDGET_BYTES,
 ): Promise<boolean> {
   const size = new TextEncoder().encode(text).length;
-  if (size > BUDGET_BYTES) return false;
+  if (size > budget) return false;
   const d = await database();
   const tx = d.transaction(['meta', 'text'], 'readwrite');
   const meta = tx.objectStore('meta');
@@ -85,7 +86,7 @@ export async function saveRecent(
   for (const f of all) total += f.size;
   // `all` is oldest first.
   for (const f of all) {
-    if (total <= BUDGET_BYTES) break;
+    if (total <= budget) break;
     await meta.delete(f.id);
     await texts.delete(f.id);
     total -= f.size;

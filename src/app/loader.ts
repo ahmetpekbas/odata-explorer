@@ -58,7 +58,11 @@ export async function openText(
           };
       store.finishLoading(id, result.resolved, text, result.index, tabs);
       // Remembering is a convenience: a full or unavailable IndexedDB must not fail the load.
-      saveRecent({ id, name, format: model.format }, text).catch(() => undefined);
+      saveRecent({ id, name, format: model.format }, text).then(
+        (saved) =>
+          saved || console.warn('The file is too large for the recent list (over 256 MB).'),
+        (e: unknown) => console.warn('Could not add the file to the recent list.', e),
+      );
     }
   } catch (e) {
     store.failLoading(id, e instanceof Error ? e.message : String(e));
