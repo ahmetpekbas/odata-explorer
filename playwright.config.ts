@@ -13,7 +13,16 @@ export default defineConfig({
     baseURL: `http://localhost:${PORT}/sub/`,
     trace: 'on-first-retry',
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    { name: 'chromium', testIgnore: 'perf.spec.ts', use: { ...devices['Desktop Chrome'] } },
+    {
+      // Timing checks run alone, after the rest: other tests competing for the CPU would skew them.
+      name: 'perf',
+      testMatch: 'perf.spec.ts',
+      dependencies: ['chromium'],
+      use: { ...devices['Desktop Chrome'] },
+    },
+  ],
   webServer: {
     command: `npm run build && npx vite preview --port ${PORT} --strictPort --base /sub/`,
     url: `http://localhost:${PORT}/sub/`,

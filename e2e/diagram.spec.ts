@@ -61,6 +61,8 @@ test('the palette shows relationships on Ctrl+Enter', async ({ page }) => {
   await page.getByRole('navigation', { name: 'Navigator' }).waitFor();
   await page.keyboard.press('Control+k');
   await page.getByRole('combobox', { name: 'Search the model' }).fill('airport');
+  // The results follow the input a moment later; Enter before then has nothing to choose.
+  await expect(page.getByRole('option').first()).toContainText('Airport');
   await page.keyboard.press('Control+Enter');
   await expect(page.getByRole('tab', { name: 'Airport diagram' })).toBeVisible();
   await expect(page.getByRole('figure', { name: `Relationships of ${NS}.Airport` })).toBeVisible();
