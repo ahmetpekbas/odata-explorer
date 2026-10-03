@@ -14,7 +14,9 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "e2e": "playwright test",
-    "fetch:vocabularies": "node scripts/fetch-vocabularies.ts"
+    "fetch:vocabularies": "node scripts/fetch-vocabularies.ts",
+    "fetch:perf": "node scripts/fetch-perf-fixtures.ts",
+    "bench": "node scripts/bench-parse.ts"
   },
   "dependencies": {
     "@codemirror/lang-json": "^6.0.2",

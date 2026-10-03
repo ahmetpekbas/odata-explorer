@@ -28,6 +28,8 @@ export default defineConfig([
     files: ['*.{js,ts}', 'e2e/**/*.ts', 'scripts/**/*.ts'],
     extends: [js.configs.recommended],
     languageOptions: { globals: globals.node },
+    // tsc already reports unused declarations; the base rule misreads parameter names in type signatures.
+    rules: { 'no-unused-vars': 'off' },
   },
   prettier,
 ]);

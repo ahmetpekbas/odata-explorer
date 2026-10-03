@@ -5,7 +5,7 @@
 - **Demo:** 10+ MB files load smoothly, E2E is green, v1.0.0 is tagged.
 - **Needs:** M1–M8
 
-- [ ] **9.1 Benchmark.** `fetch-perf-fixtures.ts` (Microsoft Graph v1.0 and beta, into
+- [x] **9.1 Benchmark.** `fetch-perf-fixtures.ts` (Microsoft Graph v1.0 and beta, into
   `fixtures/large/`) and `bench-parse.ts` (MB/s per file). Record a baseline in `docs/PERF.md`. If no
   public file reaches 10 MB, check with the owner before adding a synthetic generator.
   *Done when:* `npm run bench` prints results for both files.
