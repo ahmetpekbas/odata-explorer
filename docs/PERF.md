@@ -42,3 +42,20 @@ Taken 2026-10-03 on Windows 11, Node 24.17, before any optimization.
 | `graph-beta.xml` | 296 ms | 13.29 MB/s |
 
 Both are above the 5 MB/s budget by a wide margin.
+
+## Long tasks during load
+
+`e2e/perf.spec.ts` loads `graph-beta.xml` in Chromium and records every main-thread long task through a
+`PerformanceObserver`. It fails above 200 ms and skips itself when the file has not been downloaded.
+
+| Version | Longest task |
+|---|---|
+| One message with the whole result | 235 ms (fails) |
+| Result sent in pieces (`src/worker/transfer.ts`) | about 93 ms |
+
+Parsing was not the problem: it runs in the worker and was already at about 13 MB/s, so the budget needed
+no parser changes. The long task was the main thread receiving the result. The 22 MB result (14 MB of it the
+model) takes about 140 ms to deserialize, in a single message event. The worker now sends it as many small
+messages (a few hundred KB each: runs of types, the structure maps, the search index), and the main thread
+reassembles it. `elements` is not sent, because it is the model's own elements and a walk rebuilds it in
+a few milliseconds.

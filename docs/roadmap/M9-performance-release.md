@@ -9,7 +9,7 @@
   `fixtures/large/`) and `bench-parse.ts` (MB/s per file). Record a baseline in `docs/PERF.md`. If no
   public file reaches 10 MB, check with the owner before adding a synthetic generator.
   *Done when:* `npm run bench` prints results for both files.
-- [ ] **9.2 Hit the budget.** Profile and optimize until parse+resolve runs at 5 MB/s or more in Node,
+- [x] **9.2 Hit the budget.** Profile and optimize until parse+resolve runs at 5 MB/s or more in Node,
   and no main-thread long task during load exceeds 200 ms.
   *Done when:* the benchmark meets the budget, and the long-task check passes.
 - [ ] **9.3 E2E suite.** Playwright covers:

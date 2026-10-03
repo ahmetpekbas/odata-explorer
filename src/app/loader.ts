@@ -3,6 +3,7 @@
 import { proxy, wrap } from 'comlink';
 import type { ParserApi } from '../worker/parser.worker.ts';
 import type { LoadResult, Progress } from '../worker/load.ts';
+import { assemble, type Piece } from '../worker/transfer.ts';
 import { getRecent, getRecentText, saveRecent, type RecentFile } from './persistence.ts';
 import { useStore } from './store.ts';
 import { defaultSchema } from './summary.ts';
@@ -17,7 +18,15 @@ const workerParse: Parse = (text, onProgress) => {
     const api = wrap<ParserApi>(
       new Worker(new URL('../worker/parser.worker.ts', import.meta.url), { type: 'module' }),
     );
-    return (t, p) => api.load(t, proxy(p));
+    return async (text, onProgress) => {
+      const pieces: Piece[] = [];
+      const result = await api.load(
+        text,
+        proxy(onProgress),
+        proxy((piece: Piece) => void pieces.push(piece)),
+      );
+      return result.ok ? { ok: true, ...assemble(pieces) } : result;
+    };
   })();
   return worker(text, onProgress);
 };
