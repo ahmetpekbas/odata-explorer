@@ -1,13 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import {
-  Background,
-  Controls,
-  MarkerType,
-  MiniMap,
-  ReactFlow,
-  type Edge,
-  type Node,
-} from '@xyflow/react';
+import { Background, Controls, MarkerType, ReactFlow, type Edge, type Node } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import {
   Body1,
@@ -20,9 +12,9 @@ import {
 import { diagramTypeOf } from '../../app/diagram-tab.ts';
 import { buildGraph, type Graph } from '../../csdl/graph.ts';
 import type { Resolved } from '../../csdl/resolve.ts';
-import { layoutGraph, type Point } from './layout.ts';
+import { workerLayout, type Layout, type LayoutResult } from './layout.ts';
 import { RelationEdge } from './RelationEdge.tsx';
-import { sizeOf, type Size } from './size.ts';
+import { sizeOf } from './size.ts';
 import { TypeNode } from './TypeNode.tsx';
 
 const nodeTypes = { type: TypeNode };
@@ -39,7 +31,6 @@ const useStyles = makeStyles({
     '--xy-controls-button-background-color-hover': tokens.colorNeutralBackground1Hover,
     '--xy-controls-button-color': tokens.colorNeutralForeground1,
     '--xy-controls-button-border-color': tokens.colorNeutralStroke2,
-    '--xy-minimap-background-color': tokens.colorNeutralBackground1,
     '--xy-attribution-background-color': 'transparent',
   },
   message: { margin: tokens.spacingHorizontalL },
@@ -48,17 +39,19 @@ const useStyles = makeStyles({
 interface Laid {
   graph: Graph;
   showAll: boolean;
-  positions: Map<string, Point>;
+  result: LayoutResult;
 }
 
 interface DiagramViewProps {
   resolved: Resolved;
   /** ID of the diagram tab. */
   tabId: string;
+  /** Places the nodes; the default runs elkjs in a worker. */
+  layout?: Layout;
 }
 
 /** The relationships around one type, as a graph that can be panned and zoomed. */
-export default function DiagramView({ resolved, tabId }: DiagramViewProps) {
+export default function DiagramView({ resolved, tabId, layout = workerLayout }: DiagramViewProps) {
   const styles = useStyles();
   const typeId = diagramTypeOf(tabId) ?? '';
   const [hops] = useState(1);
@@ -74,22 +67,24 @@ export default function DiagramView({ resolved, tabId }: DiagramViewProps) {
 
   useEffect(() => {
     let current = true;
-    const sizes = new Map<string, Size>(graph.nodes.map((n) => [n.id, sizeOf(n, showAll)]));
-    layoutGraph(graph, sizes).then(
-      (positions) => current && setLaid({ graph, showAll, positions }),
+    layout({
+      nodes: graph.nodes.map((n) => ({ id: n.id, ...sizeOf(n, showAll) })),
+      edges: graph.edges,
+    }).then(
+      (result) => current && setLaid({ graph, showAll, result }),
       (e: unknown) => current && setError(e instanceof Error ? e.message : String(e)),
     );
     return () => {
       current = false;
     };
-  }, [graph, showAll]);
+  }, [graph, showAll, layout]);
 
   const elements = useMemo(() => {
     if (laid?.graph !== graph || laid.showAll !== showAll) return undefined;
     const nodes: Node[] = graph.nodes.map((node) => ({
       id: node.id,
       type: 'type',
-      position: laid.positions.get(node.id) ?? { x: 0, y: 0 },
+      position: laid.result.nodes[node.id] ?? { x: 0, y: 0 },
       data: { node, showAll, center: node.id === typeId },
     }));
     const edges: Edge[] = graph.edges.map((edge) => ({
@@ -99,7 +94,7 @@ export default function DiagramView({ resolved, tabId }: DiagramViewProps) {
       target: edge.target,
       ...(edge.source === edge.target && { sourceHandle: 'loop-out', targetHandle: 'loop-in' }),
       markerEnd: { type: MarkerType.ArrowClosed, color: tokens.colorNeutralForeground3 },
-      data: { edge },
+      data: { edge, route: laid.result.edges[edge.id] },
     }));
     return { nodes, edges };
   }, [laid, graph, showAll, typeId]);
@@ -142,7 +137,6 @@ export default function DiagramView({ resolved, tabId }: DiagramViewProps) {
       >
         <Background />
         <Controls showInteractive={false} />
-        <MiniMap pannable zoomable />
       </ReactFlow>
     </div>
   );

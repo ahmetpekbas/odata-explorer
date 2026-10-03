@@ -32,6 +32,8 @@ const useStyles = makeStyles({
     fontWeight: tokens.fontWeightSemibold,
     fontSize: tokens.fontSizeBase300,
   },
+  // The handles only anchor the edges; the layout decides where an edge runs.
+  handle: { opacity: 0, pointerEvents: 'none' },
   title: { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
   abstract: { fontStyle: 'italic' },
   badge: { color: tokens.colorNeutralForeground3, fontWeight: tokens.fontWeightRegular },
@@ -70,11 +72,23 @@ export function TypeNode({ data }: NodeProps<TypeFlowNode>) {
       className={mergeClasses(styles.root, center && styles.center)}
       style={{ width: size.width, height: size.height }}
     >
-      <Handle type="target" position={Position.Left} />
-      <Handle type="source" position={Position.Right} />
+      <Handle className={styles.handle} type="target" position={Position.Left} />
+      <Handle className={styles.handle} type="source" position={Position.Right} />
       {/* A navigation that leads back to its own type loops over the top of the node. */}
-      <Handle id="loop-in" type="target" position={Position.Top} style={{ left: '25%' }} />
-      <Handle id="loop-out" type="source" position={Position.Top} style={{ left: '75%' }} />
+      <Handle
+        className={styles.handle}
+        id="loop-in"
+        type="target"
+        position={Position.Top}
+        style={{ left: '25%' }}
+      />
+      <Handle
+        className={styles.handle}
+        id="loop-out"
+        type="source"
+        position={Position.Top}
+        style={{ left: '75%' }}
+      />
       <div className={styles.header} title={node.name}>
         <span className={mergeClasses(styles.title, node.abstract && styles.abstract)}>
           {node.name}

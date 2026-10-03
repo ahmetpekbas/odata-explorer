@@ -1,10 +1,14 @@
-import { Body1, makeStyles, tokens } from '@fluentui/react-components';
+import { lazy, Suspense } from 'react';
+import { Body1, makeStyles, Spinner, tokens } from '@fluentui/react-components';
 import { selectActiveDocument, useStore } from '../../app/store.ts';
 import type { Diagnostic } from '../../csdl/model.ts';
-import DiagramView from '../diagram/DiagramView.tsx';
 import { DiagnosticsPanel } from '../shell/DiagnosticsPanel.tsx';
 import { ElementView } from '../views/ElementView.tsx';
 import { TabStrip } from './TabStrip.tsx';
+
+// React Flow and the layout code are large, so the diagram is a chunk of its own that loads when the
+// first diagram tab opens.
+const DiagramView = lazy(() => import('../diagram/DiagramView.tsx'));
 
 const useStyles = makeStyles({
   root: { display: 'flex', flexDirection: 'column', height: '100%' },
@@ -48,7 +52,9 @@ export function Workspace({ diagnostics, onSelectDiagnostic }: WorkspaceProps) {
             <DiagnosticsPanel diagnostics={diagnostics} onSelect={onSelectDiagnostic} />
           </div>
         ) : document?.status === 'ready' && active.kind === 'diagram' ? (
-          <DiagramView key={active.id} tabId={active.id} resolved={document.resolved} />
+          <Suspense fallback={<Spinner className={styles.empty} label="Loading the diagram…" />}>
+            <DiagramView key={active.id} tabId={active.id} resolved={document.resolved} />
+          </Suspense>
         ) : document?.status === 'ready' ? (
           <div className={styles.element}>
             <ElementView key={active.id} tab={active} resolved={document.resolved} />

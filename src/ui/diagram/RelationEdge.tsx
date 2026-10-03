@@ -8,8 +8,14 @@ import {
 } from '@xyflow/react';
 import { makeStyles, mergeClasses, tokens } from '@fluentui/react-components';
 import type { GraphEdge } from '../../csdl/graph.ts';
+import { endLabel, midpoint, roundedPath } from './edge-path.ts';
+import type { Point } from './elk-layout.ts';
 
-export type RelationEdgeData = { edge: GraphEdge };
+export type RelationEdgeData = {
+  edge: GraphEdge;
+  /** The route the layout found, from source to target. Without one the edge is a plain curve. */
+  route: Point[] | undefined;
+};
 export type RelationFlowEdge = Edge<RelationEdgeData, 'relation'>;
 
 const useStyles = makeStyles({
@@ -26,7 +32,7 @@ const useStyles = makeStyles({
   cardinality: { color: tokens.colorNeutralForeground3 },
 });
 
-/** Where a cardinality sits next to the end of an edge: clear of the node, on the side it leaves. */
+/** Where a cardinality sits next to the end of a curve: clear of the node, on the side it leaves. */
 const OFFSET: Record<Position, [number, number]> = {
   [Position.Left]: [-14, -10],
   [Position.Right]: [14, -10],
@@ -34,7 +40,7 @@ const OFFSET: Record<Position, [number, number]> = {
   [Position.Bottom]: [-12, 14],
 };
 
-const at = (x: number, y: number) => `translate(-50%, -50%) translate(${x}px, ${y}px)`;
+const at = ({ x, y }: Point) => `translate(-50%, -50%) translate(${x}px, ${y}px)`;
 
 /** An edge with its navigation names in the middle and a cardinality at each end that has one. */
 export function RelationEdge({
@@ -49,7 +55,11 @@ export function RelationEdge({
   data,
 }: EdgeProps<RelationFlowEdge>) {
   const styles = useStyles();
-  const [path, labelX, labelY] = getBezierPath({
+  const edge = data?.edge;
+  if (!edge) return null;
+
+  const route = data.route && data.route.length > 1 ? data.route : undefined;
+  const [curve, curveX, curveY] = getBezierPath({
     sourceX,
     sourceY,
     sourcePosition,
@@ -57,22 +67,27 @@ export function RelationEdge({
     targetY,
     targetPosition,
   });
-  const edge = data?.edge;
-  if (!edge) return null;
-  const text = edge.partnerLabel ? `${edge.label} ⇄ ${edge.partnerLabel}` : edge.label;
+  const path = route ? roundedPath(route) : curve;
+  const middle = route ? midpoint(route) : { x: curveX, y: curveY };
+  const first = route?.[0];
+  const second = route?.[1];
+  const last = route?.at(-1);
+  const beforeLast = route?.at(-2);
+  const sourceEnd =
+    first && second ? endLabel(first, second) : offset(sourceX, sourceY, sourcePosition);
+  const targetEnd =
+    last && beforeLast ? endLabel(last, beforeLast) : offset(targetX, targetY, targetPosition);
 
-  const end = (cardinality: string | undefined, x: number, y: number, position: Position) => {
-    if (cardinality === undefined || edge.kind === 'inheritance') return null;
-    const [dx, dy] = OFFSET[position];
-    return (
+  const text = edge.partnerLabel ? `${edge.label} ⇄ ${edge.partnerLabel}` : edge.label;
+  const cardinality = (value: string | undefined, place: Point) =>
+    value === undefined || edge.kind === 'inheritance' ? null : (
       <div
         className={mergeClasses(styles.label, styles.cardinality)}
-        style={{ transform: at(x + dx, y + dy) }}
+        style={{ transform: at(place) }}
       >
-        {cardinality}
+        {value}
       </div>
     );
-  };
 
   return (
     <>
@@ -88,14 +103,19 @@ export function RelationEdge({
       />
       <EdgeLabelRenderer>
         {text && (
-          <div className={styles.label} style={{ transform: at(labelX, labelY) }}>
+          <div className={styles.label} style={{ transform: at(middle) }}>
             {edge.kind === 'containment' && '◆ '}
             {text}
           </div>
         )}
-        {end(edge.sourceCardinality, sourceX, sourceY, sourcePosition)}
-        {end(edge.targetCardinality, targetX, targetY, targetPosition)}
+        {cardinality(edge.sourceCardinality, sourceEnd)}
+        {cardinality(edge.targetCardinality, targetEnd)}
       </EdgeLabelRenderer>
     </>
   );
+}
+
+function offset(x: number, y: number, position: Position): Point {
+  const [dx, dy] = OFFSET[position];
+  return { x: x + dx, y: y + dy };
 }

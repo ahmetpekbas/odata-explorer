@@ -1,30 +1,28 @@
-import type { Graph } from '../../csdl/graph.ts';
-import type { Size } from './size.ts';
+// Runs elkjs in its own worker, so laying out a large diagram does not freeze the page. The worker is
+// started when the first diagram needs a layout.
+import * as elkApi from 'elkjs/lib/elk-api.js';
+import type ElkConstructor from 'elkjs/lib/elk-api.js';
+import { elkLayout, type Layout } from './elk-layout.ts';
 
-export interface Point {
-  x: number;
-  y: number;
+export type { Layout, LayoutRequest, LayoutResult } from './elk-layout.ts';
+
+/**
+ * elkjs is a CommonJS bundle whose export is the constructor itself, also under `default`. Depending
+ * on the tool that bundles it, the namespace import is the constructor or an object that wraps it.
+ */
+function constructorOf(module: unknown): typeof ElkConstructor {
+  let found = module;
+  while (typeof found !== 'function' && typeof found === 'object' && found && 'default' in found) {
+    found = found.default;
+  }
+  return found as typeof ElkConstructor;
 }
 
-const GAP = 60;
+let elk: InstanceType<typeof ElkConstructor> | undefined;
 
-/** The position of every node, by ID. Asynchronous because the real layout will run in a worker. */
-export function layoutGraph(graph: Graph, sizes: Map<string, Size>): Promise<Map<string, Point>> {
-  const columns = Math.max(1, Math.ceil(Math.sqrt(graph.nodes.length)));
-  const positions = new Map<string, Point>();
-  let x = 0;
-  let y = 0;
-  let rowHeight = 0;
-  graph.nodes.forEach((node, i) => {
-    const size = sizes.get(node.id) ?? { width: 0, height: 0 };
-    if (i > 0 && i % columns === 0) {
-      x = 0;
-      y += rowHeight + GAP;
-      rowHeight = 0;
-    }
-    positions.set(node.id, { x, y });
-    x += size.width + GAP;
-    rowHeight = Math.max(rowHeight, size.height);
+export const workerLayout: Layout = (request) => {
+  elk ??= new (constructorOf(elkApi))({
+    workerFactory: () => new Worker(new URL('elkjs/lib/elk-worker.min.js', import.meta.url)),
   });
-  return Promise.resolve(positions);
-}
+  return elkLayout(elk, request);
+};

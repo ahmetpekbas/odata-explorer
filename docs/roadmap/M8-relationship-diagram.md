@@ -11,7 +11,7 @@
 - [x] **8.2 Diagram tab.** Render with `@xyflow/react`: custom nodes showing the key and navigation
   properties, expandable to all properties, and edges labelled with cardinality.
   *Done when:* `Person` with 1 hop renders its connected types.
-- [ ] **8.3 Layout worker.** Run elkjs in a worker, with the diagram and layout code in a lazy-loaded
+- [x] **8.3 Layout worker.** Run elkjs in a worker, with the diagram and layout code in a lazy-loaded
   chunk.
   *Done when:* the layout doesn't block the main thread, and the chunk only loads when a diagram opens.
 - [ ] **8.4 Controls and entry points.** Hops selector, inheritance toggle, show-all-properties toggle.
