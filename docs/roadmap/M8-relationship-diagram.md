@@ -5,7 +5,7 @@
 - **Demo:** An interactive neighborhood graph for any entity.
 - **Needs:** [M3](M3-load-pipeline.md), [M4](M4-shell-navigation.md); task 8.4 also needs [M5](M5-detail-views.md)
 
-- [ ] **8.1 Graph builder.** A pure function: neighborhood by hops (1–3), a partner pair merged into
+- [x] **8.1 Graph builder.** A pure function: neighborhood by hops (1–3), a partner pair merged into
   one edge, containment and inheritance edges, and a node cap (~150) that returns a "narrow it" hint.
   *Done when:* unit tests cover the TripPin neighborhoods and the cap.
 - [ ] **8.2 Diagram tab.** Render with `@xyflow/react`: custom nodes showing the key and navigation
