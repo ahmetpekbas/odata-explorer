@@ -8,7 +8,7 @@ import {
   webDarkTheme,
   webLightTheme,
 } from '@fluentui/react-components';
-import { ErrorCircleRegular, SearchRegular } from '@fluentui/react-icons';
+import { ErrorCircleRegular, KeyboardRegular, SearchRegular } from '@fluentui/react-icons';
 import { useEffect, useState } from 'react';
 import { useBoot } from './app/boot.ts';
 import { diagramTab, diagramTypeFor } from './app/diagram-tab.ts';
@@ -21,10 +21,12 @@ import { useTheme } from './app/theme.ts';
 import { Inspector } from './ui/inspector/Inspector.tsx';
 import { Navigator } from './ui/navigator/Navigator.tsx';
 import { CommandPalette } from './ui/shell/CommandPalette.tsx';
+import { focusActiveTab } from './ui/shell/focus.ts';
 import { RecentFiles } from './ui/shell/RecentFiles.tsx';
 import { StartPage } from './ui/shell/StartPage.tsx';
 import { ModeToggle } from './ui/shell/ModeToggle.tsx';
 import { Shell } from './ui/shell/Shell.tsx';
+import { ShortcutsDialog } from './ui/shell/ShortcutsDialog.tsx';
 import { Workspace } from './ui/workspace/Workspace.tsx';
 import { ThemeToggle } from './ui/shell/ThemeToggle.tsx';
 
@@ -62,6 +64,9 @@ const useStyles = makeStyles({
   },
 });
 
+/** Elements that take typed text, where a shortcut key must stay a character. */
+const INPUTS = 'input, textarea, select, [contenteditable="true"], .cm-editor';
+
 export function App() {
   const styles = useStyles();
   const document = useStore(selectActiveDocument);
@@ -76,6 +81,7 @@ export function App() {
   useEffect(() => startRouting(), []);
   useEffect(() => startTabPersistence(), []);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const booting = useBoot(document);
   const ready = document?.status === 'ready';
   useEffect(() => {
@@ -90,6 +96,16 @@ export function App() {
     window.addEventListener('keydown', onKeyDown, true);
     return () => window.removeEventListener('keydown', onKeyDown, true);
   }, [ready]);
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      const target = e.target instanceof HTMLElement ? e.target : undefined;
+      // A question mark typed into a field is text, not a request for help.
+      if (e.key !== '?' || e.ctrlKey || e.metaKey || e.altKey || target?.closest(INPUTS)) return;
+      setShortcutsOpen(true);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, []);
 
   return (
     // Not `className`: Fluent copies it onto the root of every portal (tooltips, menus, dialogs), and
@@ -109,6 +125,12 @@ export function App() {
                 Close {document.name}
               </Button>
             )}
+            <Button
+              appearance="subtle"
+              icon={<KeyboardRegular />}
+              aria-label="Keyboard shortcuts"
+              onClick={() => setShortcutsOpen(true)}
+            />
             <ThemeToggle preference={preference} onChange={setPreference} />
           </div>
         </header>
@@ -179,6 +201,7 @@ export function App() {
             </div>
           </main>
         )}
+        <ShortcutsDialog open={shortcutsOpen} onOpenChange={setShortcutsOpen} />
         {document?.status === 'ready' && (
           <CommandPalette
             open={paletteOpen}
@@ -189,6 +212,7 @@ export function App() {
               const typeId = diagram ? diagramTypeFor(document.resolved, entry.id) : undefined;
               if (typeId) {
                 openTab(diagramTab(typeId), true);
+                focusActiveTab();
                 return;
               }
               const target = openableTarget(document.resolved, entry.id);
@@ -196,6 +220,7 @@ export function App() {
               openTab(target);
               // A property opens its type, with the property itself selected; a label, its element.
               select(entry.kind === 'annotation' ? entry.parent : entry.id);
+              focusActiveTab();
             }}
           />
         )}

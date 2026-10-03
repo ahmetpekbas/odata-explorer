@@ -1,4 +1,4 @@
-import type { MouseEvent } from 'react';
+import type { KeyboardEvent, MouseEvent } from 'react';
 import {
   Button,
   makeStyles,
@@ -70,6 +70,11 @@ export function TabStrip({
                       title={tab.id}
                       className={mergeClasses(!tab.pinned && styles.preview)}
                       onDoubleClick={() => onPin(tab.id)}
+                      onKeyDown={(event: KeyboardEvent) => {
+                        // The keyboard's double-click and middle-click.
+                        if (event.key === 'Enter') onPin(tab.id);
+                        if (event.key === 'Delete') onClose(tab.id);
+                      }}
                       onMouseDown={(event: MouseEvent) =>
                         event.button === 1 && event.preventDefault()
                       }

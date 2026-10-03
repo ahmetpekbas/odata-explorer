@@ -6,6 +6,31 @@ the browser.
 
 Status: early development. See the [plan](docs/PLAN.md) and the [roadmap](docs/roadmap/README.md).
 
+## Keyboard
+
+Every feature works without a mouse. Press `?` in the app for this list.
+
+| Where | Keys | Action |
+|---|---|---|
+| Anywhere | `Ctrl+K` | Search every symbol of the model |
+| Anywhere | `?` | Show the shortcuts |
+| Anywhere | `Tab` / `Shift+Tab` | Move between the toolbar, navigator, tabs and views |
+| Search | `Up` / `Down`, `PageUp` / `PageDown` | Move through the results |
+| Search | `Enter` | Open the result |
+| Search | `Ctrl+Enter` | Show the relationships of a type or set |
+| Search | `Esc` | Close the search |
+| Navigator | `Up` / `Down` | Move between elements |
+| Navigator | `Right` / `Left` | Expand or collapse a group; move into or out of it |
+| Navigator | `Enter` | Open the element |
+| Tabs | `Left` / `Right` | Move between open tabs |
+| Tabs | `Enter` | Keep a preview tab open |
+| Tabs | `Delete` | Close the tab |
+| Tabs | `Menu` key / `Shift+F10` | Open the tab menu |
+| Diagram | `Tab` | Move between the nodes |
+| Diagram | `Enter` / `Shift+Enter` | Open the type of the focused node / open it and keep the tab |
+
+When a search closes, the focus goes to the tab it opened (or back to where it was, on `Esc`).
+
 ## Setup
 
 Requires Node.js 20.19+ or 22.12+.

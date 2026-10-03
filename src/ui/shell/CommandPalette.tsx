@@ -22,6 +22,7 @@ import {
   type SearchHit,
 } from '../../app/search.ts';
 import type { SearchEntry, SearchKind } from '../../csdl/search-index.ts';
+import { focusIsLost, whenDialogsClosed } from './focus.ts';
 
 const ROW_HEIGHT = 40;
 const LIST_ID = 'command-palette-results';
@@ -82,6 +83,29 @@ export interface CommandPaletteProps {
 /** Ctrl+K: search every symbol of the model and open it. Works from the keyboard alone. */
 export function CommandPalette({ open, onOpenChange, index, onChoose }: CommandPaletteProps) {
   const styles = useStyles();
+
+  // The dialog should give the focus back to what had it, but when that element re-renders in the
+  // meantime the focus falls to the page body, and a keyboard user starts again from the top. So the
+  // last element focused outside a dialog is remembered here.
+  const opener = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    const remember = (target: EventTarget | null) => {
+      if (target instanceof HTMLElement && !target.closest('[role="dialog"]')) {
+        opener.current = target;
+      }
+    };
+    remember(document.activeElement);
+    const onFocusIn = (e: FocusEvent) => remember(e.target);
+    document.addEventListener('focusin', onFocusIn);
+    return () => document.removeEventListener('focusin', onFocusIn);
+  }, []);
+  useEffect(() => {
+    if (open) return;
+    return whenDialogsClosed(() => {
+      if (focusIsLost() && opener.current?.isConnected) opener.current.focus();
+    });
+  }, [open]);
+
   return (
     <Dialog open={open} onOpenChange={(_, data) => onOpenChange(data.open)}>
       <DialogSurface className={styles.surface} aria-label="Search the model">

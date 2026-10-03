@@ -116,7 +116,7 @@ export default function DiagramView({ resolved, tabId, layout = workerLayout }: 
     return { nodes, edges };
   }, [laid, graph, showAll, typeId]);
 
-  const open = (node: Node, pin: boolean) => {
+  const open = (node: Pick<Node, 'id'>, pin: boolean) => {
     const kind = graph.nodes.find((n) => n.id === node.id)?.kind;
     if (kind) openTab({ id: node.id, kind }, pin);
   };
@@ -144,7 +144,19 @@ export default function DiagramView({ resolved, tabId, layout = workerLayout }: 
     body = <Spinner className={styles.message} label="Laying out the diagram…" />;
   } else {
     body = (
-      <div className={styles.canvas} role="figure" aria-label={`Relationships of ${typeId}`}>
+      <div
+        className={styles.canvas}
+        role="figure"
+        aria-label={`Relationships of ${typeId}`}
+        // React Flow focuses nodes but does not activate them: Enter is the click, Shift+Enter the
+        // double-click.
+        onKeyDown={(e) => {
+          const id = (e.target as HTMLElement)
+            .closest('.react-flow__node')
+            ?.getAttribute('data-id');
+          if (e.key === 'Enter' && id) open({ id }, e.shiftKey);
+        }}
+      >
         <ReactFlow
           // A new graph starts from a view that fits it.
           key={`${typeId}:${hops}:${inheritance}:${showAll}`}

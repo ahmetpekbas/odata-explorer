@@ -31,5 +31,10 @@ export default defineConfig([
     // tsc already reports unused declarations; the base rule misreads parameter names in type signatures.
     rules: { 'no-unused-vars': 'off' },
   },
+  {
+    // Callbacks passed to `page.evaluate` run in the browser.
+    files: ['e2e/**/*.ts'],
+    languageOptions: { globals: globals.browser },
+  },
   prettier,
 ]);
