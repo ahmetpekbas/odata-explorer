@@ -44,4 +44,25 @@ describe('search shortcut', () => {
     expect(useStore.getState().activeTab).toBe(`${NS}.PlanItem`);
     expect(useStore.getState().selection).toBe(`${NS}.PlanItem/ConfirmationCode`);
   });
+
+  it('shows the relationships of a type on Ctrl+Enter, and opens anything else as usual', async () => {
+    render(<App />);
+    fireEvent.keyDown(window, { key: 'k', ctrlKey: true });
+    const box = await screen.findByRole('combobox', { name: 'Search the model' });
+    fireEvent.change(box, { target: { value: 'person' } });
+    fireEvent.keyDown(box, { key: 'Enter', ctrlKey: true });
+    const state = useStore.getState();
+    expect(state.activeTab).toBe(`diagram:${NS}.Person`);
+    expect(state.tabs.find((t) => t.id === state.activeTab)).toMatchObject({
+      kind: 'diagram',
+      pinned: true,
+    });
+    expect(state.selection).toBe(`${NS}.Person`);
+
+    fireEvent.keyDown(window, { key: 'k', ctrlKey: true });
+    const next = await screen.findByRole('combobox', { name: 'Search the model' });
+    fireEvent.change(next, { target: { value: 'ConfirmationCode' } });
+    fireEvent.keyDown(next, { key: 'Enter', ctrlKey: true });
+    expect(useStore.getState().activeTab).toBe(`${NS}.PlanItem`);
+  });
 });

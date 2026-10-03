@@ -82,4 +82,15 @@ describe('container view', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Base' }));
     expect(useStore.getState().activeTab).toBe('NS.Base');
   });
+
+  it('opens the diagram of the type of a set or singleton', () => {
+    open(`${NS}.DefaultContainer/People`, 'entitySet');
+    fireEvent.click(screen.getByRole('button', { name: 'Show relationships' }));
+    expect(useStore.getState().activeTab).toBe(`diagram:${NS}.Person`);
+    open(`${NS}.DefaultContainer/Me`, 'singleton');
+    fireEvent.click(
+      screen.getAllByRole('button', { name: 'Show relationships' })[1] as HTMLElement,
+    );
+    expect(useStore.getState().tabs).toHaveLength(1);
+  });
 });

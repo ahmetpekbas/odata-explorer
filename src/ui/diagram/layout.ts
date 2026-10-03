@@ -20,7 +20,8 @@ function constructorOf(module: unknown): typeof ElkConstructor {
 
 let elk: InstanceType<typeof ElkConstructor> | undefined;
 
-export const workerLayout: Layout = (request) => {
+// Async, so a browser without workers reports a failed layout instead of throwing from an effect.
+export const workerLayout: Layout = async (request) => {
   elk ??= new (constructorOf(elkApi))({
     workerFactory: () => new Worker(new URL('elkjs/lib/elk-worker.min.js', import.meta.url)),
   });

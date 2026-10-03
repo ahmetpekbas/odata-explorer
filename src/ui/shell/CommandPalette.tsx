@@ -64,6 +64,7 @@ const useStyles = makeStyles({
     whiteSpace: 'nowrap',
     color: tokens.colorNeutralForeground3,
   },
+  hint: { color: tokens.colorNeutralForeground3 },
   empty: { padding: tokens.spacingHorizontalM, color: tokens.colorNeutralForeground3 },
 });
 
@@ -71,8 +72,11 @@ export interface CommandPaletteProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   index: SearchEntry[];
-  /** Called with the chosen entry, after the palette has closed. */
-  onChoose: (entry: SearchEntry) => void;
+  /**
+   * Called with the chosen entry, after the palette has closed. `diagram` is set when the choice asked
+   * for the relationships of the entry (Ctrl+Enter, Ctrl+click) rather than the entry itself.
+   */
+  onChoose: (entry: SearchEntry, options: { diagram: boolean }) => void;
 }
 
 /** Ctrl+K: search every symbol of the model and open it. Works from the keyboard alone. */
@@ -85,9 +89,9 @@ export function CommandPalette({ open, onOpenChange, index, onChoose }: CommandP
           <DialogContent className={styles.content}>
             <Palette
               index={index}
-              onChoose={(entry) => {
+              onChoose={(entry, options) => {
                 onOpenChange(false);
-                onChoose(entry);
+                onChoose(entry, options);
               }}
             />
           </DialogContent>
@@ -155,7 +159,7 @@ function Palette({ index, onChoose }: Pick<CommandPaletteProps, 'index' | 'onCho
         break;
       case 'Enter': {
         const hit = hits[current];
-        if (hit) onChoose(hit.entry);
+        if (hit) onChoose(hit.entry, { diagram: e.ctrlKey || e.metaKey });
         break;
       }
       default:
@@ -227,7 +231,7 @@ function Palette({ index, onChoose }: Pick<CommandPaletteProps, 'index' | 'onCho
                 style={{ transform: `translateY(${row.start}px)` }}
                 // Clicking a result must not take the focus out of the search box.
                 onMouseDown={(e) => e.preventDefault()}
-                onClick={() => onChoose(entry)}
+                onClick={(e) => onChoose(entry, { diagram: e.ctrlKey || e.metaKey })}
               >
                 <Body1 className={styles.label} truncate wrap={false}>
                   {entry.label}
@@ -241,6 +245,9 @@ function Palette({ index, onChoose }: Pick<CommandPaletteProps, 'index' | 'onCho
           })}
         </ul>
       </div>
+      <Caption1 className={styles.hint}>
+        Enter opens · Ctrl+Enter shows the relationships of a type or set
+      </Caption1>
     </>
   );
 }

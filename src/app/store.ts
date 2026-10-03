@@ -1,7 +1,7 @@
 // App state: the open documents (v1 shows one), the detail mode, the tabs, and the selection. Loading itself
 // lives in loader.ts; this store only records where each document is in that process.
 import { create } from 'zustand';
-import { diagramTypeOf } from './diagram-tab.ts';
+import { DEFAULT_DIAGRAM_OPTIONS, diagramTypeOf, type DiagramOptions } from './diagram-tab.ts';
 import type { ElementKind } from '../csdl/model.ts';
 import type { Resolved } from '../csdl/resolve.ts';
 import type { SearchEntry } from '../csdl/search-index.ts';
@@ -40,6 +40,8 @@ export interface StoreState {
   detailMode: DetailMode;
   /** Views that deviate from `detailMode`, by tab ID. The global mode wins again when it changes. */
   modeOverrides: Record<string, DetailMode>;
+  /** Settings of the diagram tabs that differ from the defaults, by tab ID. */
+  diagramOptions: Record<string, DiagramOptions>;
   /** Target-path ID of the selected element. */
   selection: string | undefined;
   /** Open tabs of the active document, in display order. */
@@ -63,6 +65,8 @@ export interface StoreState {
   setDetailMode: (mode: DetailMode) => void;
   /** Sets the mode of one view; the global mode stays as it is. */
   setModeOverride: (tabId: string, mode: DetailMode) => void;
+  /** Changes some settings of one diagram tab. */
+  setDiagramOptions: (tabId: string, options: Partial<DiagramOptions>) => void;
   select: (id: string | undefined) => void;
   /** Activates the tab for `target`, opening it first. Without `pin` it becomes the preview tab. */
   openTab: (target: { id: string; kind: TabKind }, pin?: boolean) => void;
@@ -93,6 +97,7 @@ export const useStore = create<StoreState>()((set) => ({
   activeId: undefined,
   detailMode: 'friendly',
   modeOverrides: {},
+  diagramOptions: {},
   selection: undefined,
   ...NO_TABS,
 
@@ -145,6 +150,13 @@ export const useStore = create<StoreState>()((set) => ({
   setDetailMode: (detailMode) => set({ detailMode, modeOverrides: {} }),
   setModeOverride: (tabId, mode) =>
     set((s) => ({ modeOverrides: { ...s.modeOverrides, [tabId]: mode } })),
+  setDiagramOptions: (tabId, options) =>
+    set((s) => ({
+      diagramOptions: {
+        ...s.diagramOptions,
+        [tabId]: { ...DEFAULT_DIAGRAM_OPTIONS, ...s.diagramOptions[tabId], ...options },
+      },
+    })),
   select: (selection) => set({ selection }),
   openTab: (target, pin = false) =>
     set((s) => {
@@ -189,6 +201,11 @@ export const useStore = create<StoreState>()((set) => ({
 /** The mode a view shows: its own override, else the global mode. */
 export function useViewMode(tabId: string): DetailMode {
   return useStore((s) => s.modeOverrides[tabId] ?? s.detailMode);
+}
+
+/** The settings of a diagram tab: its own, else the defaults. */
+export function useDiagramOptions(tabId: string): DiagramOptions {
+  return useStore((s) => s.diagramOptions[tabId]) ?? DEFAULT_DIAGRAM_OPTIONS;
 }
 
 /** The active document, if there is one. */

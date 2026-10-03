@@ -65,7 +65,8 @@ export function startRouting(parse?: Parse): () => void {
         : route.tab.kind === 'diagram'
           ? diagramTarget(doc.resolved, route.tab.id)
           : openableTarget(doc.resolved, route.tab.id);
-    if (target) useStore.getState().openTab(target);
+    // A diagram stays open when one of its nodes opens a preview tab, so it is pinned.
+    if (target) useStore.getState().openTab(target, route.tab.kind === 'diagram');
   };
 
   const fromHash = () => {

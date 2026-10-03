@@ -95,4 +95,22 @@ describe('StructuredTypeView', () => {
     expect(screen.getByText('Properties (600)')).toBeInTheDocument();
     expect(within(table).getAllByText('Text (max 50)').length).toBeGreaterThan(0);
   });
+
+  it('has a button that opens the relationship diagram of the type in a pinned tab', () => {
+    open(`${NS}.Person`);
+    fireEvent.click(screen.getByRole('button', { name: 'Show relationships' }));
+    expect(useStore.getState().tabs).toEqual([
+      { id: `diagram:${NS}.Person`, kind: 'diagram', pinned: true },
+    ]);
+  });
+
+  it('has no such button on a complex type', () => {
+    renderView(
+      <ElementView
+        tab={{ id: `${NS}.Location`, kind: 'complexType', pinned: true }}
+        resolved={loadResolved(trippin)}
+      />,
+    );
+    expect(screen.queryByRole('button', { name: 'Show relationships' })).not.toBeInTheDocument();
+  });
 });

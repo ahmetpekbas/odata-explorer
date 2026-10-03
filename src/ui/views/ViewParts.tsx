@@ -25,6 +25,7 @@ const useStyles = makeStyles({
     gap: tokens.spacingHorizontalM,
   },
   kind: { display: 'flex', alignItems: 'center', gap: tokens.spacingHorizontalS },
+  actions: { display: 'flex', alignItems: 'center', gap: tokens.spacingHorizontalM },
   title: { margin: 0, overflowWrap: 'anywhere' },
   id: {
     color: tokens.colorNeutralForeground3,
@@ -63,6 +64,8 @@ interface ViewHeaderProps {
   longDescription?: string | undefined;
   /** Short facts shown next to the kind, e.g. "abstract". Technical mode only. */
   badges?: string[];
+  /** Buttons shown next to the mode toggle. */
+  actions?: ReactNode;
 }
 
 /** Title, description and the per-view mode toggle that every view starts with. */
@@ -75,6 +78,7 @@ export function ViewHeader({
   description,
   longDescription,
   badges = [],
+  actions,
 }: ViewHeaderProps) {
   const styles = useStyles();
   const setModeOverride = useStore((s) => s.setModeOverride);
@@ -90,11 +94,14 @@ export function ViewHeader({
               </Badge>
             ))}
         </div>
-        <ModeToggle
-          mode={mode}
-          onChange={(m) => setModeOverride(tabId, m)}
-          label="Detail for this view"
-        />
+        <div className={styles.actions}>
+          {actions}
+          <ModeToggle
+            mode={mode}
+            onChange={(m) => setModeOverride(tabId, m)}
+            label="Detail for this view"
+          />
+        </div>
       </div>
       <Title2 as="h2" className={styles.title}>
         {title}

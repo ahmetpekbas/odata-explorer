@@ -11,6 +11,7 @@ import {
 import { ErrorCircleRegular, SearchRegular } from '@fluentui/react-icons';
 import { useEffect, useState } from 'react';
 import { useBoot } from './app/boot.ts';
+import { diagramTab, diagramTypeFor } from './app/diagram-tab.ts';
 import { openFile, openRecent } from './app/loader.ts';
 import { openableTarget } from './app/openable.ts';
 import { PROBLEMS_TAB, startRouting } from './app/routing.ts';
@@ -183,7 +184,13 @@ export function App() {
             open={paletteOpen}
             onOpenChange={setPaletteOpen}
             index={document.index}
-            onChoose={(entry) => {
+            onChoose={(entry, { diagram }) => {
+              // Relationships are for types and sets; any other entry opens as usual.
+              const typeId = diagram ? diagramTypeFor(document.resolved, entry.id) : undefined;
+              if (typeId) {
+                openTab(diagramTab(typeId), true);
+                return;
+              }
               const target = openableTarget(document.resolved, entry.id);
               if (!target) return;
               openTab(target);

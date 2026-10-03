@@ -10,6 +10,7 @@ import { PropertyNotes } from './PropertyNotes.tsx';
 import { TypeText } from './TypeText.tsx';
 import { declaredOn, ownerOf, yesNo } from './members.ts';
 import { EntityRelationships } from './EntityRelationships.tsx';
+import { ShowRelationships } from './ShowRelationships.tsx';
 import type { ViewProps } from './types.ts';
 
 interface PropertyRow {
@@ -161,6 +162,7 @@ export function StructuredTypeView(props: ViewProps<StructuredType>) {
         description={descriptionOf(element)}
         longDescription={longDescriptionOf(element)}
         badges={badges}
+        actions={isEntity && <ShowRelationships typeId={element.id} />}
       />
       {mode === 'technical' && hasLabel(element) && (
         <Caption1 block>Label: {labelOf(element)}</Caption1>

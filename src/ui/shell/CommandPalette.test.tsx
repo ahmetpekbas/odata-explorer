@@ -45,6 +45,7 @@ describe('command palette', () => {
     key('Enter');
     expect(onChoose).toHaveBeenCalledWith(
       expect.objectContaining({ kind: 'entityType', id: `${NS}.Person` }),
+      { diagram: false },
     );
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
@@ -61,14 +62,34 @@ describe('command palette', () => {
     expect(box).toHaveAttribute('aria-activedescendant', first?.id);
     key('ArrowDown');
     key('Enter');
-    expect(onChoose).toHaveBeenCalledWith(expect.objectContaining({ id: `${NS}.PersonGender` }));
+    expect(onChoose).toHaveBeenCalledWith(expect.objectContaining({ id: `${NS}.PersonGender` }), {
+      diagram: false,
+    });
   });
 
   it('opens a result that is clicked', () => {
     const { type, onChoose } = setup();
     type('airline');
     fireEvent.click(screen.getByRole('option', { name: /^Airline\s*Entity type/ }));
-    expect(onChoose).toHaveBeenCalledWith(expect.objectContaining({ id: `${NS}.Airline` }));
+    expect(onChoose).toHaveBeenCalledWith(expect.objectContaining({ id: `${NS}.Airline` }), {
+      diagram: false,
+    });
+  });
+
+  it('asks for the relationships with Ctrl+Enter or a Ctrl+click', () => {
+    const { type, box, onChoose } = setup();
+    type('person');
+    fireEvent.keyDown(box, { key: 'Enter', ctrlKey: true });
+    expect(onChoose).toHaveBeenLastCalledWith(expect.objectContaining({ id: `${NS}.Person` }), {
+      diagram: true,
+    });
+    fireEvent.click(screen.getByRole('option', { name: /^Person\s*Entity type/ }), {
+      ctrlKey: true,
+    });
+    expect(onChoose).toHaveBeenLastCalledWith(expect.objectContaining({ id: `${NS}.Person` }), {
+      diagram: true,
+    });
+    expect(screen.getByText(/Ctrl\+Enter shows the relationships/)).toBeInTheDocument();
   });
 
   it('narrows the results with the kind filters', () => {

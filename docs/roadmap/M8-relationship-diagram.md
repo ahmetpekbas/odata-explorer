@@ -14,7 +14,7 @@
 - [x] **8.3 Layout worker.** Run elkjs in a worker, with the diagram and layout code in a lazy-loaded
   chunk.
   *Done when:* the layout doesn't block the main thread, and the chunk only loads when a diagram opens.
-- [ ] **8.4 Controls and entry points.** Hops selector, inheritance toggle, show-all-properties toggle.
+- [x] **8.4 Controls and entry points.** Hops selector, inheritance toggle, show-all-properties toggle.
   Clicking a node opens its tab. Add a "Show relationships" button on entity and set views, and in the
   palette.
   *Done when:* the E2E flow of opening a diagram and clicking a node to open its tab passes.

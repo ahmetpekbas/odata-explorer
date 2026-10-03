@@ -1,3 +1,4 @@
+import { diagramTypeFor } from '../../app/diagram-tab.ts';
 import { descriptionOf, labelOf, longDescriptionOf, shortName } from '../../csdl/humanize.ts';
 import type { EntitySet, Singleton } from '../../csdl/model.ts';
 import type { ResolvedBinding } from '../../csdl/resolve-structure.ts';
@@ -6,6 +7,7 @@ import { CapabilityBadges } from './CapabilityBadges.tsx';
 import { DataTable, type Column } from './DataTable.tsx';
 import { ElementLink } from './ElementLink.tsx';
 import { ownerOf } from './members.ts';
+import { ShowRelationships } from './ShowRelationships.tsx';
 import { TypeText } from './TypeText.tsx';
 import type { ViewProps } from './types.ts';
 import { Facts, Section, ViewHeader } from './ViewParts.tsx';
@@ -28,6 +30,7 @@ export function EntitySetView({
   const isSet = element.kind === 'entitySet';
   const type = isSet ? element.entityType : element.type;
   const bindings = resolved.bindings.get(element.id) ?? [];
+  const diagramType = diagramTypeFor(resolved, element.id);
 
   const target = (b: ResolvedBinding) =>
     b.targetId ? (
@@ -70,6 +73,7 @@ export function EntitySetView({
         description={descriptionOf(element)}
         longDescription={longDescriptionOf(element)}
         badges={isSet && !element.includeInServiceDocument ? ['not in service document'] : []}
+        actions={diagramType && <ShowRelationships typeId={diagramType} />}
       />
       <Section title={isSet ? 'Contains' : 'Is a single'}>
         <Facts
