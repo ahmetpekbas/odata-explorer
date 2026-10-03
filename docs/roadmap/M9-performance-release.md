@@ -24,6 +24,6 @@
 - [x] **9.4 Keyboard and accessibility pass.** Every feature is reachable by keyboard, focus moves
   correctly when tabs and dialogs open and close, and the key shortcuts are documented.
   *Done when:* a keyboard-only walkthrough of the E2E flows succeeds.
-- [ ] **9.5 Release.** Verify `npm run build` served from a subpath. Finish the README (features,
+- [x] **9.5 Release.** Verify `npm run build` served from a subpath. Finish the README (features,
   screenshots, deploy to any static host). Tag `v1.0.0`.
   *Done when:* the built `dist/` works under `/sub/`, and the tag exists.
