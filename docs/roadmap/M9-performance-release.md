@@ -12,7 +12,7 @@
 - [x] **9.2 Hit the budget.** Profile and optimize until parse+resolve runs at 5 MB/s or more in Node,
   and no main-thread long task during load exceeds 200 ms.
   *Done when:* the benchmark meets the budget, and the long-task check passes.
-- [ ] **9.3 E2E suite.** Playwright covers:
+- [x] **9.3 E2E suite.** Playwright covers:
   - Load TripPin, open `Person`, check the property table.
   - Toggle Friendly/Technical.
   - Open the diagram and click a node.

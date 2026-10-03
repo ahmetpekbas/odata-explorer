@@ -30,3 +30,17 @@ test('loading Microsoft Graph never blocks the main thread for over 200 ms', asy
   console.log(`long tasks during load (ms): ${tasks.map(Math.round).join(', ') || 'none'}`);
   expect(Math.max(0, ...tasks)).toBeLessThanOrEqual(LONG_TASK_BUDGET);
 });
+
+test('a loaded Microsoft Graph document is searchable and opens its types', async ({ page }) => {
+  await page.goto('./');
+  await page.getByLabel('Choose a metadata file').setInputFiles(GRAPH);
+  await expect(page.getByRole('navigation', { name: 'Navigator' })).toBeVisible({
+    timeout: 60_000,
+  });
+
+  await page.keyboard.press('Control+k');
+  await page.getByRole('combobox', { name: 'Search the model' }).fill('user');
+  await expect(page.getByRole('option').first()).toBeVisible();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('heading', { level: 2, name: 'user', exact: true })).toBeVisible();
+});
