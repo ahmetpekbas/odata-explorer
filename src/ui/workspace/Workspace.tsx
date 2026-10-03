@@ -1,6 +1,7 @@
 import { Body1, makeStyles, tokens } from '@fluentui/react-components';
 import { selectActiveDocument, useStore } from '../../app/store.ts';
 import type { Diagnostic } from '../../csdl/model.ts';
+import DiagramView from '../diagram/DiagramView.tsx';
 import { DiagnosticsPanel } from '../shell/DiagnosticsPanel.tsx';
 import { ElementView } from '../views/ElementView.tsx';
 import { TabStrip } from './TabStrip.tsx';
@@ -46,6 +47,8 @@ export function Workspace({ diagnostics, onSelectDiagnostic }: WorkspaceProps) {
           <div className={styles.diagnostics}>
             <DiagnosticsPanel diagnostics={diagnostics} onSelect={onSelectDiagnostic} />
           </div>
+        ) : document?.status === 'ready' && active.kind === 'diagram' ? (
+          <DiagramView key={active.id} tabId={active.id} resolved={document.resolved} />
         ) : document?.status === 'ready' ? (
           <div className={styles.element}>
             <ElementView key={active.id} tab={active} resolved={document.resolved} />

@@ -1,6 +1,7 @@
 // App state: the open documents (v1 shows one), the detail mode, the tabs, and the selection. Loading itself
 // lives in loader.ts; this store only records where each document is in that process.
 import { create } from 'zustand';
+import { diagramTypeOf } from './diagram-tab.ts';
 import type { ElementKind } from '../csdl/model.ts';
 import type { Resolved } from '../csdl/resolve.ts';
 import type { SearchEntry } from '../csdl/search-index.ts';
@@ -8,11 +9,11 @@ import type { Progress } from '../worker/load.ts';
 
 export type DetailMode = 'friendly' | 'technical';
 
-/** What a tab shows: an element of the model, or the list of problems. */
-export type TabKind = ElementKind | 'diagnostics';
+/** What a tab shows: an element of the model, the relationships of a type, or the list of problems. */
+export type TabKind = ElementKind | 'diagnostics' | 'diagram';
 
 export interface Tab {
-  /** Target-path ID of the element, or `problems` for the diagnostics tab. */
+  /** Target-path ID of the element, `problems` for the diagnostics tab, or `diagram:` and a type ID. */
   id: string;
   kind: TabKind;
   /** An unpinned tab is a preview: the next preview replaces it. At most one tab is a preview. */
@@ -74,9 +75,10 @@ export interface StoreState {
 
 const NO_TABS: Pick<StoreState, 'tabs' | 'activeTab'> = { tabs: [], activeTab: undefined };
 
-/** The state after the active tab changed: the selection follows it. */
+/** The state after the active tab changed: the selection follows it, a diagram selecting its type. */
 function activated(tabs: Tab[], activeTab: string | undefined) {
-  return { tabs, activeTab, selection: activeTab };
+  const selection = activeTab === undefined ? undefined : (diagramTypeOf(activeTab) ?? activeTab);
+  return { tabs, activeTab, selection };
 }
 
 /** Replaces one document, if it still exists: a load can finish after its document was closed. */

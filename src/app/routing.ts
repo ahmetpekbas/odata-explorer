@@ -1,8 +1,10 @@
 // Hash routes, `#/d/<docId>/<kind>/<targetPath>`, kept in step with the store: the active tab writes
 // the hash, and a hash that changes (back/forward, a pasted link) opens its tab. The document id is
 // the recent-file id, so a link reopens the file from IndexedDB when it is not loaded.
+import { diagramTab, diagramTypeOf } from './diagram-tab.ts';
 import { openRecentById, type Parse } from './loader.ts';
 import { openableTarget } from './openable.ts';
+import type { Resolved } from '../csdl/resolve.ts';
 import { selectActiveDocument, useStore, type StoreState } from './store.ts';
 
 export interface Route {
@@ -31,6 +33,12 @@ export function parseRoute(hash: string): Route | undefined {
   }
 }
 
+/** The diagram tab a route names, when it names a structured type of the model. */
+function diagramTarget({ types }: Resolved, tabId: string) {
+  const typeId = diagramTypeOf(tabId);
+  return typeId !== undefined && types.has(typeId) ? diagramTab(typeId) : undefined;
+}
+
 /** The route of what the store shows, or undefined when no document is ready. */
 function routeOf(state: StoreState): Route | undefined {
   const doc = selectActiveDocument(state);
@@ -52,7 +60,11 @@ export function startRouting(parse?: Parse): () => void {
       return;
     }
     const target =
-      route.tab.kind === 'diagnostics' ? PROBLEMS_TAB : openableTarget(doc.resolved, route.tab.id);
+      route.tab.kind === 'diagnostics'
+        ? PROBLEMS_TAB
+        : route.tab.kind === 'diagram'
+          ? diagramTarget(doc.resolved, route.tab.id)
+          : openableTarget(doc.resolved, route.tab.id);
     if (target) useStore.getState().openTab(target);
   };
 

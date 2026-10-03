@@ -89,6 +89,21 @@ describe('startRouting', () => {
     );
   });
 
+  it('opens a diagram tab from its link, selecting the type, and ignores a link to a non-type', async () => {
+    stop = startRouting();
+    const id = await openText('trippin.xml', trippin, inline);
+    history.pushState(null, '', `#/d/${id}/diagram/diagram:${NS}.Person`);
+    dispatchEvent(new PopStateEvent('popstate'));
+    expect(useStore.getState()).toMatchObject({
+      activeTab: `diagram:${NS}.Person`,
+      selection: `${NS}.Person`,
+    });
+
+    history.pushState(null, '', `#/d/${id}/diagram/diagram:${NS}.PersonGender`);
+    dispatchEvent(new PopStateEvent('popstate'));
+    expect(useStore.getState().activeTab).toBe(`diagram:${NS}.Person`);
+  });
+
   it('leaves the start page alone for a link to a file that is gone', async () => {
     history.replaceState(null, '', '#/d/missing/entityType/NS.A');
     stop = startRouting();
