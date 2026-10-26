@@ -1,17 +1,37 @@
-import { useMemo } from 'react';
-import { Body1, Caption1 } from '@fluentui/react-components';
+import { useMemo, useState } from 'react';
+import { Body1, Caption1, makeStyles, SearchBox, tokens } from '@fluentui/react-components';
 import { KeyRegular } from '@fluentui/react-icons';
-import { descriptionOf, hasLabel, labelOf, longDescriptionOf } from '../../csdl/humanize.ts';
+import {
+  descriptionOf,
+  hasLabel,
+  labelOf,
+  longDescriptionOf,
+  technicalType,
+} from '../../csdl/humanize.ts';
 import type { Property, StructuredType } from '../../csdl/model.ts';
 import { hasHints, propertyHints } from '../../csdl/term-summaries.ts';
 import { DataTable, type Column } from './DataTable.tsx';
-import { Facts, Section, ViewHeader } from './ViewParts.tsx';
+import { Section, ViewHeader } from './ViewParts.tsx';
 import { PropertyNotes } from './PropertyNotes.tsx';
 import { TypeText } from './TypeText.tsx';
-import { declaredOn, ownerOf, yesNo } from './members.ts';
+import { declaredOn, matchesFilter, ownerOf, yesNo } from './members.ts';
 import { EntityRelationships } from './EntityRelationships.tsx';
 import { ShowRelationships } from './ShowRelationships.tsx';
 import type { ViewProps } from './types.ts';
+
+const useStyles = makeStyles({
+  /** The same gap below as a Section has, so it sits apart from the title that follows. */
+  filter: { marginBottom: tokens.spacingVerticalL },
+  /** The key as one line instead of a section of its own. */
+  key: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'baseline',
+    columnGap: tokens.spacingHorizontalM,
+    marginBottom: tokens.spacingVerticalM,
+  },
+  keyLabel: { color: tokens.colorNeutralForeground3 },
+});
 
 interface PropertyRow {
   property: Property;
@@ -25,7 +45,10 @@ export function StructuredTypeView(props: ViewProps<StructuredType>) {
   const { resolved, element, tabId, mode } = props;
   const info = resolved.types.get(element.id);
 
-  const rows = useMemo<PropertyRow[]>(() => {
+  const styles = useStyles();
+  const [filter, setFilter] = useState('');
+
+  const allRows = useMemo<PropertyRow[]>(() => {
     const keyNames = new Set(info?.key.map((k) => k.name));
     return (info?.propertyIds ?? []).flatMap((id) => {
       const property = resolved.elements.get(id);
@@ -34,6 +57,20 @@ export function StructuredTypeView(props: ViewProps<StructuredType>) {
         : [];
     });
   }, [info, resolved]);
+  const rows = useMemo(
+    () =>
+      allRows.filter((r) =>
+        matchesFilter(
+          filter,
+          r.property.name,
+          labelOf(r.property),
+          descriptionOf(r.property),
+          technicalType(r.property.type),
+        ),
+      ),
+    [allRows, filter],
+  );
+  const navCount = info?.navigationPropertyIds.length ?? 0;
 
   const isEntity = element.kind === 'entityType';
   const hasInherited = rows.some((r) => r.owner !== element.id);
@@ -168,34 +205,50 @@ export function StructuredTypeView(props: ViewProps<StructuredType>) {
         <Caption1 block>Label: {labelOf(element)}</Caption1>
       )}
       {isEntity && (
-        <Section title={mode === 'friendly' ? 'Identified by' : 'Key'}>
+        <div className={styles.key}>
           {keyText === '' ? (
             <Body1>This type has no key.</Body1>
           ) : (
-            <Facts
-              rows={[
-                [mode === 'friendly' ? 'Properties' : 'PropertyRef', keyText],
-                [
-                  'Declared on',
-                  mode === 'technical' && info?.keyOwner && info.keyOwner !== element.id
-                    ? info.keyOwner
-                    : undefined,
-                ],
-              ]}
-            />
+            <>
+              <Body1 className={styles.keyLabel}>
+                {mode === 'friendly' ? 'Identified by' : 'Key'}
+              </Body1>
+              <Body1>{keyText}</Body1>
+              {mode === 'technical' && info?.keyOwner && info.keyOwner !== element.id && (
+                <Caption1 className={styles.keyLabel}>declared on {info.keyOwner}</Caption1>
+              )}
+            </>
           )}
-        </Section>
+        </div>
       )}
-      <Section title={`Properties (${rows.length})`}>
+      {allRows.length + navCount > 0 && (
+        <div className={styles.filter}>
+          <SearchBox
+            aria-label="Filter properties and links"
+            placeholder="Filter properties and links"
+            value={filter}
+            onChange={(_, data) => setFilter(data.value)}
+          />
+        </div>
+      )}
+      <Section
+        title={`Properties (${
+          rows.length === allRows.length ? rows.length : `${rows.length} of ${allRows.length}`
+        })`}
+      >
         <DataTable
           label="Properties"
           columns={columns}
           rows={rows}
           rowId={(row) => row.property.id}
-          emptyText="This type has no properties."
+          emptyText={
+            allRows.length === 0
+              ? 'This type has no properties.'
+              : 'No properties match the filter.'
+          }
         />
       </Section>
-      <EntityRelationships {...props} />
+      <EntityRelationships {...props} filter={filter} />
     </>
   );
 }

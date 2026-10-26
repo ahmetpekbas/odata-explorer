@@ -40,6 +40,23 @@ describe('StructuredTypeView', () => {
     expect(within(table).getByText('List of Text')).toBeInTheDocument();
   });
 
+  it('filters properties and links with one box', () => {
+    open(`${NS}.Person`);
+    const all = within(screen.getByRole('table', { name: 'Properties' })).getAllByRole(
+      'row',
+    ).length;
+    fireEvent.change(screen.getByRole('searchbox', { name: 'Filter properties and links' }), {
+      target: { value: 'username' },
+    });
+    const table = screen.getByRole('table', { name: 'Properties' });
+    expect(within(table).getAllByRole('row')).toHaveLength(2);
+    expect(all).toBeGreaterThan(2);
+    expect(within(table).getByText('UserName')).toBeInTheDocument();
+    expect(screen.getByText(/^Properties \(1 of /)).toBeInTheDocument();
+    expect(screen.getByText(/^Links to \(0 of /)).toBeInTheDocument();
+    expect(screen.getByText('No links match the filter.')).toBeInTheDocument();
+  });
+
   it('switches the columns in technical mode', () => {
     open(`${NS}.Person`);
     fireEvent.click(screen.getByRole('button', { name: 'Technical' }));
@@ -66,7 +83,7 @@ describe('StructuredTypeView', () => {
     const table = screen.getByRole('table', { name: 'Properties' });
     expect(within(table).getAllByText('PlanItem').length).toBeGreaterThan(0);
     fireEvent.click(screen.getByRole('button', { name: 'Technical' }));
-    expect(screen.getByText(`${NS}.PlanItem`, { selector: 'dd' })).toBeInTheDocument();
+    expect(screen.getByText(`declared on ${NS}.PlanItem`)).toBeInTheDocument();
   });
 
   it('opens the type of a property in a tab', () => {

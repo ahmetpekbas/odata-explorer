@@ -12,7 +12,7 @@ import type { Resolved } from '../../csdl/resolve.ts';
 import { CapabilityBadges } from './CapabilityBadges.tsx';
 import { DataTable, type Column } from './DataTable.tsx';
 import { ElementLink } from './ElementLink.tsx';
-import { declaredOn, yesNo } from './members.ts';
+import { declaredOn, matchesFilter, yesNo } from './members.ts';
 import type { ViewProps } from './types.ts';
 import { Chips, Facts, Section } from './ViewParts.tsx';
 
@@ -41,17 +41,29 @@ function links(
 const partnerName = (id: string | undefined) => (id ? id.slice(id.lastIndexOf('.') + 1) : '');
 
 /** "Links to", the type hierarchy, and "Exposed as" of a structured type. */
-export function EntityRelationships({ resolved, element, mode }: ViewProps<StructuredType>) {
+export function EntityRelationships({
+  resolved,
+  element,
+  mode,
+  filter = '',
+}: ViewProps<StructuredType> & { filter?: string }) {
   const info = resolved.types.get(element.id);
   const technical = mode === 'technical';
 
-  const navigations = useMemo(
+  const allNavigations = useMemo(
     () =>
       (info?.navigationPropertyIds ?? []).flatMap((id) => {
         const nav = resolved.elements.get(id);
         return nav?.kind === 'navigationProperty' ? [nav] : [];
       }),
     [info, resolved],
+  );
+  const navigations = useMemo(
+    () =>
+      allNavigations.filter((n) =>
+        matchesFilter(filter, n.name, labelOf(n), descriptionOf(n), technicalType(n.type)),
+      ),
+    [allNavigations, filter],
   );
   const hasInherited = navigations.some((n) => declaredOn(n.id, element.id) !== '');
 
@@ -137,13 +149,20 @@ export function EntityRelationships({ resolved, element, mode }: ViewProps<Struc
 
   return (
     <>
-      {navigations.length > 0 && (
-        <Section title={`Links to (${navigations.length})`}>
+      {allNavigations.length > 0 && (
+        <Section
+          title={`Links to (${
+            navigations.length === allNavigations.length
+              ? navigations.length
+              : `${navigations.length} of ${allNavigations.length}`
+          })`}
+        >
           <DataTable
             label="Navigation properties"
             columns={columns}
             rows={navigations}
             rowId={(n) => n.id}
+            emptyText="No links match the filter."
           />
         </Section>
       )}

@@ -24,7 +24,14 @@ const useStyles = makeStyles({
     justifyContent: 'space-between',
     gap: tokens.spacingHorizontalM,
   },
-  kind: { display: 'flex', alignItems: 'center', gap: tokens.spacingHorizontalS },
+  kind: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    columnGap: tokens.spacingHorizontalM,
+    rowGap: tokens.spacingVerticalXS,
+    minWidth: 0,
+  },
   actions: { display: 'flex', alignItems: 'center', gap: tokens.spacingHorizontalM },
   title: { margin: 0, overflowWrap: 'anywhere' },
   id: {
@@ -86,6 +93,9 @@ export function ViewHeader({
     <header className={styles.header}>
       <div className={styles.top}>
         <div className={styles.kind}>
+          <Title2 as="h2" className={styles.title}>
+            {title}
+          </Title2>
           <Badge appearance="tint">{kind}</Badge>
           {mode === 'technical' &&
             badges.map((b) => (
@@ -103,9 +113,6 @@ export function ViewHeader({
           />
         </div>
       </div>
-      <Title2 as="h2" className={styles.title}>
-        {title}
-      </Title2>
       <Caption1 className={styles.id}>{id}</Caption1>
       {description && <Body1>{description}</Body1>}
       {longDescription && <Body1>{longDescription}</Body1>}

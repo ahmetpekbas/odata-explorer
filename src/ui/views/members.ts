@@ -9,5 +9,11 @@ export const declaredOn = (memberId: string, typeId: string) => {
   return owner === typeId ? '' : shortName(owner);
 };
 
+/** Whether any of the texts contains the filter, ignoring case. An empty filter matches everything. */
+export const matchesFilter = (filter: string, ...texts: (string | undefined)[]) => {
+  const needle = filter.trim().toLowerCase();
+  return needle === '' || texts.some((t) => t?.toLowerCase().includes(needle));
+};
+
 export const yesNo = (value: boolean | undefined) =>
   value === undefined ? '' : value ? 'Yes' : 'No';
